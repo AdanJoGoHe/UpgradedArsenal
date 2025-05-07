@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- */
 package net.serex.itemmodifiers.attribute;
 
 import java.util.UUID;

@@ -1,18 +1,4 @@
-package net.serex.itemmodifiers.event;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.chat.Component
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.event.entity.player.ItemTooltipEvent
- *  net.minecraftforge.event.entity.player.PlayerEvent$ItemCraftedEvent
- *  net.minecraftforge.event.entity.player.PlayerEvent$ItemPickupEvent
- *  net.minecraftforge.event.entity.player.PlayerEvent$PlayerLoggedInEvent
- *  net.minecraftforge.eventbus.api.EventPriority
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
+package net.serex.itemmodifiers.event;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

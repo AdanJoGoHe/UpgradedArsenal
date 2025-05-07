@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.LivingEntity
- *  net.minecraft.world.entity.player.Player
- *  net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- */
 package net.serex.itemmodifiers.event;
 
 import net.minecraft.world.entity.LivingEntity;

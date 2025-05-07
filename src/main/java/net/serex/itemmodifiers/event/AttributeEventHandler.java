@@ -1,29 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.core.BlockPos
- *  net.minecraft.server.level.ServerLevel
- *  net.minecraft.world.InteractionHand
- *  net.minecraft.world.entity.Entity
- *  net.minecraft.world.entity.LivingEntity
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.AttributeInstance
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- *  net.minecraft.world.entity.ai.attributes.Attributes
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.level.Level
- *  net.minecraft.world.level.LevelAccessor
- *  net.minecraft.world.level.block.Block
- *  net.minecraft.world.level.block.state.BlockState
- *  net.minecraftforge.event.entity.living.LivingEvent$LivingTickEvent
- *  net.minecraftforge.event.level.BlockEvent$BreakEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- *  org.apache.commons.lang3.tuple.Pair
- */
 package net.serex.itemmodifiers.event;
 
 import java.util.HashSet;

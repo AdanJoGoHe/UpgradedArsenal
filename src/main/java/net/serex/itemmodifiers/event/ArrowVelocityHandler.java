@@ -1,17 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.Entity
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.entity.projectile.AbstractArrow
- *  net.minecraft.world.item.BowItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.phys.Vec3
- *  net.minecraftforge.event.entity.EntityJoinLevelEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
 package net.serex.itemmodifiers.event;
 
 import java.util.function.Supplier;

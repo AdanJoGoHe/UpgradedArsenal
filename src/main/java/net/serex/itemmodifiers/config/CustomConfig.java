@@ -12,6 +12,8 @@ public class CustomConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> SHARP_DAMAGE_MODIFIER;
     public static final ForgeConfigSpec.ConfigValue<Double> SWIFT_ATTACK_SPEED_MODIFIER;
 
+    public static final ForgeConfigSpec.IntValue REROLL_XP_COST;
+    public static final ForgeConfigSpec.IntValue MAX_REROLLS;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ALLOWED_DUPLICATION_BLOCKS;
 
     static {
@@ -63,6 +65,18 @@ public class CustomConfig {
                         ),
                         obj -> obj instanceof String
                 );
+
+        BUILDER.pop();
+
+        BUILDER.push("Grindstone Settings");
+
+        REROLL_XP_COST = BUILDER
+                .comment("XP cost for each grindstone re-roll")
+                .defineInRange("rerollXpCost", 5, 0, 100);
+
+        MAX_REROLLS = BUILDER
+                .comment("Maximum number of grindstone re-rolls allowed per item")
+                .defineInRange("maxRerolls", 15, 0, 100);
 
         BUILDER.pop();
 

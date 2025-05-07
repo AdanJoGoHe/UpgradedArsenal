@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.event.entity.living.LivingHurtEvent
- *  net.minecraftforge.event.entity.player.PlayerEvent$BreakSpeed
- *  net.minecraftforge.event.entity.player.PlayerEvent$ItemCraftedEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
 package net.serex.itemmodifiers.event;
 
 import net.minecraft.nbt.CompoundTag;

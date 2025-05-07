@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.math.Axis
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.player.LocalPlayer
- *  net.minecraft.world.item.BowItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.api.distmarker.Dist
- *  net.minecraftforge.api.distmarker.OnlyIn
- *  net.minecraftforge.client.event.RenderHandEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
 package net.serex.itemmodifiers.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;

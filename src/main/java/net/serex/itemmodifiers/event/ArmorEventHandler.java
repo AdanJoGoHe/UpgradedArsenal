@@ -1,24 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.EquipmentSlot
- *  net.minecraft.world.entity.EquipmentSlot$Type
- *  net.minecraft.world.entity.LivingEntity
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.AttributeInstance
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- *  net.minecraft.world.entity.ai.attributes.Attributes
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ArmorItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent
- *  net.minecraftforge.event.entity.living.LivingFallEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- *  org.apache.commons.lang3.tuple.Pair
- */
 package net.serex.itemmodifiers.event;
 
 import java.util.UUID;

@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.RandomSource
- *  net.minecraft.world.inventory.ChestMenu
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.level.Level
- *  net.minecraftforge.event.entity.player.PlayerContainerEvent$Open
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
 package net.serex.itemmodifiers.event;
 
 import net.minecraft.util.RandomSource;
