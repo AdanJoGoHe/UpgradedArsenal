@@ -1,10 +1,4 @@
-package net.serex.itemmodifiers.modifier;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.RandomSource
- */
-
+package net.serex.itemmodifiers.modifier;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.util.RandomSource;

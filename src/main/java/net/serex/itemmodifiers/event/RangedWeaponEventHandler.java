@@ -1,19 +1,6 @@
-package net.serex.itemmodifiers.event;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.BowItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.event.entity.living.LivingEntityUseItemEvent$Finish
- *  net.minecraftforge.event.entity.living.LivingEntityUseItemEvent$Start
- *  net.minecraftforge.event.entity.living.LivingEntityUseItemEvent$Stop
- *  net.minecraftforge.event.entity.living.LivingEntityUseItemEvent$Tick
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
-import java.util.function.Supplier;
+package net.serex.itemmodifiers.event;
 
+import java.util.function.Supplier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;

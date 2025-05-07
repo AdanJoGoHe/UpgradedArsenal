@@ -1,16 +1,4 @@
-package net.serex.itemmodifiers;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraftforge.api.distmarker.Dist
- *  net.minecraftforge.api.distmarker.OnlyIn
- *  net.minecraftforge.common.MinecraftForge
- *  net.minecraftforge.eventbus.api.IEventBus
- *  net.minecraftforge.fml.common.Mod
- *  net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
- *  net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
- *  net.minecraftforge.fml.loading.FMLEnvironment
- */
+package net.serex.itemmodifiers;
 
 
 import net.minecraftforge.api.distmarker.Dist;

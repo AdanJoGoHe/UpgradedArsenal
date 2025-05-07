@@ -1,14 +1,4 @@
-package net.serex.itemmodifiers;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ItemStack
- *  net.minecraftforge.event.TickEvent$Phase
- *  net.minecraftforge.event.TickEvent$ServerTickEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
+package net.serex.itemmodifiers;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -1,17 +1,4 @@
-package net.serex.itemmodifiers.item;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.chat.Component
- *  net.minecraft.world.InteractionHand
- *  net.minecraft.world.InteractionResultHolder
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.Item
- *  net.minecraft.world.item.Item$Properties
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.level.Level
- */
-
+package net.serex.itemmodifiers.item;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

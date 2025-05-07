@@ -1,19 +1,4 @@
-package net.serex.itemmodifiers.util;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.core.BlockPos
- *  net.minecraft.nbt.CompoundTag
- *  net.minecraft.nbt.ListTag
- *  net.minecraft.nbt.Tag
- *  net.minecraft.server.level.ServerLevel
- *  net.minecraft.world.level.LevelAccessor
- *  net.minecraft.world.level.saveddata.SavedData
- *  net.minecraftforge.event.level.BlockEvent$BreakEvent
- *  net.minecraftforge.event.level.BlockEvent$EntityPlaceEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- */
+package net.serex.itemmodifiers.util;
 
 
 import java.util.HashSet;

@@ -1,8 +1,6 @@
 package net.serex.itemmodifiers.loot;
 
 import com.google.common.base.Suppliers;
-import com.mojang.datafixers.kinds.App;
-import com.mojang.datafixers.kinds.Applicative;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

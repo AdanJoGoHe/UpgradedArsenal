@@ -1,17 +1,4 @@
-package net.serex.itemmodifiers.loot;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonDeserializationContext
- *  com.google.gson.JsonObject
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.level.storage.loot.LootContext
- *  net.minecraft.world.level.storage.loot.Serializer
- *  net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction
- *  net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction$Serializer
- *  net.minecraft.world.level.storage.loot.functions.LootItemFunctionType
- *  net.minecraft.world.level.storage.loot.predicates.LootItemCondition
- */
+package net.serex.itemmodifiers.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

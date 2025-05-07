@@ -1,16 +1,4 @@
-package net.serex.itemmodifiers.modifier;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.ChatFormatting
- *  net.minecraft.network.chat.Component
- *  net.minecraft.network.chat.MutableComponent
- *  net.minecraft.resources.ResourceLocation
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- *  org.apache.commons.lang3.tuple.ImmutablePair
- *  org.apache.commons.lang3.tuple.Pair
- */
+package net.serex.itemmodifiers.modifier;
 
 import java.util.ArrayList;
 import java.util.List;

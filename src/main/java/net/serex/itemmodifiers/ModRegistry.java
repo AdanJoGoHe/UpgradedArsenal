@@ -1,16 +1,4 @@
-package net.serex.itemmodifiers;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.serialization.Codec
- *  net.minecraft.resources.ResourceKey
- *  net.minecraftforge.common.loot.IGlobalLootModifier
- *  net.minecraftforge.eventbus.api.IEventBus
- *  net.minecraftforge.registries.DeferredRegister
- *  net.minecraftforge.registries.ForgeRegistries$Keys
- *  net.minecraftforge.registries.RegistryObject
- */
-
+package net.serex.itemmodifiers;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceKey;
