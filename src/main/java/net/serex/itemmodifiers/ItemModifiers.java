@@ -26,6 +26,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.client.BowAnimationHandler;
 import net.serex.itemmodifiers.config.CustomConfig;
+import net.serex.itemmodifiers.config.CustomConfigCache;
 import net.serex.itemmodifiers.event.*;
 import net.serex.itemmodifiers.modifier.Modifiers;
 
@@ -73,5 +74,6 @@ public class ItemModifiers {
     private void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(Modifiers::init);
         registerConfigSettings();
+        CustomConfigCache.reload();
     }
 }
