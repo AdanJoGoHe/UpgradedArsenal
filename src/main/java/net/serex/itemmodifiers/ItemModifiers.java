@@ -57,7 +57,7 @@ public class ItemModifiers {
         MinecraftForge.EVENT_BUS.register(MiningSpeedHandler.class);
         MinecraftForge.EVENT_BUS.register(ArmorEventHandler.class);
         MinecraftForge.EVENT_BUS.register(CombatEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(ItemProcessingQueue.class);
+        MinecraftForge.EVENT_BUS.register(net.serex.itemmodifiers.modifier.ModifierHandler.class);
         MinecraftForge.EVENT_BUS.register(EquipmentChangeHandler.class);
         MinecraftForge.EVENT_BUS.register(ChestOpenHandler.class);
         MinecraftForge.EVENT_BUS.register(DurabilityEventHandler.class);
@@ -74,4 +74,3 @@ public class ItemModifiers {
         event.enqueueWork(Modifiers::init);
     }
 }
-

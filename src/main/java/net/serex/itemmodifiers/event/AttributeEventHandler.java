@@ -30,7 +30,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,6 +50,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
@@ -93,27 +96,45 @@ public class AttributeEventHandler {
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        LevelAccessor levelAccessor = event.getLevel();
-        if (!(levelAccessor instanceof ServerLevel serverLevel)) return;
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
 
         Player player = event.getPlayer();
         ItemStack tool = player.getMainHandItem();
+
         Modifier modifier = ModifierHandler.getModifier(tool);
         if (modifier == null) return;
 
         double doubleChance = getMinedDropDoubleChance(modifier);
         if (doubleChance <= 0.0) return;
 
+        BlockPos pos = event.getPos();
+        BlockState state = event.getState();
+        Block block = state.getBlock();
+
+        if (!canBeDuplicated(block)) return;
+
         PlayerPlacedBlocks tracker = PlayerPlacedBlocks.get(serverLevel);
-        if (tracker.isPlayerPlaced(event.getPos())) return;
+        if (tracker.isPlayerPlaced(pos)) return;
 
         if (serverLevel.getRandom().nextDouble() < doubleChance) {
-            BlockState state = event.getState();
-            List<ItemStack> drops = Block.getDrops(state, serverLevel, event.getPos(), null, player, tool);
+            List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, null, player, tool);
             for (ItemStack drop : drops) {
-                Block.popResource(serverLevel, event.getPos(), drop.copy());
+                Block.popResource(serverLevel, pos, drop.copy());
             }
         }
+    }
+
+    private static boolean canBeDuplicated(Block block) {
+        ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(block);
+        if (blockId == null) return false;
+
+        return block.builtInRegistryHolder().is(BlockTags.OVERWORLD_CARVER_REPLACEABLES)
+                    || block.builtInRegistryHolder().is(BlockTags.OVERWORLD_NATURAL_LOGS)
+                    || block.builtInRegistryHolder().is(BlockTags.STONE_ORE_REPLACEABLES)
+                    || block.builtInRegistryHolder().is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
+                    || block.builtInRegistryHolder().is(BlockTags.ICE)
+                    || block.builtInRegistryHolder().is(BlockTags.COAL_ORES)
+                    || block.builtInRegistryHolder().is(BlockTags.IRON_ORES);
     }
 
     private static double getDurabilityIncrease(Modifier modifier) {

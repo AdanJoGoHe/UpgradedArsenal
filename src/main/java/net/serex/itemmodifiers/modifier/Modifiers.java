@@ -103,6 +103,13 @@ public class Modifiers {
                     .addModifier(() -> ModAttributes.DOUBLE_DROP_CHANCE.get(), new Modifier.AttributeModifierSupplier(0.1, AttributeModifier.Operation.ADDITION))
                     .build()
     );
+    // TOOL MODIFIERS - RARE
+    public static final Modifier SEREXWILL = register(
+            new Modifier.ModifierBuilder(new ResourceLocation("itemmodifiers:serex_will"), "serex_will", Modifier.ModifierType.HELD)
+                    .setRarity(Modifier.Rarity.COMMON)
+                    .addModifier(() -> ModAttributes.DOUBLE_DROP_CHANCE.get(), new Modifier.AttributeModifierSupplier(1, AttributeModifier.Operation.ADDITION))
+                    .build()
+    );
 
     // ARMOR MODIFIERS - COMMON
     public static final Modifier PADDED = register(

@@ -1,30 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.ChatFormatting
- *  net.minecraft.network.chat.Component
- *  net.minecraft.network.chat.MutableComponent
- *  net.minecraft.world.entity.EquipmentSlot
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- *  net.minecraft.world.entity.ai.attributes.Attributes
- *  net.minecraft.world.item.ArmorItem
- *  net.minecraft.world.item.AxeItem
- *  net.minecraft.world.item.BowItem
- *  net.minecraft.world.item.CrossbowItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.item.PickaxeItem
- *  net.minecraft.world.item.ShovelItem
- *  net.minecraft.world.item.SwordItem
- *  net.minecraft.world.item.TieredItem
- *  net.minecraftforge.event.entity.player.ItemTooltipEvent
- *  net.minecraftforge.eventbus.api.SubscribeEvent
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber
- *  net.minecraftforge.fml.common.Mod$EventBusSubscriber$Bus
- *  org.apache.commons.lang3.tuple.Pair
- */
 package net.serex.itemmodifiers;
 
 import java.util.ArrayList;
@@ -33,25 +6,20 @@ import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TieredItem;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
+import net.serex.itemmodifiers.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE)
@@ -193,9 +161,7 @@ public class TooltipHandler {
     }
 
     private static String formatAttributeValue(double value, AttributeModifier.Operation operation) {
-        return operation == AttributeModifier.Operation.MULTIPLY_TOTAL ?
-                String.format("%+d%%", (int)(value * 100.0)) :
-                String.format("%+.1f", value);
+        return AttributeUtils.formatAttributeValue(value, operation);
     }
 
     private static String getAttributeNameForRangedWeapon(Attribute attribute) {
@@ -257,40 +223,10 @@ public class TooltipHandler {
     }
 
     private static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, Modifier modifier) {
-        double finalValue = baseValue;
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-            if (entry.getKey().get() != attribute) continue;
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
-            switch (supplier.operation) {
-                case ADDITION -> finalValue += supplier.amount;
-                case MULTIPLY_BASE -> finalValue += baseValue * supplier.amount;
-                case MULTIPLY_TOTAL -> finalValue *= 1.0 + supplier.amount;
-            }
-        }
-        return finalValue;
+        return AttributeUtils.calculateFinalAttributeValue(stack, attribute, baseValue, modifier);
     }
 
     private static double getBaseAttributeValue(ItemStack stack, Attribute attribute) {
-        if (attribute == Attributes.ATTACK_DAMAGE && stack.getItem() instanceof TieredItem item) {
-            float base = item.getTier().getAttackDamageBonus();
-            if (item instanceof SwordItem) return base + 4.0f;
-            if (item instanceof AxeItem) return base + 7.0f;
-            if (item instanceof PickaxeItem) return base + 2.0f;
-            if (item instanceof ShovelItem) return base + 2.5f;
-            return base + 1.0f;
-        }
-        if (attribute == Attributes.ATTACK_SPEED) {
-            double baseSpeed = 4.0;
-            for (AttributeModifier mod : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attribute)) {
-                if (mod.getOperation() == AttributeModifier.Operation.ADDITION) {
-                    baseSpeed += mod.getAmount();
-                }
-            }
-            return baseSpeed;
-        }
-        if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && stack.getItem() instanceof ArmorItem armorItem) {
-            return attribute == Attributes.ARMOR ? armorItem.getDefense() : armorItem.getToughness();
-        }
-        return 0.0;
+        return AttributeUtils.getBaseAttributeValue(stack, attribute);
     }
 }

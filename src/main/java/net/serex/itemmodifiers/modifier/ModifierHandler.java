@@ -1,46 +1,15 @@
-package net.serex.itemmodifiers.modifier;/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.common.collect.HashMultimap
- *  com.google.common.collect.Multimap
- *  net.minecraft.nbt.CompoundTag
- *  net.minecraft.nbt.ListTag
- *  net.minecraft.nbt.Tag
- *  net.minecraft.network.chat.Component
- *  net.minecraft.network.chat.MutableComponent
- *  net.minecraft.resources.ResourceLocation
- *  net.minecraft.util.RandomSource
- *  net.minecraft.world.entity.EquipmentSlot
- *  net.minecraft.world.entity.EquipmentSlot$Type
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.AttributeInstance
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier
- *  net.minecraft.world.entity.ai.attributes.AttributeModifier$Operation
- *  net.minecraft.world.entity.ai.attributes.Attributes
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.world.item.ArmorItem
- *  net.minecraft.world.item.AxeItem
- *  net.minecraft.world.item.BowItem
- *  net.minecraft.world.item.CrossbowItem
- *  net.minecraft.world.item.ItemStack
- *  net.minecraft.world.item.PickaxeItem
- *  net.minecraft.world.item.ShovelItem
- *  net.minecraft.world.item.SwordItem
- *  net.minecraft.world.item.TieredItem
- *  net.minecraftforge.registries.ForgeRegistries
- *  org.apache.commons.lang3.tuple.Pair
- */
+package net.serex.itemmodifiers.modifier;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -49,14 +18,19 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.serex.itemmodifiers.attribute.CustomAttributeModifier;
+import net.serex.itemmodifiers.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+@Mod.EventBusSubscriber(modid="itemmodifiers")
 public class ModifierHandler {
+    private static final Queue<QueuedItem> itemQueue = new ConcurrentLinkedQueue<QueuedItem>();
     public static final String MODIFIER_TAG = "itemmodifiers:modifier";
     public static final String PROCESSED_TAG = "itemmodifiers:processed";
     private static final Map<UUID, Map<Attribute, AttributeModifier>> playerModifiers = new HashMap<UUID, Map<Attribute, AttributeModifier>>();
@@ -200,24 +174,7 @@ public class ModifierHandler {
     }
 
     private static double getBaseAttributeValue(ItemStack stack, Attribute attribute) {
-        double baseValue = 0.0;
-        if (attribute == Attributes.ATTACK_DAMAGE) {
-            if (stack.getItem() instanceof TieredItem tieredItem) {
-                baseValue = tieredItem.getTier().getAttackDamageBonus() + 1.0f;
-            } else {
-                baseValue = 1.0;
-            }
-        } else if (attribute == Attributes.ATTACK_SPEED) {
-            baseValue = 4.0;
-        } else if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && stack.getItem() instanceof ArmorItem armorItem) {
-            baseValue = attribute == Attributes.ARMOR ? armorItem.getDefense() : armorItem.getToughness();
-        }
-        for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attribute)) {
-            if (modifier.getOperation() == AttributeModifier.Operation.ADDITION) {
-                baseValue += modifier.getAmount();
-            }
-        }
-        return baseValue;
+        return AttributeUtils.getBaseAttributeValue(stack, attribute);
     }
 
     private static UUID getModifierUUID(Attribute attribute, EquipmentSlot slot) {
@@ -227,7 +184,7 @@ public class ModifierHandler {
     public static Modifier getModifier(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.contains(MODIFIER_TAG)) {
-            return Modifiers.getModifier(new ResourceLocation(tag.getString(MODIFIER_TAG)));
+            return Modifiers.getModifier(AttributeUtils.createResourceLocation(tag.getString(MODIFIER_TAG)));
         }
         return null;
     }
@@ -281,5 +238,36 @@ public class ModifierHandler {
             return Modifiers.TOOL_POOL;
         }
         return Modifiers.WEAPON_POOL;
+    }
+
+    public static void addItem(ItemStack stack, Player player) {
+        itemQueue.offer(new QueuedItem(stack, player));
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            processQueue();
+        }
+    }
+
+    private static void processQueue() {
+        QueuedItem queuedItem;
+        while ((queuedItem = itemQueue.poll()) != null) {
+            if (canHaveModifiers(queuedItem.stack) && !hasBeenProcessed(queuedItem.stack)) {
+                processNewItem(queuedItem.stack, queuedItem.player.getRandom().fork());
+            }
+            updateItemNameAndColor(queuedItem.stack);
+        }
+    }
+
+    private static class QueuedItem {
+        final ItemStack stack;
+        final Player player;
+
+        QueuedItem(ItemStack stack, Player player) {
+            this.stack = stack;
+            this.player = player;
+        }
     }
 }

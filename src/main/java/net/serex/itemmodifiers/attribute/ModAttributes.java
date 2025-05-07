@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.entity.ai.attributes.Attribute
- *  net.minecraft.world.entity.ai.attributes.RangedAttribute
- *  net.minecraftforge.registries.DeferredRegister
- *  net.minecraftforge.registries.ForgeRegistries
- *  net.minecraftforge.registries.IForgeRegistry
- *  net.minecraftforge.registries.RegistryObject
- */
 package net.serex.itemmodifiers.attribute;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;

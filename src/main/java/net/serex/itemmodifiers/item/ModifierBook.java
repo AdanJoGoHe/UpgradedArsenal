@@ -23,6 +23,7 @@ import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
 
 public class ModifierBook extends Item {
+
     public ModifierBook(Item.Properties properties) {
         super(properties);
     }
