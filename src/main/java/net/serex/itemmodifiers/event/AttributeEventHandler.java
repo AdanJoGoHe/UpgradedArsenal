@@ -26,15 +26,15 @@
  */
 package net.serex.itemmodifiers.event;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
-import net.minecraft.core.BlockPos;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -42,7 +42,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,6 +51,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.serex.itemmodifiers.attribute.ModAttributes;
+import net.serex.itemmodifiers.config.CustomConfig;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
 import net.serex.itemmodifiers.util.PlayerPlacedBlocks;
@@ -94,49 +94,41 @@ public class AttributeEventHandler {
         return modifier.modifiers.stream().filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.MOVEMENT_SPEED.get()).mapToDouble(pair -> ((Modifier.AttributeModifierSupplier)pair.getValue()).amount).sum();
     }
 
+    private static final Set<ResourceLocation> ALLOWED_BLOCKS = new HashSet<>();
+
+    public static void loadAllowedBlocks() {
+        ALLOWED_BLOCKS.clear();
+        for (String id : CustomConfig.ALLOWED_DUPLICATION_BLOCKS.get()) {
+            ALLOWED_BLOCKS.add(new ResourceLocation(id));
+        }
+    }
+
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
+        LevelAccessor levelAccessor = event.getLevel();
+        if (!(levelAccessor instanceof ServerLevel serverLevel)) return;
 
         Player player = event.getPlayer();
         ItemStack tool = player.getMainHandItem();
-
         Modifier modifier = ModifierHandler.getModifier(tool);
         if (modifier == null) return;
 
         double doubleChance = getMinedDropDoubleChance(modifier);
         if (doubleChance <= 0.0) return;
 
-        BlockPos pos = event.getPos();
-        BlockState state = event.getState();
-        Block block = state.getBlock();
-
-        if (!canBeDuplicated(block)) return;
-
         PlayerPlacedBlocks tracker = PlayerPlacedBlocks.get(serverLevel);
-        if (tracker.isPlayerPlaced(pos)) return;
+        if (tracker.isPlayerPlaced(event.getPos())) return;
+
+        BlockState state = event.getState();
+        ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+        if (!ALLOWED_BLOCKS.contains(blockId)) return;
 
         if (serverLevel.getRandom().nextDouble() < doubleChance) {
-            List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, null, player, tool);
+            List<ItemStack> drops = Block.getDrops(state, serverLevel, event.getPos(), null, player, tool);
             for (ItemStack drop : drops) {
-                Block.popResource(serverLevel, pos, drop.copy());
+                Block.popResource(serverLevel, event.getPos(), drop.copy());
             }
         }
-    }
-
-    private static boolean canBeDuplicated(Block block) {
-        ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(block);
-        if (blockId == null) return false;
-
-        return block.builtInRegistryHolder().is(BlockTags.OVERWORLD_CARVER_REPLACEABLES)
-                    || block.builtInRegistryHolder().is(BlockTags.OVERWORLD_NATURAL_LOGS)
-                    || block.builtInRegistryHolder().is(BlockTags.STONE_ORE_REPLACEABLES)
-                    || block.builtInRegistryHolder().is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
-                    || block.builtInRegistryHolder().is(BlockTags.ICE)
-                    || block.builtInRegistryHolder().is(BlockTags.COAL_ORES)
-                    || block.builtInRegistryHolder().is(BlockTags.IRON_ORES)
-                    || block.builtInRegistryHolder().is(BlockTags.DIAMOND_ORES)
-                    || block.builtInRegistryHolder().is(BlockTags.NEEDS_IRON_TOOL);
     }
 
     private static double getDurabilityIncrease(Modifier modifier) {

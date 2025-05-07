@@ -17,22 +17,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.serex.itemmodifiers.TooltipHandler;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.client.BowAnimationHandler;
-import net.serex.itemmodifiers.event.ArmorEventHandler;
-import net.serex.itemmodifiers.event.ChestOpenHandler;
-import net.serex.itemmodifiers.event.CombatEventHandler;
-import net.serex.itemmodifiers.event.DurabilityEventHandler;
-import net.serex.itemmodifiers.event.EquipmentChangeHandler;
-import net.serex.itemmodifiers.event.GrindstoneHandler;
-import net.serex.itemmodifiers.event.MiningSpeedHandler;
-import net.serex.itemmodifiers.event.ModifierEvents;
-import net.serex.itemmodifiers.event.RangedWeaponEventHandler;
+import net.serex.itemmodifiers.config.CustomConfig;
+import net.serex.itemmodifiers.event.*;
 import net.serex.itemmodifiers.modifier.Modifiers;
 
 @Mod(value="itemmodifiers")
@@ -51,7 +45,13 @@ public class ItemModifiers {
         ModRegistry.init(modEventBus);
     }
 
+    private void registerConfigSettings() {
+         AttributeEventHandler.loadAllowedBlocks();
+    }
+
     private void registerCommonEventHandlers() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CustomConfig.SPEC);
+
         MinecraftForge.EVENT_BUS.register(ModifierEvents.class);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
         MinecraftForge.EVENT_BUS.register(MiningSpeedHandler.class);
@@ -72,5 +72,6 @@ public class ItemModifiers {
 
     private void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(Modifiers::init);
+        registerConfigSettings();
     }
 }
