@@ -22,15 +22,11 @@
 package net.serex.itemmodifiers.event;
 
 import java.util.UUID;
-import java.util.function.Supplier;
+
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -39,7 +35,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
-import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid="itemmodifiers")
 public class ArmorEventHandler {
@@ -63,86 +58,6 @@ public class ArmorEventHandler {
                 ModifierHandler.handleEquipmentChange(player, slot, oldItem, newItem);
             }
         }
-    }
-
-    private static void removeArmorModifiers(Player player, ItemStack armorPiece, EquipmentSlot slot) {
-        Modifier modifier = ModifierHandler.getModifier(armorPiece);
-        if (modifier != null) {
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-                Attribute attribute = entry.getKey().get();
-                AttributeInstance instance = player.getAttribute(attribute);
-                if (instance != null) {
-                    UUID modifierUUID = getModifierUUID(attribute, slot);
-                    instance.removeModifier(modifierUUID);
-                }
-            }
-        }
-    }
-
-    private static void applyArmorModifiers(Player player, ItemStack armorPiece, EquipmentSlot slot) {
-        if (slot.getType() != EquipmentSlot.Type.ARMOR) return;
-
-        Modifier modifier = ModifierHandler.getModifier(armorPiece);
-        if (modifier != null) {
-            System.out.println("Applying modifiers for: " + armorPiece.getItem().getDescription().getString());
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-                Attribute attribute = entry.getKey().get();
-                AttributeInstance instance = player.getAttribute(attribute);
-                if (instance != null) {
-                    UUID modifierUUID = getModifierUUID(attribute, slot);
-                    instance.removeModifier(modifierUUID);
-                    AttributeModifier attributeModifier = new AttributeModifier(modifierUUID, "Armor modifier for " + slot.getName(), entry.getValue().amount, entry.getValue().operation);
-                    instance.addPermanentModifier(attributeModifier);
-                    System.out.println("Applied modifier for attribute: " + attribute.getDescriptionId());
-                }
-            }
-        }
-    }
-
-    private static void updateArmorAttributes(Player player) {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
-                ItemStack armorPiece = player.getItemBySlot(slot);
-                if (!armorPiece.isEmpty()) {
-                    ModifierHandler.handleEquipmentChange(player, slot, ItemStack.EMPTY, armorPiece);
-                }
-            }
-        }
-    }
-
-    private static void updateAttribute(Player player, Attribute attribute, UUID modifierUUID, String modifierName) {
-        AttributeInstance instance = player.getAttribute(attribute);
-        if (instance != null) {
-            instance.removeModifier(modifierUUID);
-            double totalModifier = 0.0;
-            for (ItemStack armorPiece : player.getArmorSlots()) {
-                if (armorPiece.getItem() instanceof ArmorItem armorItem) {
-                    if (attribute == Attributes.ARMOR) {
-                        totalModifier += armorItem.getDefense();
-                    } else if (attribute == Attributes.ARMOR_TOUGHNESS) {
-                        totalModifier += armorItem.getToughness();
-                    }
-                }
-                Modifier modifier = ModifierHandler.getModifier(armorPiece);
-                if (modifier != null) {
-                    totalModifier += getModifierValueForAttribute(modifier, attribute);
-                }
-            }
-            if (totalModifier != 0.0) {
-                instance.addPermanentModifier(new AttributeModifier(modifierUUID, modifierName, totalModifier, AttributeModifier.Operation.ADDITION));
-            }
-        }
-    }
-
-    private static double getModifierValueForAttribute(Modifier modifier, Attribute attribute) {
-        return modifier.modifiers.stream()
-                .filter(pair -> pair.getKey().get() == attribute)
-                .mapToDouble(pair -> pair.getValue().amount)
-                .sum();
-    }
-
-    public static UUID getModifierUUID(Attribute attribute, EquipmentSlot slot) {
-        return UUID.nameUUIDFromBytes((attribute.getDescriptionId() + slot.getName()).getBytes());
     }
 
     @SubscribeEvent
