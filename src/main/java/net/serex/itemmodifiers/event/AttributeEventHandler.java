@@ -134,7 +134,9 @@ public class AttributeEventHandler {
                     || block.builtInRegistryHolder().is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
                     || block.builtInRegistryHolder().is(BlockTags.ICE)
                     || block.builtInRegistryHolder().is(BlockTags.COAL_ORES)
-                    || block.builtInRegistryHolder().is(BlockTags.IRON_ORES);
+                    || block.builtInRegistryHolder().is(BlockTags.IRON_ORES)
+                    || block.builtInRegistryHolder().is(BlockTags.DIAMOND_ORES)
+                    || block.builtInRegistryHolder().is(BlockTags.NEEDS_IRON_TOOL);
     }
 
     private static double getDurabilityIncrease(Modifier modifier) {
