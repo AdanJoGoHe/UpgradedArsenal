@@ -15,12 +15,12 @@ public class ModifierPool {
 
     public void add(Modifier modifier) {
         this.modifiers.add(modifier);
-        this.totalWeight += modifier.rarity.getWeight();
+        this.totalWeight += modifier.weight;
     }
 
     public void remove(Modifier modifier) {
         if (this.modifiers.remove(modifier)) {
-            this.totalWeight -= modifier.rarity.getWeight();
+            this.totalWeight -= modifier.weight;
         }
     }
 
@@ -35,8 +35,10 @@ public class ModifierPool {
         int roll = random.nextInt(this.totalWeight);
         int currentWeight = 0;
         for (Modifier modifier : this.modifiers) {
-            if (roll >= (currentWeight += modifier.rarity.getWeight())) continue;
-            return modifier;
+            currentWeight += modifier.weight;
+            if (roll < currentWeight) {
+                return modifier;
+            }
         }
         return this.modifiers.get(this.modifiers.size() - 1);
     }
@@ -45,4 +47,3 @@ public class ModifierPool {
         return this.totalWeight;
     }
 }
-

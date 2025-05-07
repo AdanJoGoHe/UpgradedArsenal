@@ -59,13 +59,13 @@ public class Modifier {
     }
 
     public static enum Rarity {
-        UNCHANGED(ChatFormatting.GRAY, 100),
-        COMMON(ChatFormatting.GRAY, 55),
-        UNCOMMON(ChatFormatting.GREEN, 40),
-        RARE(ChatFormatting.BLUE, 25),
-        EPIC(ChatFormatting.LIGHT_PURPLE, 15),
-        LEGENDARY(ChatFormatting.GOLD, 8),
-        MYTHIC(ChatFormatting.RED, 3);
+        UNCHANGED(ChatFormatting.GRAY, 50),
+        COMMON(ChatFormatting.GRAY, 75),
+        UNCOMMON(ChatFormatting.GREEN, 100),
+        RARE(ChatFormatting.BLUE, 125),
+        EPIC(ChatFormatting.LIGHT_PURPLE, 150),
+        LEGENDARY(ChatFormatting.GOLD, 175),
+        MYTHIC(ChatFormatting.RED, 200);
 
         private final ChatFormatting color;
         private final int weight;
@@ -118,9 +118,8 @@ public class Modifier {
         }
 
         public Modifier build() {
-            int weight = 100;
+            int weight = this.rarity.getWeight();
             return new Modifier(this.name, this.debugName, weight, this.type, this.modifiers, this.rarity);
         }
     }
 }
-
