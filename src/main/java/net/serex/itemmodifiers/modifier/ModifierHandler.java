@@ -141,15 +141,11 @@ public class ModifierHandler {
                 existingModifiers.put(attribute, newModifierInstance);
             }
 
-            if (newModifier.rarity != Modifier.Rarity.UNCHANGED) {
-                String itemName = stack.getItem().getDescription().getString();
-                String modifierName = newModifier.getFormattedName().getString();
-                if (!itemName.startsWith(modifierName)) {
-                    MutableComponent newName = Component.literal(modifierName + " " + itemName).withStyle(newModifier.rarity.getColor());
-                    stack.setHoverName(newName);
-                }
-            } else {
-                stack.resetHoverName();
+            String itemName = stack.getItem().getDescription().getString();
+            String modifierName = newModifier.getFormattedName().getString();
+            if (!itemName.startsWith(modifierName)) {
+                MutableComponent newName = Component.literal(modifierName + " " + itemName).withStyle(newModifier.rarity.getColor());
+                stack.setHoverName(newName);
             }
 
             CompoundTag attributesNBT = new CompoundTag();
@@ -173,7 +169,7 @@ public class ModifierHandler {
 
     public static void updateItemNameAndColor(ItemStack stack) {
         Modifier modifier = getModifier(stack);
-        if (modifier != null && modifier.rarity != Modifier.Rarity.UNCHANGED) {
+        if (modifier != null) {
             String itemName = stack.getItem().getDescriptionId();
             String modifierName = modifier.getFormattedName().getString();
             if (!stack.hasCustomHoverName() || !stack.getHoverName().getString().startsWith(modifierName)) {
@@ -182,6 +178,7 @@ public class ModifierHandler {
                 stack.setHoverName(newName);
             }
         } else {
+            // Reset hover name for null modifiers
             stack.resetHoverName();
         }
     }
@@ -286,4 +283,3 @@ public class ModifierHandler {
         return Modifiers.WEAPON_POOL;
     }
 }
-

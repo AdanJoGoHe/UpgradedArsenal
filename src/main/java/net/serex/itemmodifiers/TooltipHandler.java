@@ -62,19 +62,20 @@ public class TooltipHandler {
         List<Component> tooltip = event.getToolTip();
         if (stack.hasTag() && stack.getTag().contains("itemmodifiers:modifier")) {
             Modifier modifier = ModifierHandler.getModifier(stack);
-            if (modifier != null && stack.getItem() instanceof BowItem) {
-                updateBowTooltip(stack, tooltip, modifier);
-            } else if (modifier != null && !(stack.getItem() instanceof CrossbowItem)) {
-                updateTooltip(stack, tooltip, modifier);
+            if (modifier != null) {
+                if (stack.getItem() instanceof BowItem) {
+                    updateBowTooltip(stack, tooltip, modifier);
+                } else if (!(stack.getItem() instanceof CrossbowItem)) {
+                    updateTooltip(stack, tooltip, modifier);
+                }
             }
         }
     }
 
     private static void updateTooltip(ItemStack stack, List<Component> tooltip, Modifier modifier) {
-        if (modifier.rarity != Modifier.Rarity.UNCHANGED) {
-            tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
-                    .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
-        }
+        tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
+                .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
+
         int whenIndex = findWhenIndex(tooltip);
         if (stack.getItem() instanceof ArmorItem) {
             updateArmorAttributes(stack, tooltip, modifier, whenIndex + 1);
@@ -114,14 +115,10 @@ public class TooltipHandler {
 
     private static void addModifierLines(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         tooltip.add(insertIndex++, Component.empty());
-        if (modifier.rarity == Modifier.Rarity.UNCHANGED) {
-            tooltip.add(insertIndex++, modifier.getFormattedName().copy().withStyle(ChatFormatting.GRAY));
-        } else {
-            tooltip.add(insertIndex++, modifier.getFormattedName().copy()
-                    .withStyle(modifier.rarity.getColor(), ChatFormatting.UNDERLINE));
-            for (Component line : getFormattedInfoLines(modifier)) {
-                tooltip.add(insertIndex++, line);
-            }
+        tooltip.add(insertIndex++, modifier.getFormattedName().copy()
+                .withStyle(modifier.rarity.getColor(), ChatFormatting.UNDERLINE));
+        for (Component line : getFormattedInfoLines(modifier)) {
+            tooltip.add(insertIndex++, line);
         }
     }
 
@@ -297,4 +294,3 @@ public class TooltipHandler {
         return 0.0;
     }
 }
-
