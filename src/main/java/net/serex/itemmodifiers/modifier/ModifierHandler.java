@@ -194,7 +194,7 @@ public class ModifierHandler {
         return tag != null && tag.getBoolean(PROCESSED_TAG);
     }
 
-    private static void markAsProcessed(ItemStack stack) {
+    public static void markAsProcessed(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean(PROCESSED_TAG, true);
     }

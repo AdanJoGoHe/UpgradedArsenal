@@ -2,10 +2,12 @@ package net.serex.itemmodifiers.modifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -16,13 +18,15 @@ import org.apache.commons.lang3.tuple.Pair;
 public class Modifier {
     public final ResourceLocation name;
     public final String debugName;
+    public final String displayName;
     public final int weight;
     public final ModifierType type;
     public final List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers;
     public final Rarity rarity;
 
-    private Modifier(ResourceLocation name, String debugName, int weight, ModifierType type, List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers, Rarity rarity) {
+    private Modifier(ResourceLocation name, String debugName, String displayName ,  int weight, ModifierType type, List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers, Rarity rarity) {
         this.name = name;
+        this.displayName = debugName;
         this.debugName = debugName;
         this.weight = weight;
         this.type = type;
@@ -30,10 +34,18 @@ public class Modifier {
         this.rarity = rarity;
     }
 
-    public MutableComponent getFormattedName() {
-        return Component.translatable("modifier.itemmodifiers." + this.name.getPath())
-                .withStyle(this.rarity.getColor());
+    public Component getFormattedName() {
+        return getFormattedName(false);
     }
+
+    public Component getFormattedName(boolean bold) {
+        Style baseStyle = Style.EMPTY.withColor(rarity.getColor());
+        if (bold) baseStyle = baseStyle.withBold(true);
+        return Component.translatable("modifier.itemmodifiers." + name.getPath()).withStyle(baseStyle);
+    }
+
+
+
 
 
     public double getDurabilityIncrease() {
@@ -53,7 +65,8 @@ public class Modifier {
         RARE(ChatFormatting.BLUE, 125),
         EPIC(ChatFormatting.LIGHT_PURPLE, 150),
         LEGENDARY(ChatFormatting.GOLD, 175),
-        MYTHIC(ChatFormatting.RED, 200);
+        MYTHIC(ChatFormatting.RED, 200),
+        HERO(ChatFormatting.DARK_RED, 225);
 
         private final ChatFormatting color;
         private final int weight;
@@ -84,15 +97,36 @@ public class Modifier {
 
     public static class ModifierBuilder {
         private final ResourceLocation name;
-        private final String debugName;
         private final ModifierType type;
-        private final List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers = new ArrayList<Pair<Supplier<Attribute>, AttributeModifierSupplier>>();
+        private final String debugName;
+
+        private String displayName;
+        private int weight;
         private Rarity rarity = Rarity.COMMON;
+        private final List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers = new ArrayList<>();
 
         public ModifierBuilder(ResourceLocation name, String debugName, ModifierType type) {
             this.name = name;
             this.debugName = debugName;
             this.type = type;
+        }
+
+        public ModifierBuilder(Modifier existing) {
+            this(existing.name, existing.debugName, existing.type);
+            this.displayName = existing.displayName;
+            this.weight = existing.weight;
+            this.rarity = existing.rarity;
+            this.modifiers.addAll(existing.modifiers);
+        }
+
+        public ModifierBuilder setDisplayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public ModifierBuilder setWeight(int weight) {
+            this.weight = weight;
+            return this;
         }
 
         public ModifierBuilder setRarity(Rarity rarity) {
@@ -101,13 +135,21 @@ public class Modifier {
         }
 
         public ModifierBuilder addModifier(Supplier<Attribute> attribute, AttributeModifierSupplier modifier) {
-            this.modifiers.add((Pair<Supplier<Attribute>, AttributeModifierSupplier>)new ImmutablePair(attribute, (Object)modifier));
+            this.modifiers.add(Pair.of(attribute, modifier));
             return this;
         }
 
         public Modifier build() {
-            int weight = this.rarity.getWeight();
-            return new Modifier(this.name, this.debugName, weight, this.type, this.modifiers, this.rarity);
+            return new Modifier(name, debugName, displayName, weight, type, modifiers, rarity);
         }
     }
+
+
+    public boolean hasAttribute(Attribute... attributes) {
+        Set<Attribute> targets = Set.of(attributes);
+        return this.modifiers.stream()
+                .map(entry -> entry.getKey().get())
+                .anyMatch(targets::contains);
+    }
+
 }

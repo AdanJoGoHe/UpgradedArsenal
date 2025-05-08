@@ -14,12 +14,23 @@
   "modifier.itemmodifiers.unchanged": "Sin cambios",
 
   "_comment.weapon_modifiers": "Modificadores de Armas - Común",
+
   "modifier.itemmodifiers.dull": "Desafilado",
   "modifier.itemmodifiers.blunt": "Romo",
   "modifier.itemmodifiers.rusty": "Oxidado",
   "modifier.itemmodifiers.heavy": "Pesado",
   "modifier.itemmodifiers.sluggish": "Lento",
   "modifier.itemmodifiers.bulky": "Voluminoso",
+  "attribute.itemmodifiers.jump_height": "Altura de salto",
+  "attribute.itemmodifiers.step_height": "Altura de paso",
+  "attribute.itemmodifiers.fire_resistance": "Resistencia al fuego",
+  "attribute.itemmodifiers.magic_resistance": "Resistencia mágica",
+  "attribute.itemmodifiers.critical_hit_chance": "Probabilidad de golpe crítico",
+  "attribute.itemmodifiers.critical_damage": "Daño de golpe crítico",
+  "attribute.itemmodifiers.lifesteal": "Robo de vida",
+  "attribute.itemmodifiers.xp_gain_bonus": "Bonificación de experiencia",
+  "attribute.itemmodifiers.swim_speed": "Velocidad de nado",
+  "attribute.itemmodifiers.respiration_efficiency": "Eficiencia de respiración",
 
   "_comment.weapon_modifiers_uncommon": "Modificadores de Armas - Poco común",
   "modifier.itemmodifiers.pointy": "Puntiagudo",
@@ -149,5 +160,25 @@
   "item.modifiers.legs": "Cuando está en las Piernas:",
   "item.modifiers.chest": "Cuando está en el Pecho:",
   "item.modifiers.head": "Cuando está en la Cabeza:",
-  "item.modifiers.equipped": "Cuando está Equipado:"
+  "item.modifiers.equipped": "Cuando está Equipado:",
+
+
+  "modifier.itemmodifiers.unchanged": "Sin cambios",
+  "modifier.itemmodifiers.common_worn": "Gastado",
+  "modifier.itemmodifiers.common_dented": "Abollado",
+  "modifier.itemmodifiers.uncommon_balanced": "Balanceado",
+  "modifier.itemmodifiers.uncommon_tempered": "Templado",
+  "modifier.itemmodifiers.rare_mystic": "Místico",
+  "modifier.itemmodifiers.rare_enchanted": "Hechizado",
+  "modifier.itemmodifiers.epic_focused": "Concentrado",
+  "modifier.itemmodifiers.epic_frenzied": "Frenético",
+  "modifier.itemmodifiers.legendary_titanic": "Titánico",
+  "modifier.itemmodifiers.legendary_wrathful": "Furioso",
+  "modifier.itemmodifiers.mythic_celestial": "Celestial",
+  "modifier.itemmodifiers.mythic_eldritch": "Arcano",
+  "modifier.itemmodifiers.hero_supreme": "Supremo",
+  "modifier.itemmodifiers.hero_infernal": "Infernal",
+
+  "attribute.itemmodifiers.regeneration": "Regeneración de salud"
+
 }

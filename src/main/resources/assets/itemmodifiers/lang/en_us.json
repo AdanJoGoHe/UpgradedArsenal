@@ -109,6 +109,18 @@
   "modifier.itemmodifiers.blessed_agility": "Blessed Agility",
   "modifier.itemmodifiers.godly_armor": "Godly",
   "modifier.itemmodifiers.celestial_blessing": "Celestial Blessing",
+  "attribute.itemmodifiers.jump_height": "Jump Height",
+  "attribute.itemmodifiers.step_height": "Step Height",
+  "attribute.itemmodifiers.fire_resistance": "Fire Resistance",
+  "attribute.itemmodifiers.magic_resistance": "Magic Resistance",
+  "attribute.itemmodifiers.critical_hit_chance": "Critical Hit Chance",
+  "attribute.itemmodifiers.critical_damage": "Critical Hit Damage",
+  "attribute.itemmodifiers.lifesteal": "Lifesteal",
+  "attribute.itemmodifiers.xp_gain_bonus": "XP Gain Bonus",
+  "attribute.itemmodifiers.swim_speed": "Swim Speed",
+  "attribute.itemmodifiers.respiration_efficiency": "Respiration Efficiency",
+
+
 
   "_comment.bow_modifiers": "Bow Modifiers",
   "modifier.itemmodifiers.lightweightbow": "Lightweight",
@@ -149,5 +161,25 @@
   "item.modifiers.legs": "When on Legs:",
   "item.modifiers.chest": "When on Chest:",
   "item.modifiers.head": "When on Head:",
-  "item.modifiers.equipped": "When Equipped:"
+  "item.modifiers.equipped": "When Equipped:",
+
+
+  "modifier.itemmodifiers.unchanged": "Unchanged",
+  "modifier.itemmodifiers.common_worn": "Worn",
+  "modifier.itemmodifiers.common_dented": "Dented",
+  "modifier.itemmodifiers.uncommon_balanced": "Balanced",
+  "modifier.itemmodifiers.uncommon_tempered": "Tempered",
+  "modifier.itemmodifiers.rare_mystic": "Mystic",
+  "modifier.itemmodifiers.rare_enchanted": "Enchanted",
+  "modifier.itemmodifiers.epic_focused": "Focused",
+  "modifier.itemmodifiers.epic_frenzied": "Frenzied",
+  "modifier.itemmodifiers.legendary_titanic": "Titanic",
+  "modifier.itemmodifiers.legendary_wrathful": "Wrathful",
+  "modifier.itemmodifiers.mythic_celestial": "Celestial",
+  "modifier.itemmodifiers.mythic_eldritch": "Eldritch",
+  "modifier.itemmodifiers.hero_supreme": "Supreme",
+  "modifier.itemmodifiers.hero_infernal": "Infernal",
+
+  "attribute.itemmodifiers.regeneration": "Health Regeneration"
+
 }

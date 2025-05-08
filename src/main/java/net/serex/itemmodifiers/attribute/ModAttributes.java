@@ -19,5 +19,29 @@ public class ModAttributes {
     public static final RegistryObject<Attribute> PROJECTILE_VELOCITY = ATTRIBUTES.register("projectile_velocity", () -> new RangedAttribute("attribute.itemmodifiers.projectile_velocity", 1.0, 0.0, 3.0).setSyncable(true));
     public static final RegistryObject<Attribute> PROJECTILE_DAMAGE = ATTRIBUTES.register("projectile_damage", () -> new RangedAttribute("attribute.itemmodifiers.projectile_damage", 1.0, 0.0, 5.0).setSyncable(true));
     public static final RegistryObject<Attribute> PROJECTILE_ACCURACY = ATTRIBUTES.register("projectile_accuracy", () -> new RangedAttribute("attribute.itemmodifiers.projectile_accuracy", 1.0, 0.0, 2.0).setSyncable(true));
+
+    public static final RegistryObject<Attribute> JUMP_HEIGHT = ATTRIBUTES.register("jump_height",
+            () -> new RangedAttribute("attribute.itemmodifiers.jump_height", 1.0, 0.0, 5.0).setSyncable(true));
+    public static final RegistryObject<Attribute> STEP_HEIGHT = ATTRIBUTES.register("step_height",
+            () -> new RangedAttribute("attribute.itemmodifiers.step_height", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> FIRE_RESISTANCE = ATTRIBUTES.register("fire_resistance",
+            () -> new RangedAttribute("attribute.itemmodifiers.fire_resistance", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> MAGIC_RESISTANCE = ATTRIBUTES.register("magic_resistance",
+            () -> new RangedAttribute("attribute.itemmodifiers.magic_resistance", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> CRITICAL_HIT_CHANCE = ATTRIBUTES.register("critical_hit_chance",
+            () -> new RangedAttribute("attribute.itemmodifiers.critical_hit_chance", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> CRITICAL_DAMAGE = ATTRIBUTES.register("critical_damage",
+            () -> new RangedAttribute("attribute.itemmodifiers.critical_damage", 1.0, 1.0, 5.0).setSyncable(true));
+    public static final RegistryObject<Attribute> LIFESTEAL = ATTRIBUTES.register("lifesteal",
+            () -> new RangedAttribute("attribute.itemmodifiers.lifesteal", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> XP_GAIN_BONUS = ATTRIBUTES.register("xp_gain_bonus",
+            () -> new RangedAttribute("attribute.itemmodifiers.xp_gain_bonus", 0.0, 0.0, 5.0).setSyncable(true));
+    public static final RegistryObject<Attribute> SWIM_SPEED = ATTRIBUTES.register("swim_speed",
+            () -> new RangedAttribute("attribute.itemmodifiers.swim_speed", 1.0, 0.1, 5.0).setSyncable(true));
+    public static final RegistryObject<Attribute> RESPIRATION_EFFICIENCY = ATTRIBUTES.register("respiration_efficiency",
+            () -> new RangedAttribute("attribute.itemmodifiers.respiration_efficiency", 1.0, 0.1, 10.0).setSyncable(true));
+    public static final RegistryObject<Attribute> REGENERATION = ATTRIBUTES.register("regeneration",
+            () -> new RangedAttribute("attribute.itemmodifiers.regeneration", 0.0, 0.0, 10.0).setSyncable(true));
+
 }
 

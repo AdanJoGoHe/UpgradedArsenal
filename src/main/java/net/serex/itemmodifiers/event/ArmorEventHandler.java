@@ -15,41 +15,50 @@ import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
 
-@Mod.EventBusSubscriber(modid="itemmodifiers")
+@Mod.EventBusSubscriber(modid = "itemmodifiers")
 public class ArmorEventHandler {
-    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    private static final UUID TOUGHNESS_MODIFIER_UUID = UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D");
-    private static final UUID KNOCKBACK_RESISTANCE_MODIFIER_UUID = UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D");
-    private static final UUID MAX_HEALTH_MODIFIER_UUID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC");
-    private static final UUID MOVEMENT_SPEED_MODIFIER_UUID = UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635");
-    private static final UUID ATTACK_DAMAGE_MODIFIER_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    private static final UUID ATTACK_SPEED_MODIFIER_UUID = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-    private static final UUID LUCK_MODIFIER_UUID = UUID.fromString("03C3C89D-7037-4B42-869F-B146BCB64D2E");
 
     @SubscribeEvent
     public static void onLivingEquipmentChange(LivingEquipmentChangeEvent event) {
-        LivingEntity livingEntity = event.getEntity();
-        if (livingEntity instanceof Player player) {
-            EquipmentSlot slot = event.getSlot();
-            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
-                ItemStack oldItem = event.getFrom();
-                ItemStack newItem = event.getTo();
-                ModifierHandler.handleEquipmentChange(player, slot, oldItem, newItem);
-            }
-        }
+        LivingEntity entity = event.getEntity();
+        if (!(entity instanceof Player player)) return;
+
+        EquipmentSlot slot = event.getSlot();
+        if (slot.getType() != EquipmentSlot.Type.ARMOR) return;
+
+        ItemStack oldItem = event.getFrom();
+        ItemStack newItem = event.getTo();
+        ModifierHandler.handleEquipmentChange(player, slot, oldItem, newItem);
     }
 
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
-        LivingEntity livingEntity = event.getEntity();
-        if (livingEntity instanceof Player player) {
-            ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-            Modifier modifier = ModifierHandler.getModifier(boots);
-            AttributeInstance fallDamageResistance = player.getAttribute(ModAttributes.FALL_DAMAGE_RESISTANCE.get());
-            if (modifier != null && fallDamageResistance != null) {
-                double resistanceValue = fallDamageResistance.getValue();
-                event.setDistance((float) (event.getDistance() * (1.0 - resistanceValue)));
-            }
+        LivingEntity entity = event.getEntity();
+        if (!(entity instanceof Player player)) return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        Modifier modifier = ModifierHandler.getModifier(boots);
+        if (modifier == null) return;
+
+        AttributeInstance fallRes = player.getAttribute(ModAttributes.FALL_DAMAGE_RESISTANCE.get());
+        if (fallRes != null) {
+            double value = fallRes.getValue();
+            event.setDistance((float) (event.getDistance() * (1.0 - value)));
+        }
+
+        AttributeInstance jumpBoost = player.getAttribute(ModAttributes.JUMP_HEIGHT.get());
+        if (jumpBoost != null && jumpBoost.getValue() > 0.0) {
+            player.setDeltaMovement(player.getDeltaMovement().add(0, 0.05 * jumpBoost.getValue(), 0));
+        }
+
+        AttributeInstance swimSpeed = player.getAttribute(ModAttributes.SWIM_SPEED.get());
+        if (swimSpeed != null && player.isInWater()) {
+            player.setDeltaMovement(player.getDeltaMovement().multiply(1, 1, 1 + swimSpeed.getValue()));
+        }
+
+        AttributeInstance healthRegen = player.getAttribute(ModAttributes.REGENERATION.get());
+        if (healthRegen != null && player.getHealth() < player.getMaxHealth()) {
+            player.heal((float) healthRegen.getValue());
         }
     }
 }

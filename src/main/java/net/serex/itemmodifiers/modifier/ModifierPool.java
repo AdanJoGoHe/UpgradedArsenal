@@ -23,19 +23,17 @@ public class ModifierPool {
     }
 
     public Modifier roll(RandomSource random) {
-        if (this.totalWeight == 0 || this.modifiers.isEmpty()) {
-            return null;
+        if (totalWeight <= 0) return null;
+
+        int roll = random.nextInt(totalWeight);
+        for (Modifier modifier : modifiers) {
+            roll -= modifier.weight;
+            if (roll < 0) return modifier;
         }
-        int roll = random.nextInt(this.totalWeight);
-        int currentWeight = 0;
-        for (Modifier modifier : this.modifiers) {
-            currentWeight += modifier.weight;
-            if (roll < currentWeight) {
-                return modifier;
-            }
-        }
-        return this.modifiers.get(this.modifiers.size() - 1);
+
+        return null; //Edge case
     }
+
 
     public int getTotalWeight() {
         return this.totalWeight;
