@@ -59,14 +59,15 @@ public class Modifier {
     }
 
     public static enum Rarity {
-        UNCHANGED(ChatFormatting.GRAY, 50),
-        COMMON(ChatFormatting.GRAY, 75),
-        UNCOMMON(ChatFormatting.GREEN, 100),
-        RARE(ChatFormatting.BLUE, 125),
+        UNCHANGED(ChatFormatting.GRAY, 900),
+        COMMON(ChatFormatting.GRAY, 650),
+        UNCOMMON(ChatFormatting.GREEN, 400),
+        RARE(ChatFormatting.BLUE, 250),
         EPIC(ChatFormatting.LIGHT_PURPLE, 150),
-        LEGENDARY(ChatFormatting.GOLD, 175),
-        MYTHIC(ChatFormatting.RED, 200),
-        HERO(ChatFormatting.DARK_RED, 225);
+        LEGENDARY(ChatFormatting.GOLD, 100),
+        MYTHIC(ChatFormatting.RED, 75),
+        HERO(ChatFormatting.DARK_RED, 50);
+
 
         private final ChatFormatting color;
         private final int weight;

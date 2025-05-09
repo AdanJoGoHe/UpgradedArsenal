@@ -51,9 +51,42 @@ public class CombatEventHandler {
         Player player = event.player;
         if (player.tickCount % 40 != 0) return;
 
+        handleRegeneration(player); // Lógica para la regeneración
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        handleSwimSpeedBoost(player);
+        applyRespirationEfficiency(player);
+    }
+
+    private static void handleRegeneration(Player player) {
         double regenAmount = getAttributeValueFromAll(player, ModAttributes.REGENERATION.get());
         if (regenAmount > 0.0 && player.getHealth() < player.getMaxHealth()) {
             player.heal((float) regenAmount);
+        }
+    }
+
+    private static void applyRespirationEfficiency(Player player) {
+        if (!player.isUnderWater()) return;
+
+        double efficiency = getAttributeValueFromAll(player, ModAttributes.RESPIRATION_EFFICIENCY.get());
+        if (efficiency > 1.0 && player.getAirSupply() < player.getMaxAirSupply()) {
+            int restored = (int)((efficiency - 1.0) * 2);
+            player.setAirSupply(Math.min(player.getAirSupply() + restored, player.getMaxAirSupply()));
+        }
+    }
+
+    private static void handleSwimSpeedBoost(Player player) {
+        if (!player.isInWater()) return;
+
+        double swimBoost = getAttributeValueFromAll(player, ModAttributes.SWIM_SPEED.get());
+        if (swimBoost > 1.0) {
+            Vec3 motion = player.getDeltaMovement();
+            Vec3 boosted = new Vec3(motion.x, motion.y, motion.z).scale(swimBoost);
+            player.setDeltaMovement(boosted);
         }
     }
 
@@ -83,7 +116,7 @@ public class CombatEventHandler {
         }
 
 
-        private static double getAttributeValueFromAll(Player player, Attribute attribute) {
+        public static double getAttributeValueFromAll(Player player, Attribute attribute) {
             double total = 0.0;
             // Main hand and offhand
             for (InteractionHand hand : InteractionHand.values()) {

@@ -9,11 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
+
+import static net.serex.itemmodifiers.event.CombatEventHandler.getAttributeValueFromAll;
 
 @Mod.EventBusSubscriber(modid = "itemmodifiers")
 public class ArmorEventHandler {
@@ -30,6 +33,17 @@ public class ArmorEventHandler {
         ItemStack newItem = event.getTo();
         ModifierHandler.handleEquipmentChange(player, slot, oldItem, newItem);
     }
+
+    @SubscribeEvent
+    public static void onXpGain(PlayerXpEvent.XpChange event) {
+        Player player = event.getEntity();
+        double bonus = getAttributeValueFromAll(player, ModAttributes.XP_GAIN_BONUS.get());
+        if (bonus > 0) {
+            int extra = (int)(event.getAmount() * bonus);
+            event.setAmount(event.getAmount() + extra);
+        }
+    }
+
 
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
@@ -51,10 +65,7 @@ public class ArmorEventHandler {
             player.setDeltaMovement(player.getDeltaMovement().add(0, 0.05 * jumpBoost.getValue(), 0));
         }
 
-        AttributeInstance swimSpeed = player.getAttribute(ModAttributes.SWIM_SPEED.get());
-        if (swimSpeed != null && player.isInWater()) {
-            player.setDeltaMovement(player.getDeltaMovement().multiply(1, 1, 1 + swimSpeed.getValue()));
-        }
+
 
         AttributeInstance healthRegen = player.getAttribute(ModAttributes.REGENERATION.get());
         if (healthRegen != null && player.getHealth() < player.getMaxHealth()) {
