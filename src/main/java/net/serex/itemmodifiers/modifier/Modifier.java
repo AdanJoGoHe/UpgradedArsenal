@@ -140,8 +140,10 @@ public class Modifier {
         }
 
         public Modifier build() {
-            return new Modifier(name, debugName, displayName, weight, type, modifiers, rarity);
+            int actualWeight = this.weight > 0 ? this.weight : this.rarity.getWeight();
+            return new Modifier(this.name, this.debugName, this.displayName,  actualWeight, this.type, this.modifiers, this.rarity);
         }
+
     }
 
 

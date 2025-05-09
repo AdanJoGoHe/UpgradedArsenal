@@ -34,35 +34,103 @@ import org.apache.commons.lang3.tuple.Pair;
 @Mod.EventBusSubscriber(modid="itemmodifiers")
 public class AttributeEventHandler {
     private static final UUID MOVEMENT_SPEED_MODIFIER_UUID = UUID.fromString("d74fc612-c093-4a42-a146-45c8f3f8babe");
+    private static final UUID MAX_HEALTH_MODIFIER_UUID = UUID.fromString("91fc27b3-f61d-4627-9d33-bcb2938e0ddf");
+
 
     @SubscribeEvent
     public static void onPlayerUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity livingEntity = event.getEntity();
-        if (livingEntity instanceof Player) {
-            Player player = (Player)livingEntity;
-            AttributeEventHandler.updatePlayerMovementSpeed(player);
-        }
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        updatePlayerMovementSpeed(player);
+        updatePlayerMaxHealth(player);
     }
 
     private static void updatePlayerMovementSpeed(Player player) {
-        double speedIncrease = getSpeedIncrease(player);
+        double speedIncrease = getMaxAttributeValue(player, ModAttributes.MOVEMENT_SPEED.get());
         AttributeInstance movementAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (movementAttribute != null) {
-            AttributeModifier existingModifier = movementAttribute.getModifier(MOVEMENT_SPEED_MODIFIER_UUID);
-            if (existingModifier != null) {
-                movementAttribute.removeModifier(existingModifier);
+        applyModifier(movementAttribute, MOVEMENT_SPEED_MODIFIER_UUID, "ItemModifiers movement speed bonus", speedIncrease - 1.0, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    }
+
+    private static void updatePlayerMaxHealth(Player player) {
+        double extraHealth = getAttributeValueFromEquipment(player, Attributes.MAX_HEALTH);
+
+        AttributeInstance maxHealthAttr = player.getAttribute(Attributes.MAX_HEALTH);
+        if (maxHealthAttr != null) {
+            AttributeModifier existing = maxHealthAttr.getModifier(MAX_HEALTH_MODIFIER_UUID);
+            if (existing != null) {
+                maxHealthAttr.removeModifier(existing);
             }
-            if (speedIncrease > 1.0) {
-                AttributeModifier newModifier = new AttributeModifier(
-                        MOVEMENT_SPEED_MODIFIER_UUID,
-                        "ItemModifiers movement speed bonus",
-                        speedIncrease - 1.0,
-                        AttributeModifier.Operation.MULTIPLY_TOTAL
+
+            if (extraHealth != 0.0) {
+                AttributeModifier mod = new AttributeModifier(
+                        MAX_HEALTH_MODIFIER_UUID,
+                        "ItemModifiers max health bonus",
+                        extraHealth,
+                        AttributeModifier.Operation.ADDITION
                 );
-                movementAttribute.addPermanentModifier(newModifier);
+                maxHealthAttr.addTransientModifier(mod);
             }
         }
+
+        // Cap current health to new max
+        if (player.getHealth() > player.getMaxHealth()) {
+            player.setHealth(player.getMaxHealth());
+        }
     }
+
+    private static double getAttributeValueFromEquipment(Player player, Attribute attribute) {
+        double total = 0.0;
+
+        // Recorre armadura
+        for (ItemStack item : player.getArmorSlots()) {
+            Modifier modifier = ModifierHandler.getModifier(item);
+            if (modifier != null) {
+                total += getAttributeValue(modifier, attribute);
+            }
+        }
+
+        // Recorre ambas manos
+        for (InteractionHand hand : InteractionHand.values()) {
+            ItemStack item = player.getItemInHand(hand);
+            Modifier modifier = ModifierHandler.getModifier(item);
+            if (modifier != null) {
+                total += getAttributeValue(modifier, attribute);
+            }
+        }
+
+        return total;
+    }
+
+
+    private static void applyModifier(AttributeInstance instance, UUID uuid, String name, double amount, AttributeModifier.Operation operation) {
+        if (instance == null) return;
+
+        AttributeModifier existing = instance.getModifier(uuid);
+        if (existing != null) {
+            instance.removeModifier(existing);
+        }
+        if (amount != 0.0) {
+            instance.addPermanentModifier(new AttributeModifier(uuid, name, amount, operation));
+        }
+    }
+
+    private static double getMaxAttributeValue(Player player, Attribute attribute) {
+        double result = 1.0;
+        for (ItemStack item : player.getArmorSlots()) {
+            Modifier modifier = ModifierHandler.getModifier(item);
+            if (modifier != null) {
+                result = Math.max(result, getAttributeValue(modifier, attribute));
+            }
+        }
+        for (InteractionHand hand : InteractionHand.values()) {
+            Modifier modifier = ModifierHandler.getModifier(player.getItemInHand(hand));
+            if (modifier != null) {
+                result = Math.max(result, getAttributeValue(modifier, attribute));
+            }
+        }
+        return result;
+    }
+
 
     private static double getSpeedIncrease(Modifier modifier) {
         return modifier.modifiers.stream().filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.MOVEMENT_SPEED.get()).mapToDouble(pair -> ((Modifier.AttributeModifierSupplier)pair.getValue()).amount).sum();
@@ -132,10 +200,17 @@ public class AttributeEventHandler {
 
     private static double getAttributeValue(Modifier modifier, Attribute attribute) {
         for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-            if (((Supplier)entry.getKey()).get() != attribute) continue;
-            return 1.0 + ((Modifier.AttributeModifierSupplier)entry.getValue()).amount;
+            if (entry.getKey().get().equals(attribute)) {
+                double value = entry.getValue().amount;
+                // Max health should be additive, not multiplier
+                if (attribute.equals(Attributes.MAX_HEALTH)) {
+                    return value;
+                }
+                return 1.0 + value;
+            }
         }
-        return 1.0;
+        return attribute.equals(Attributes.MAX_HEALTH) ? 0.0 : 1.0;
     }
+
 }
 

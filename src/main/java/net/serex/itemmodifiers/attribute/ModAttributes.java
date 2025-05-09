@@ -26,8 +26,7 @@ public class ModAttributes {
             () -> new RangedAttribute("attribute.itemmodifiers.step_height", 0.0, 0.0, 1.0).setSyncable(true));
     public static final RegistryObject<Attribute> FIRE_RESISTANCE = ATTRIBUTES.register("fire_resistance",
             () -> new RangedAttribute("attribute.itemmodifiers.fire_resistance", 0.0, 0.0, 1.0).setSyncable(true));
-    public static final RegistryObject<Attribute> MAGIC_RESISTANCE = ATTRIBUTES.register("magic_resistance",
-            () -> new RangedAttribute("attribute.itemmodifiers.magic_resistance", 0.0, 0.0, 1.0).setSyncable(true));
+
     public static final RegistryObject<Attribute> CRITICAL_HIT_CHANCE = ATTRIBUTES.register("critical_hit_chance",
             () -> new RangedAttribute("attribute.itemmodifiers.critical_hit_chance", 0.0, 0.0, 1.0).setSyncable(true));
     public static final RegistryObject<Attribute> CRITICAL_DAMAGE = ATTRIBUTES.register("critical_damage",

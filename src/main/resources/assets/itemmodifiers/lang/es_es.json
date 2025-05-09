@@ -142,7 +142,8 @@
   "attribute.itemmodifiers.attack_speed_percent": "Velocidad de Ataque",
   "attribute.itemmodifiers.mining_speed_increase_percent": "Velocidad de Minería",
   "attribute.itemmodifiers.mined_drop_double_chance_percent": "Probabilidad de Duplicar Objetos",
-  "attribute.itemmodifiers.durability_increase_percent": "Durabilidad Máxima",
+  "attribute.itemmodifiers.durability_increase_percent": "Durabilidad Máxima porcentual",
+  "attribute.itemmodifiers.durability_increase": "Durabilidad Máxima",
   "attribute.itemmodifiers.movement_speed_increase_percent": "Velocidad de Movimiento",
   "attribute.itemmodifiers.fall_damage_resistance": "Resistencia a Daño por Caída",
   "attribute.itemmodifiers.step_height": "Altura de Paso",
@@ -179,6 +180,31 @@
   "modifier.itemmodifiers.hero_supreme": "Supremo",
   "modifier.itemmodifiers.hero_infernal": "Infernal",
 
-  "attribute.itemmodifiers.regeneration": "Regeneración de salud"
+  "attribute.itemmodifiers.regeneration": "Regeneración de salud",
+
+  "modifier.itemmodifiers.loose_grip": "Empuñadura Floja",
+  "modifier.itemmodifiers.soft_sole": "Suela Blanda",
+  "modifier.itemmodifiers.hardheaded": "Cabeza Dura",
+  "modifier.itemmodifiers.keen": "Sagaz",
+  "modifier.itemmodifiers.quick_hands": "Manos Rápidas",
+  "modifier.itemmodifiers.heavy_strikes": "Golpes Fuertes",
+  "modifier.itemmodifiers.berserker": "Berserker",
+  "modifier.itemmodifiers.grounded": "Conectado a Tierra",
+  "modifier.itemmodifiers.swift_steps": "Pasos Rápidos",
+  "modifier.itemmodifiers.phantom": "Fantasma",
+  "modifier.itemmodifiers.crackshot": "Francotirador",
+  "modifier.itemmodifiers.fortified": "Fortificado",
+  "modifier.itemmodifiers.lucky_touch": "Toque de la Suerte",
+  "modifier.itemmodifiers.juggernaut": "Imparable",
+  "modifier.itemmodifiers.thundercaller": "Invocatormentas",
+  "modifier.itemmodifiers.adamant": "Adamantino",
+  "modifier.itemmodifiers.midas_gift": "Regalo de Midas",
+  "modifier.itemmodifiers.bloodthirsty": "Sediento de Sangre",
+  "modifier.itemmodifiers.warped_reflexes": "Reflejos Distorcionados",
+  "modifier.itemmodifiers.divine_momentum": "Impulso Divino",
+  "modifier.itemmodifiers.deadeye": "Ojo Muerto",
+  "modifier.itemmodifiers.titans_wrath": "Ira del Titán",
+  "modifier.itemmodifiers.ethereal_grace": "Gracia Etérea",
+  "modifier.itemmodifiers.legends_fortune": "Fortuna de Leyenda"
 
 }
