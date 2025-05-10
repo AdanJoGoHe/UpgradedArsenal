@@ -1,7 +1,7 @@
 {
   "id": "berserker",
   "name": "berserker",
-  "type": "held",
+  "type": "equipped",
   "rarity": "rare",
   "attributes": [
     {

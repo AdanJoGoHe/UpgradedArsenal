@@ -221,7 +221,6 @@
 
   "modifier.itemmodifiers.bouncy": "Bouncy",
   "modifier.itemmodifiers.sizzled": "Sizzled",
-  "modifier.itemmodifiers.reinforced": "Reinforced",
   "modifier.itemmodifiers.recuperative": "Recuperative",
   "modifier.itemmodifiers.aquatic": "Aquatic",
   "modifier.itemmodifiers.featherstep": "Featherstep",
@@ -237,24 +236,8 @@
   "modifier.itemmodifiers.bloodgod": "Blood God",
   "modifier.itemmodifiers.flameheart": "Flameheart",
   "modifier.itemmodifiers.ocean_king": "Ocean King",
-
-  "modifier.itemmodifiers.bouncy": "Saltarín",
-  "modifier.itemmodifiers.sizzled": "Chamuscado",
-  "modifier.itemmodifiers.reinforced": "Reforzado",
-  "modifier.itemmodifiers.recuperative": "Recuperativo",
-  "modifier.itemmodifiers.aquatic": "Acuático",
-  "modifier.itemmodifiers.featherstep": "Paso Ligero",
-  "modifier.itemmodifiers.emberwalker": "Caminallamas",
-  "modifier.itemmodifiers.survivor": "Superviviente",
-  "modifier.itemmodifiers.tidebound": "Atado a la marea",
-  "modifier.itemmodifiers.vampire": "Vampiro",
-  "modifier.itemmodifiers.sunfury": "Furia Solar",
-  "modifier.itemmodifiers.resonant": "Resonante",
-  "modifier.itemmodifiers.jumpmaster": "Maestro del Salto",
-  "modifier.itemmodifiers.soulbinder": "Vinculaalmas",
-  "modifier.itemmodifiers.darkflame": "Llama Oscura",
-  "modifier.itemmodifiers.bloodgod": "Dios de la Sangre",
-  "modifier.itemmodifiers.flameheart": "Corazón Ígneo",
-  "modifier.itemmodifiers.ocean_king": "Rey del Océano"
+  "modifier.itemmodifiers.phoenix_blessing": "Phoenix Blessing",
+  "modifier.itemmodifiers.lifebloom": "Lifebloom",
+  "modifier.itemmodifiers.scholar": "Scholar"
 
 }

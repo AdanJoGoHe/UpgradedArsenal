@@ -17,14 +17,16 @@ import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.client.BowAnimationHandler;
 import net.serex.itemmodifiers.config.CustomConfig;
 import net.serex.itemmodifiers.config.CustomConfigCache;
+import net.serex.itemmodifiers.config.ModifierLoader;
+import net.serex.itemmodifiers.config.RarityConfigLoader;
 import net.serex.itemmodifiers.event.*;
 import net.serex.itemmodifiers.modifier.Modifiers;
 
-@Mod(value="itemmodifiers")
-public class ItemModifiers {
+@Mod(value= Main.MODID)
+public class Main {
     public static final String MODID = "itemmodifiers";
 
-    public ItemModifiers() {
+    public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register((Object)this);
         modEventBus.addListener(this::setup);
@@ -66,6 +68,7 @@ public class ItemModifiers {
         @SubscribeEvent
         public static void onAddReloadListeners(AddReloadListenerEvent event) {
             event.addListener(new ModifierLoader());
+            event.addListener(new RarityConfigLoader());
         }
     }
 }

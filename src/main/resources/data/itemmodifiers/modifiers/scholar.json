@@ -1,0 +1,18 @@
+{
+  "id": "scholar",
+  "name": "scholar",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:xp_gain_bonus",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

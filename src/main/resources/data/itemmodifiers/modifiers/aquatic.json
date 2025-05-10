@@ -13,6 +13,11 @@
       "attribute": "itemmodifiers:respiration_efficiency",
       "value": 0.2,
       "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 0.05,
+      "operation": "multiply_total"
     }
   ]
 }

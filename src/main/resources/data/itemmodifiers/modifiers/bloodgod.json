@@ -1,7 +1,7 @@
 {
   "id": "bloodgod",
   "name": "blood god",
-  "type": "held",
+  "type": "equipped",
   "rarity": "hero",
   "attributes": [
     {

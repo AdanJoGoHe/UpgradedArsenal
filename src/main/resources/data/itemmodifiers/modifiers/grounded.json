@@ -1,13 +1,23 @@
 {
   "id": "grounded",
   "name": "grounded",
-  "type": "held",
+  "type": "equipped",
   "rarity": "rare",
   "attributes": [
     {
       "attribute": "minecraft:generic.knockback_resistance",
       "value": 0.2,
       "operation": "addition"
+    },
+    {
+      "attribute": "itemmodifiers:durability_increase",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:movement_speed",
+      "value": -0.05,
+      "operation": "multiply_total"
     }
   ]
 }

@@ -1,6 +1,8 @@
 package net.serex.itemmodifiers.modifier;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
 public class ModifierPool {
@@ -27,7 +29,10 @@ public class ModifierPool {
     }
 
     public Modifier roll(RandomSource random) {
-        if (totalWeight <= 0) return null;
+        if (totalWeight <= 0 || modifiers.isEmpty()) {
+            System.err.println("[ModifierPool] Pool vacío o sin peso válido. Devolviendo 'unchanged'.");
+            return Modifiers.getModifier(new ResourceLocation("itemmodifiers", "unchanged"));
+        }
 
         int roll = random.nextInt(totalWeight);
         for (Modifier modifier : modifiers) {
@@ -35,8 +40,11 @@ public class ModifierPool {
             if (roll < 0) return modifier;
         }
 
-        return null; //Edge case
+        // Fallback robusto
+        System.err.println("[ModifierPool] Edge case: ningún modificador elegido tras roll. Usando 'unchanged'.");
+        return Modifiers.getModifier(new ResourceLocation("itemmodifiers", "unchanged"));
     }
+
 
     public int getTotalWeight() {
         return this.totalWeight;

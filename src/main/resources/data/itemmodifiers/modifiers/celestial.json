@@ -1,0 +1,33 @@
+{
+  "id": "celestial",
+  "name": "celestial",
+  "type": "equipped",
+  "rarity": "mythic",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:xp_gain_bonus",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:jump_height",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.1,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": -0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}

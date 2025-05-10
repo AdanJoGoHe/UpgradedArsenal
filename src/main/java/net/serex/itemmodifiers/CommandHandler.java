@@ -81,7 +81,7 @@ public class CommandHandler {
 
                                             builder.addModifier(() -> attribute, new Modifier.AttributeModifierSupplier(amount, AttributeModifier.Operation.ADDITION));
 
-// ¡Combina en lugar de reemplazar!
+
                                             ModifierHandler.applyModifier(stack, builder.build());
                                             ModifierHandler.markAsProcessed(stack);
 

@@ -44,10 +44,6 @@ public class Modifier {
         return Component.translatable("modifier.itemmodifiers." + name.getPath()).withStyle(baseStyle);
     }
 
-
-
-
-
     public double getDurabilityIncrease() {
         return this.modifiers.stream().filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.DURABILITY_INCREASE.get()).mapToDouble(pair -> ((AttributeModifierSupplier)pair.getValue()).amount).sum();
     }
@@ -55,7 +51,6 @@ public class Modifier {
     public static enum ModifierType {
         EQUIPPED,
         HELD;
-
     }
 
     public static enum Rarity {
@@ -69,8 +64,8 @@ public class Modifier {
         HERO(ChatFormatting.DARK_RED, 50);
 
 
-        private final ChatFormatting color;
-        private final int weight;
+        private ChatFormatting color;
+        private int weight;
 
         private Rarity(ChatFormatting color, int weight) {
             this.color = color;
@@ -83,6 +78,14 @@ public class Modifier {
 
         public int getWeight() {
             return this.weight;
+        }
+
+        public void setColor(ChatFormatting color) {
+            this.color = color;
+        }
+
+        public void setWeight(int weight) {
+            this.weight = weight;
         }
     }
 

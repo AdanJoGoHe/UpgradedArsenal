@@ -2,7 +2,7 @@
   "id": "survivor",
   "name": "survivor",
   "type": "equipped",
-  "rarity": "rare",
+  "rarity": "legendary",
   "attributes": [
     {
       "attribute": "itemmodifiers:regeneration",

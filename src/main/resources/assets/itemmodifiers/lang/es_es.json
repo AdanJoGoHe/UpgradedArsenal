@@ -11,7 +11,6 @@
   "rarity.mythic": "Mítico",
 
   "_comment.general": "Modificadores Generales",
-  "modifier.itemmodifiers.unchanged": "Sin cambios",
 
   "_comment.weapon_modifiers": "Modificadores de Armas - Común",
 
@@ -22,7 +21,6 @@
   "modifier.itemmodifiers.sluggish": "Lento",
   "modifier.itemmodifiers.bulky": "Voluminoso",
   "attribute.itemmodifiers.jump_height": "Altura de salto",
-  "attribute.itemmodifiers.step_height": "Altura de paso",
   "attribute.itemmodifiers.fire_resistance": "Resistencia al fuego",
   "attribute.itemmodifiers.magic_resistance": "Resistencia mágica",
   "attribute.itemmodifiers.critical_hit_chance": "Probabilidad de golpe crítico",
@@ -88,7 +86,6 @@
   "modifier.itemmodifiers.quick_tool": "Rápido",
   "modifier.itemmodifiers.sturdy": "Resistente",
   "modifier.itemmodifiers.sturdy_tool": "Resistente",
-  "modifier.itemmodifiers.reinforced": "Reforzado",
   "modifier.itemmodifiers.efficient": "Eficiente",
   "modifier.itemmodifiers.fortuitous": "Afortunado",
   "modifier.itemmodifiers.enduring": "Perdurable",
@@ -205,6 +202,27 @@
   "modifier.itemmodifiers.deadeye": "Ojo Muerto",
   "modifier.itemmodifiers.titans_wrath": "Ira del Titán",
   "modifier.itemmodifiers.ethereal_grace": "Gracia Etérea",
-  "modifier.itemmodifiers.legends_fortune": "Fortuna de Leyenda"
+  "modifier.itemmodifiers.legends_fortune": "Fortuna de Leyenda",
 
+  "modifier.itemmodifiers.bouncy": "Saltarín",
+  "modifier.itemmodifiers.sizzled": "Chamuscado",
+  "modifier.itemmodifiers.reinforced": "Reforzado",
+  "modifier.itemmodifiers.recuperative": "Recuperativo",
+  "modifier.itemmodifiers.aquatic": "Acuático",
+  "modifier.itemmodifiers.featherstep": "Paso Ligero",
+  "modifier.itemmodifiers.emberwalker": "Caminallamas",
+  "modifier.itemmodifiers.survivor": "Superviviente",
+  "modifier.itemmodifiers.tidebound": "Atado a la marea",
+  "modifier.itemmodifiers.vampire": "Vampiro",
+  "modifier.itemmodifiers.sunfury": "Furia Solar",
+  "modifier.itemmodifiers.resonant": "Resonante",
+  "modifier.itemmodifiers.jumpmaster": "Maestro del Salto",
+  "modifier.itemmodifiers.soulbinder": "Vinculaalmas",
+  "modifier.itemmodifiers.darkflame": "Llama Oscura",
+  "modifier.itemmodifiers.bloodgod": "Dios de la Sangre",
+  "modifier.itemmodifiers.flameheart": "Corazón Ígneo",
+  "modifier.itemmodifiers.ocean_king": "Rey del Océano",
+  "modifier.itemmodifiers.phoenix_blessing": "Bendición del Fénix",
+  "modifier.itemmodifiers.lifebloom": "Florecimiento Vital",
+  "modifier.itemmodifiers.scholar": "Escolar"
 }

@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.itemmodifiers.config;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -10,6 +10,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.serex.itemmodifiers.ModifierJson;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.Modifiers;
 

@@ -90,10 +90,6 @@ public class Modifiers {
     public static Modifier FLAMEHEART;
     public static Modifier OCEAN_KING;
 
-
-
-
-
     static {
         Modifier.ModifierType held = Modifier.ModifierType.HELD;
         Modifier.ModifierType equipped = Modifier.ModifierType.EQUIPPED;
