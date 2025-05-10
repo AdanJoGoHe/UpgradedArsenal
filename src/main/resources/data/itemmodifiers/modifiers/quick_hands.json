@@ -1,0 +1,13 @@
+{
+  "id": "quick_hands",
+  "name": "quick hands",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:mining_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

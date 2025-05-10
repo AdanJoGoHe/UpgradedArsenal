@@ -1,0 +1,13 @@
+{
+  "id": "powerful",
+  "name": "powerful",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:projectile_damage",
+      "value": 0.15,
+      "operation": "multiply_total"
+    }
+  ]
+}

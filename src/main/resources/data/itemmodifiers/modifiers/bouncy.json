@@ -1,0 +1,13 @@
+{
+  "id": "bouncy",
+  "name": "bouncy",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:jump_height",
+      "value": 0.5,
+      "operation": "multiply_total"
+    }
+  ]
+}

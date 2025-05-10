@@ -1,0 +1,18 @@
+{
+  "id": "heavy",
+  "name": "heavy",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "value": -0.1,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}

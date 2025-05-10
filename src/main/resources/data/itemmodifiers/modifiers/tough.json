@@ -1,0 +1,13 @@
+{
+  "id": "tough",
+  "name": "tough",
+  "type": "equipped",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "value": 1.0,
+      "operation": "addition"
+    }
+  ]
+}

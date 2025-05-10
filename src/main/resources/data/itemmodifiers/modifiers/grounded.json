@@ -1,0 +1,13 @@
+{
+  "id": "grounded",
+  "name": "grounded",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "value": 0.2,
+      "operation": "addition"
+    }
+  ]
+}

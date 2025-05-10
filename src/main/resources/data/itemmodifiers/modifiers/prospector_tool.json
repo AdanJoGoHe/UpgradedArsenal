@@ -1,0 +1,13 @@
+{
+  "id": "prospector_tool",
+  "name": "prospector_tool",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:double_drop_chance",
+      "value": 0.1,
+      "operation": "addition"
+    }
+  ]
+}

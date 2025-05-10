@@ -1,0 +1,13 @@
+{
+  "id": "hardheaded",
+  "name": "hardheaded",
+  "type": "equipped",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 1.0,
+      "operation": "addition"
+    }
+  ]
+}

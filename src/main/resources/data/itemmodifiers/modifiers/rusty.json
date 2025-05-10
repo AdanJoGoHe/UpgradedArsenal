@@ -1,0 +1,13 @@
+{
+  "id": "rusty",
+  "name": "rusty",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:mining_speed",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

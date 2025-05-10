@@ -1,0 +1,13 @@
+{
+  "id": "sharp",
+  "name": "Sharp",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "loose_grip",
+  "name": "loose grip",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "quick",
+  "name": "quick",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

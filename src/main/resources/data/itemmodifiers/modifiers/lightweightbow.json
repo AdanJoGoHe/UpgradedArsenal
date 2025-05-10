@@ -1,0 +1,13 @@
+{
+  "id": "lightweightbow",
+  "name": "lightweightbow",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:draw_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

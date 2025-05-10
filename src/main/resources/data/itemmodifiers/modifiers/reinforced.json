@@ -1,0 +1,13 @@
+{
+  "id": "reinforced",
+  "name": "reinforced",
+  "type": "equipped",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:max_durability",
+      "value": 0.2,
+      "operation": "multiply_total"
+    }
+  ]
+}

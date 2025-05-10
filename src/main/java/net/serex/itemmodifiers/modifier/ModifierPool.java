@@ -12,6 +12,10 @@ public class ModifierPool {
         this.totalWeight += modifier.weight;
     }
 
+    public void clear() {
+        modifiers.clear();
+    }
+
     public void remove(Modifier modifier) {
         if (this.modifiers.remove(modifier)) {
             this.totalWeight -= modifier.weight;
@@ -33,7 +37,6 @@ public class ModifierPool {
 
         return null; //Edge case
     }
-
 
     public int getTotalWeight() {
         return this.totalWeight;

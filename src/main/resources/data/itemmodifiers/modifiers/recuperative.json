@@ -1,0 +1,13 @@
+{
+  "id": "recuperative",
+  "name": "recuperative",
+  "type": "equipped",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 0.5,
+      "operation": "multiply_total"
+    }
+  ]
+}

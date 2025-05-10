@@ -1,0 +1,13 @@
+{
+  "id": "precisebow",
+  "name": "precisebow",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:projectile_accuracy",
+      "value": 0.2,
+      "operation": "multiply_total"
+    }
+  ]
+}

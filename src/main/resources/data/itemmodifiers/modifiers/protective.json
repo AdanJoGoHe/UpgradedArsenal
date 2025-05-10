@@ -1,0 +1,18 @@
+{
+  "id": "protective",
+  "name": "protective",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 2.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "value": 1.0,
+      "operation": "addition"
+    }
+  ]
+}

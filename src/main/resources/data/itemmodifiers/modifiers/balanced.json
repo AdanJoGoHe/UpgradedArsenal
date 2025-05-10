@@ -1,0 +1,18 @@
+{
+  "id": "balanced",
+  "name": "balanced",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "value": 0.05,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}

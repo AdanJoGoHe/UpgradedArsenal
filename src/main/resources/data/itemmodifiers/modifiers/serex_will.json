@@ -1,0 +1,13 @@
+{
+  "id": "serex_will",
+  "name": "serex_will",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:double_drop_chance",
+      "value": 1.0,
+      "operation": "addition"
+    }
+  ]
+}

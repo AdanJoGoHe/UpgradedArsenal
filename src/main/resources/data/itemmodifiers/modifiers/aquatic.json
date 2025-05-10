@@ -1,0 +1,18 @@
+{
+  "id": "aquatic",
+  "name": "aquatic",
+  "type": "equipped",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:swim_speed",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:respiration_efficiency",
+      "value": 0.2,
+      "operation": "multiply_total"
+    }
+  ]
+}

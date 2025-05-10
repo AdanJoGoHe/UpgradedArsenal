@@ -1,0 +1,13 @@
+{
+  "id": "sizzled",
+  "name": "sizzled",
+  "type": "held",
+  "rarity": "common",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:fire_resistance",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

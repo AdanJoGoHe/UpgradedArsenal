@@ -1,0 +1,13 @@
+{
+  "id": "efficient",
+  "name": "efficient",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:mining_speed",
+      "value": 0.15,
+      "operation": "multiply_total"
+    }
+  ]
+}
