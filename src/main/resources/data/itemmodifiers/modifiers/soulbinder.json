@@ -1,0 +1,18 @@
+{
+  "id": "soulbinder",
+  "name": "soulbinder",
+  "type": "equipped",
+  "rarity": "legendary",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:lifesteal",
+      "value": 0.35,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 1.0,
+      "operation": "multiply_total"
+    }
+  ]
+}

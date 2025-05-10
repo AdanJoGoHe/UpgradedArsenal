@@ -1,0 +1,18 @@
+{
+  "id": "sunfury",
+  "name": "sunfury",
+  "type": "held",
+  "rarity": "epic",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:fire_resistance",
+      "value": 0.6,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.15,
+      "operation": "multiply_total"
+    }
+  ]
+}

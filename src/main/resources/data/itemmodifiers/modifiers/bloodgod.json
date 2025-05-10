@@ -1,0 +1,23 @@
+{
+  "id": "bloodgod",
+  "name": "blood god",
+  "type": "held",
+  "rarity": "hero",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:lifesteal",
+      "value": 0.5,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 1.5,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 6.0,
+      "operation": "addition"
+    }
+  ]
+}

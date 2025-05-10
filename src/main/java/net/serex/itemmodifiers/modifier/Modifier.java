@@ -59,8 +59,8 @@ public class Modifier {
     }
 
     public static enum Rarity {
-        UNCHANGED(ChatFormatting.GRAY, 1000),
-        COMMON(ChatFormatting.GRAY, 900),
+        UNCHANGED(ChatFormatting.GRAY, 800),
+        COMMON(ChatFormatting.GRAY, 700),
         UNCOMMON(ChatFormatting.GREEN, 400),
         RARE(ChatFormatting.BLUE, 250),
         EPIC(ChatFormatting.LIGHT_PURPLE, 150),

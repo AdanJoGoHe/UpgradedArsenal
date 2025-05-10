@@ -37,7 +37,7 @@ public class ItemModifiers {
     }
 
     private void registerConfigSettings() {
-         AttributeEventHandler.loadAllowedBlocks();
+         ModifierEventHandler.loadAllowedBlocks();
     }
 
     private void registerCommonEventHandlers() {
@@ -45,15 +45,8 @@ public class ItemModifiers {
 
         MinecraftForge.EVENT_BUS.register(ModifierEvents.class);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
-        MinecraftForge.EVENT_BUS.register(MiningSpeedHandler.class);
-        MinecraftForge.EVENT_BUS.register(ArmorEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(CombatEventHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.itemmodifiers.modifier.ModifierHandler.class);
-        MinecraftForge.EVENT_BUS.register(EquipmentChangeHandler.class);
-        MinecraftForge.EVENT_BUS.register(ChestOpenHandler.class);
-        MinecraftForge.EVENT_BUS.register(DurabilityEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(RangedWeaponEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(GrindstoneHandler.class);
+        MinecraftForge.EVENT_BUS.register(net.serex.itemmodifiers.event.ModifierEventHandler.class);
     }
 
     @OnlyIn(value=Dist.CLIENT)

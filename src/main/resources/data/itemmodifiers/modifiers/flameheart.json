@@ -1,0 +1,23 @@
+{
+  "id": "flameheart",
+  "name": "flameheart",
+  "type": "equipped",
+  "rarity": "hero",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:fire_resistance",
+      "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.2,
+      "operation": "multiply_total"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "survivor",
+  "name": "survivor",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:regeneration",
+      "value": 0.5,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 2.0,
+      "operation": "addition"
+    }
+  ]
+}

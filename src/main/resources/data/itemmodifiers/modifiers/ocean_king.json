@@ -1,0 +1,23 @@
+{
+  "id": "ocean_king",
+  "name": "ocean king",
+  "type": "equipped",
+  "rarity": "hero",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:swim_speed",
+      "value": 0.75,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:respiration_efficiency",
+      "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:xp_gain_bonus",
+      "value": 1.0,
+      "operation": "multiply_total"
+    }
+  ]
+}

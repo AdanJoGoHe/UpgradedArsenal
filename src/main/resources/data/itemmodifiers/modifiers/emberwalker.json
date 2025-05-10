@@ -1,0 +1,18 @@
+{
+  "id": "emberwalker",
+  "name": "emberwalker",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "itemmodifiers:fire_resistance",
+      "value": 0.5,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "itemmodifiers:movement_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}
