@@ -1,10 +1,10 @@
 package net.serex.itemmodifiers;
 
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -22,13 +22,14 @@ import net.serex.itemmodifiers.config.RarityConfigLoader;
 import net.serex.itemmodifiers.event.*;
 import net.serex.itemmodifiers.modifier.Modifiers;
 
+
 @Mod(value= Main.MODID)
 public class Main {
     public static final String MODID = "itemmodifiers";
 
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        MinecraftForge.EVENT_BUS.register((Object)this);
+        MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
         ModAttributes.ATTRIBUTES.register(modEventBus);
         this.registerCommonEventHandlers();
@@ -49,11 +50,12 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.itemmodifiers.modifier.ModifierHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.itemmodifiers.event.ModifierEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class);
     }
 
     @OnlyIn(value=Dist.CLIENT)
     private void registerClientEventHandlers() {
-        MinecraftForge.EVENT_BUS.register((Object)new BowAnimationHandler());
+        MinecraftForge.EVENT_BUS.register(new BowAnimationHandler());
     }
 
     private void setup(FMLCommonSetupEvent event) {
@@ -64,7 +66,7 @@ public class Main {
     }
 
     @Mod.EventBusSubscriber(modid = MODID)
-    public class ModEventHandler {
+    public static class ModEventHandler {
         @SubscribeEvent
         public static void onAddReloadListeners(AddReloadListenerEvent event) {
             event.addListener(new ModifierLoader());

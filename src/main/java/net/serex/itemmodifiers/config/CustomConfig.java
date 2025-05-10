@@ -8,31 +8,11 @@ public class CustomConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Double> DULL_DAMAGE_MODIFIER;
-    public static final ForgeConfigSpec.ConfigValue<Double> SHARP_DAMAGE_MODIFIER;
-    public static final ForgeConfigSpec.ConfigValue<Double> SWIFT_ATTACK_SPEED_MODIFIER;
-
     public static final ForgeConfigSpec.IntValue REROLL_XP_COST;
     public static final ForgeConfigSpec.IntValue MAX_REROLLS;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ALLOWED_DUPLICATION_BLOCKS;
 
     static {
-        BUILDER.push("Item Modifiers Config");
-
-        DULL_DAMAGE_MODIFIER = BUILDER
-                .comment("Damage modifier for Dull weapons")
-                .define("dullDamageModifier", -1.5);
-
-        SHARP_DAMAGE_MODIFIER = BUILDER
-                .comment("Damage modifier for Sharp weapons")
-                .define("sharpDamageModifier", 2.5);
-
-        SWIFT_ATTACK_SPEED_MODIFIER = BUILDER
-                .comment("Attack speed modifier for Swift weapons")
-                .define("swiftAttackSpeedModifier", 2.0);
-
-        BUILDER.pop(); // 👈 pop antes de abrir otra sección
-
         BUILDER.push("Duplication Settings");
 
         ALLOWED_DUPLICATION_BLOCKS = BUILDER
@@ -76,7 +56,7 @@ public class CustomConfig {
 
         MAX_REROLLS = BUILDER
                 .comment("Maximum number of grindstone re-rolls allowed per item")
-                .defineInRange("maxRerolls", 15, 0, 100);
+                .defineInRange("maxRerolls", 30, 0, 100);
 
         BUILDER.pop();
 
