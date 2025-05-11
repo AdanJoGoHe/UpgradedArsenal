@@ -14,6 +14,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,8 +35,9 @@ import static net.serex.itemmodifiers.util.AttributeDisplayUtils.*;
  * including attribute changes, rarity, and other modifier-specific details.
  * It handles different types of items (armor, weapons, bows) differently.
  */
-@Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class TooltipHandler {
+
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();

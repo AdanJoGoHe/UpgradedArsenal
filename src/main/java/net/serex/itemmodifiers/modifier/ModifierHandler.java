@@ -2,10 +2,8 @@ package net.serex.itemmodifiers.modifier;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +11,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,9 +23,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.serex.itemmodifiers.NetworkHandler;
+import net.serex.itemmodifiers.SyncModifierPacket;
 import net.serex.itemmodifiers.attribute.CustomAttributeModifier;
 import net.serex.itemmodifiers.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(modid="itemmodifiers")
 public class ModifierHandler {
@@ -35,14 +37,14 @@ public class ModifierHandler {
     public static final String PROCESSED_TAG = "itemmodifiers:processed";
     private static final Map<UUID, Map<Attribute, AttributeModifier>> playerModifiers = new HashMap<UUID, Map<Attribute, AttributeModifier>>();
 
-    public static void processNewItem(ItemStack stack, RandomSource random) {
+    public static void processNewItem(ItemStack stack, Player player, RandomSource random) {
         if (canHaveModifiers(stack)) {
             ModifierPool pool = getAppropriatePool(stack);
             pool.add(Modifiers.UNCHANGED);
-            Modifier selectedModifier = pool.roll(random);
+            Modifier selectedModifier = pool.roll(random.fork());
             pool.remove(Modifiers.UNCHANGED);
             if (selectedModifier != null) {
-                applyModifier(stack, selectedModifier);
+                applyModifier(stack, selectedModifier, player);
             }
             markAsProcessed(stack);
         }
@@ -100,10 +102,10 @@ public class ModifierHandler {
         }
     }
 
-    public static void applyModifier(ItemStack stack, Modifier newModifier) {
+    public static void applyModifier(ItemStack stack, Modifier newModifier, @Nullable Player player) {
         if (canHaveModifiers(stack)) {
             CompoundTag tag = stack.getOrCreateTag();
-            tag.putString(MODIFIER_TAG, newModifier.name.toString());
+            tag.putString("itemmodifiers:modifier", newModifier.name.toString());
 
             Multimap<Attribute, AttributeModifier> existingModifiers = HashMultimap.create(stack.getAttributeModifiers(EquipmentSlot.MAINHAND));
             for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : newModifier.modifiers) {
@@ -137,9 +139,20 @@ public class ModifierHandler {
             attributesNBT.put("AttributeModifiers", listNBT);
             stack.getTag().put("AttributeModifiers", attributesNBT);
 
+            // 🔁 Sincronizar si hay un jugador, o marcar para sincronizar más adelante
+            if (player instanceof ServerPlayer serverPlayer) {
+                int slot = serverPlayer.getInventory().findSlotMatchingItem(stack);
+                if (slot != -1) {
+                    NetworkHandler.sendToPlayer(serverPlayer, new SyncModifierPacket(slot, newModifier.name.toString()));
+                }
+            } else {
+                tag.putBoolean("itemmodifiers:needs_sync", true);
+            }
+
             markAsProcessed(stack);
         }
     }
+
 
     public static void updateItemNameAndColor(ItemStack stack) {
         Modifier modifier = getModifier(stack);
@@ -182,12 +195,33 @@ public class ModifierHandler {
     }
 
     public static Modifier getModifier(ItemStack stack) {
+        if (stack == null || !stack.hasTag()) return null;
+
         CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(MODIFIER_TAG)) {
-            return Modifiers.getModifier(AttributeUtils.createResourceLocation(tag.getString(MODIFIER_TAG)));
+        if (!tag.contains(MODIFIER_TAG)) return null;
+
+        String rawId = tag.getString(MODIFIER_TAG);
+        if (rawId == null || rawId.isEmpty()) {
+            System.out.println("[ItemModifiers] Tag '" + MODIFIER_TAG + "' está presente pero vacío.");
+            return null;
         }
-        return null;
+
+        ResourceLocation id;
+        try {
+            id = AttributeUtils.createResourceLocation(rawId); // tu método existente
+        } catch (Exception e) {
+            System.out.println("[ItemModifiers] Error creando ResourceLocation con '" + rawId + "': " + e.getMessage());
+            return null;
+        }
+
+        Modifier mod = Modifiers.getModifier(id);
+        if (mod == null) {
+            System.out.println("[ItemModifiers] Modificador '" + id + "' no está registrado en este lado (¿cliente sin datapack?).");
+        }
+
+        return mod;
     }
+
 
     public static boolean hasBeenProcessed(ItemStack stack) {
         CompoundTag tag = stack.getTag();
@@ -211,7 +245,7 @@ public class ModifierHandler {
                     : rarityChance < 0.7f ? rollModifierWithMinRarity(stack, random, Modifier.Rarity.RARE)
                     : rarityChance < 0.9f ? rollModifierWithMinRarity(stack, random, Modifier.Rarity.EPIC)
                     : rollModifierWithMinRarity(stack, random, Modifier.Rarity.LEGENDARY);
-            applyModifier(stack, modifier != null ? modifier : Modifiers.UNCHANGED);
+            applyModifier(stack, modifier != null ? modifier : Modifiers.UNCHANGED, null);
             markAsProcessed(stack);
         }
     }
@@ -255,7 +289,7 @@ public class ModifierHandler {
         QueuedItem queuedItem;
         while ((queuedItem = itemQueue.poll()) != null) {
             if (canHaveModifiers(queuedItem.stack) && !hasBeenProcessed(queuedItem.stack)) {
-                processNewItem(queuedItem.stack, queuedItem.player.getRandom().fork());
+                processNewItem(queuedItem.stack, queuedItem.player, queuedItem.player.getRandom());
             }
             updateItemNameAndColor(queuedItem.stack);
         }
@@ -270,4 +304,32 @@ public class ModifierHandler {
             this.player = player;
         }
     }
+
+    public static void syncAllItems(ServerPlayer player) {
+        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            if (stack.hasTag() && stack.getTag().contains("itemmodifiers:modifier")) {
+                String id = stack.getTag().getString("itemmodifiers:modifier");
+                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
+            }
+        }
+
+        // Offhand
+        ItemStack offhand = player.getOffhandItem();
+        if (offhand.hasTag() && offhand.getTag().contains("itemmodifiers:modifier")) {
+            String id = offhand.getTag().getString("itemmodifiers:modifier");
+            NetworkHandler.sendToPlayer(player, new SyncModifierPacket(40, id)); // 40 = offhand
+        }
+
+        // Armadura
+        for (int i = 0; i < player.getInventory().armor.size(); i++) {
+            ItemStack armor = player.getInventory().armor.get(i);
+            if (armor.hasTag() && armor.getTag().contains("itemmodifiers:modifier")) {
+                String id = armor.getTag().getString("itemmodifiers:modifier");
+                int slot = 36 + i; // 36–39 = armor
+                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
+            }
+        }
+    }
+
 }

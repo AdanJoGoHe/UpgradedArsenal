@@ -28,7 +28,7 @@ public class ItemProcessingQueue {
         QueuedItem queuedItem;
         while ((queuedItem = itemQueue.poll()) != null) {
             if (ModifierHandler.canHaveModifiers(queuedItem.stack) && !ModifierHandler.hasBeenProcessed(queuedItem.stack)) {
-                ModifierHandler.processNewItem(queuedItem.stack, queuedItem.player.getRandom().fork());
+                ModifierHandler.processNewItem(queuedItem.stack, queuedItem.player, queuedItem.player.getRandom());
             }
             ModifierHandler.updateItemNameAndColor(queuedItem.stack);
         }

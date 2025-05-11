@@ -1,13 +1,17 @@
 package net.serex.itemmodifiers.event;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import net.serex.itemmodifiers.ItemProcessingQueue;
 import net.serex.itemmodifiers.modifier.Modifier;
 import net.serex.itemmodifiers.modifier.ModifierHandler;
@@ -23,7 +27,7 @@ public class ModifierEvents {
         ItemStack craftedItem = event.getCrafting();
         Player player = event.getEntity();
         if (ModifierHandler.canHaveModifiers(craftedItem)) {
-            ModifierHandler.processNewItem(craftedItem, player.getRandom().fork());
+            ModifierHandler.processNewItem(craftedItem, player, player.getRandom());
             ModifierHandler.updateItemNameAndColor(craftedItem);
         }
         processInventory(player);
@@ -46,16 +50,25 @@ public class ModifierEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onItemTooltip(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        Modifier modifier = ModifierHandler.getModifier(stack);
-        if (modifier != null && modifier.rarity != Modifier.Rarity.UNCHANGED) {
-            List<Component> tooltip = event.getToolTip();
-            Component original = tooltip.get(0);
-            Component updated = original.copy().withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false));
-            tooltip.set(0, updated);
+    private static int globalTickCounter = 0;
+    private static final int SYNC_INTERVAL_TICKS = 20 * 60; // 1 minuto
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        globalTickCounter++;
+        if (globalTickCounter >= SYNC_INTERVAL_TICKS) {
+            globalTickCounter = 0;
+
+            // Forzar sync a todos los jugadores
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                ModifierHandler.syncAllItems(player);
+                player.sendSystemMessage(Component.literal("[ItemModifiers] Sincronización automática de modificadores"));
+            }
         }
     }
+
 }
 

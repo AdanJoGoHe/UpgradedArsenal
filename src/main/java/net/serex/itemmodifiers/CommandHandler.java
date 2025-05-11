@@ -21,6 +21,8 @@ import net.serex.itemmodifiers.modifier.ModifierHandler;
 
 import java.util.Objects;
 
+import static net.serex.itemmodifiers.modifier.ModifierHandler.syncAllItems;
+
 @Mod.EventBusSubscriber(modid = "itemmodifiers", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommandHandler {
     @SubscribeEvent
@@ -44,52 +46,16 @@ public class CommandHandler {
         );
     }
     private static void giveAttribute(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("itemmodifiers")
-                .requires(source -> source.hasPermission(2)) // Only admins
-                .then(Commands.literal("giveattribute")
-                        .then(Commands.argument("attribute", ResourceLocationArgument.id())
-                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
-                                        ModAttributes.ATTRIBUTES.getEntries().stream()
-                                                .map(entry -> ForgeRegistries.ATTRIBUTES.getKey(entry.get()))
-                                                .filter(Objects::nonNull)
-                                                .map(ResourceLocation::toString),
-                                        builder
-                                ))
-
-                                .then(Commands.argument("amount", DoubleArgumentType.doubleArg())
-                                        .executes(ctx -> {
-                                            ServerPlayer player = ctx.getSource().getPlayerOrException();
-                                            ItemStack stack = player.getMainHandItem();
-
-                                            ResourceLocation id = ResourceLocationArgument.getId(ctx, "attribute");
-                                            double amount = DoubleArgumentType.getDouble(ctx, "amount");
-
-                                            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(id);
-                                            if (attribute == null) {
-                                                ctx.getSource().sendFailure(Component.literal("Unknown attribute: " + id));
-                                                return 0;
-                                            }
-
-                                            Modifier current = ModifierHandler.getModifier(stack);
-                                            Modifier.ModifierBuilder builder = (current != null)
-                                                    ? new Modifier.ModifierBuilder(current)
-                                                    : new Modifier.ModifierBuilder(new ResourceLocation("itemmodifiers", "custom_debug"),
-                                                    "Custom Debug",
-                                                    Modifier.ModifierType.HELD)
-                                                    .setDisplayName("Custom Debug")
-                                                    .setRarity(Modifier.Rarity.UNCHANGED);
-
-                                            builder.addModifier(() -> attribute, new Modifier.AttributeModifierSupplier(amount, AttributeModifier.Operation.ADDITION));
-
-
-                                            ModifierHandler.applyModifier(stack, builder.build());
-                                            ModifierHandler.markAsProcessed(stack);
-
-
-
-                                            ctx.getSource().sendSuccess(() -> Component.literal("Added attribute " + id + " with amount " + amount), false);
-                                            return 1;
-                                        })))));
+        event.getDispatcher().register(
+                Commands.literal("sync_itemmodifiers")
+                        .requires(source -> source.hasPermission(2)) // nivel de OP
+                        .executes(ctx -> {
+                            ServerPlayer player = ctx.getSource().getPlayer();
+                            syncAllItems(player);
+                            ctx.getSource().sendSuccess(() -> Component.literal("[ItemModifiers] Sincronización forzada."), false);
+                            return 1;
+                        })
+        );
     }
 }
 

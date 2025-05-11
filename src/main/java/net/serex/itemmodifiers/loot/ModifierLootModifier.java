@@ -35,7 +35,7 @@ public class ModifierLootModifier extends LootModifier {
                 if (isChestLoot) {
                     ModifierHandler.processChestLoot(stack, random, context.getQueriedLootTableId());
                 } else {
-                    ModifierHandler.processNewItem(stack, random);
+                    ModifierHandler.processNewItem(stack, null ,random);
                 }
             }
         });

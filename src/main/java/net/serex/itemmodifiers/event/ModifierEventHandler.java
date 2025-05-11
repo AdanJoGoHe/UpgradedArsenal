@@ -1,17 +1,14 @@
 package net.serex.itemmodifiers.event;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -47,6 +44,8 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.serex.itemmodifiers.NetworkHandler;
+import net.serex.itemmodifiers.SyncModifierPacket;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.config.CustomConfig;
 import net.serex.itemmodifiers.modifier.Modifier;
@@ -563,18 +562,18 @@ public class ModifierEventHandler {
     public static void onChestOpen(PlayerContainerEvent.Open event) {
         if (event.getContainer() instanceof ChestMenu chestMenu && !event.getEntity().level().isClientSide()) {
             Level level = event.getEntity().level();
-            processChestItems(chestMenu, level.getRandom());
+            processChestItems(chestMenu, level);
         }
     }
 
-    private static void processChestItems(ChestMenu chestMenu, RandomSource random) {
+    private static void processChestItems(ChestMenu chestMenu, Level level) {
         Container container = chestMenu.getContainer();
         for (int i = 0; i < container.getContainerSize(); ++i) {
             ItemStack stack = container.getItem(i);
             if (stack.isEmpty() || !ModifierHandler.canHaveModifiers(stack) || ModifierHandler.hasBeenProcessed(stack)) {
                 continue;
             }
-            ModifierHandler.processNewItem(stack, random);
+            ModifierHandler.processNewItem(stack, null, level.getRandom() );
             container.setItem(i, stack);
         }
     }
@@ -605,7 +604,7 @@ public class ModifierEventHandler {
 
             if (player.experienceLevel >= xpCost || player.isCreative()) {
                 Modifier oldModifier = ModifierHandler.getModifier(heldItem);
-                ModifierHandler.processNewItem(heldItem, player.getRandom().fork());
+                ModifierHandler.processNewItem(heldItem, player, player.getRandom());
                 Modifier newModifier = ModifierHandler.getModifier(heldItem);
 
                 if (!player.isCreative()) {
@@ -664,5 +663,35 @@ public class ModifierEventHandler {
             multiplier += modifierSupplier.amount;
         }
         return multiplier;
+    }
+
+    private static final int SYNC_INTERVAL_TICKS = 20; // cada 20 ticks (1 segundo)
+    private static final Map<UUID, Integer> syncTimers = new HashMap<>();
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+
+        ServerPlayer player = (ServerPlayer) event.player;
+        UUID uuid = player.getUUID();
+
+        int ticks = syncTimers.getOrDefault(uuid, 0) + 1;
+        if (ticks >= SYNC_INTERVAL_TICKS) {
+            syncTimers.put(uuid, 0); // reinicia el contador
+            syncPendingModifiers(player);
+        } else {
+            syncTimers.put(uuid, ticks);
+        }
+    }
+
+    private static void syncPendingModifiers(ServerPlayer player) {
+        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            if (stack.hasTag() && stack.getTag().getBoolean("itemmodifiers:needs_sync")) {
+                String id = stack.getTag().getString("itemmodifiers:modifier");
+                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
+                stack.getTag().remove("itemmodifiers:needs_sync");
+            }
+        }
     }
 }
