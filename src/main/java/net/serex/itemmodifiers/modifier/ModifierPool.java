@@ -44,9 +44,4 @@ public class ModifierPool {
         System.err.println("[ModifierPool] Edge case: ningún modificador elegido tras roll. Usando 'unchanged'.");
         return Modifiers.getModifier(new ResourceLocation("itemmodifiers", "unchanged"));
     }
-
-
-    public int getTotalWeight() {
-        return this.totalWeight;
-    }
 }

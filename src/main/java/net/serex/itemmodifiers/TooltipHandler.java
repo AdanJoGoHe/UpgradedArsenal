@@ -35,7 +35,7 @@ import static net.serex.itemmodifiers.util.AttributeDisplayUtils.*;
  * including attribute changes, rarity, and other modifier-specific details.
  * It handles different types of items (armor, weapons, bows) differently.
  */
-@Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler {
 
     @SubscribeEvent
@@ -267,7 +267,7 @@ public class TooltipHandler {
      * @param attribute The attribute
      * @return The display name, or null if not a ranged weapon attribute
      */
-    private static String getAttributeNameForRangedWeapon(Attribute attribute) {
+    public static String getAttributeNameForRangedWeapon(Attribute attribute) {
         return RANGED_WEAPON_ATTRIBUTE_NAMES.getOrDefault(attribute, null);
     }
 

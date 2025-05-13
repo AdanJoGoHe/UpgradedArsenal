@@ -25,7 +25,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.serex.itemmodifiers.NetworkHandler;
 import net.serex.itemmodifiers.SyncModifierPacket;
-import net.serex.itemmodifiers.attribute.CustomAttributeModifier;
 import net.serex.itemmodifiers.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -153,7 +152,6 @@ public class ModifierHandler {
         }
     }
 
-
     public static void updateItemNameAndColor(ItemStack stack) {
         Modifier modifier = getModifier(stack);
         if (modifier != null) {
@@ -168,26 +166,6 @@ public class ModifierHandler {
             // Reset hover name for null modifiers
             stack.resetHoverName();
         }
-    }
-
-    private static ListTag serializeAttributeModifiers(Multimap<Attribute, AttributeModifier> modifiers) {
-        ListTag list = new ListTag();
-        for (Map.Entry<Attribute, AttributeModifier> entry : modifiers.entries()) {
-            CompoundTag compoundNBT = new CompoundTag();
-            compoundNBT.putString("AttributeName", ForgeRegistries.ATTRIBUTES.getKey(entry.getKey()).toString());
-            compoundNBT.putString("Name", entry.getValue().getName());
-            double amount = entry.getValue() instanceof CustomAttributeModifier custom ? custom.getRawAmount() : entry.getValue().getAmount();
-            compoundNBT.putDouble("Amount", amount);
-            compoundNBT.putInt("Operation", entry.getValue().getOperation().toValue());
-            compoundNBT.putUUID("UUID", entry.getValue().getId());
-            compoundNBT.putString("Slot", EquipmentSlot.MAINHAND.getName());
-            list.add(compoundNBT);
-        }
-        return list;
-    }
-
-    private static double getBaseAttributeValue(ItemStack stack, Attribute attribute) {
-        return AttributeUtils.getBaseAttributeValue(stack, attribute);
     }
 
     private static UUID getModifierUUID(Attribute attribute, EquipmentSlot slot) {
@@ -221,7 +199,6 @@ public class ModifierHandler {
 
         return mod;
     }
-
 
     public static boolean hasBeenProcessed(ItemStack stack) {
         CompoundTag tag = stack.getTag();
@@ -272,10 +249,6 @@ public class ModifierHandler {
             return Modifiers.TOOL_POOL;
         }
         return Modifiers.WEAPON_POOL;
-    }
-
-    public static void addItem(ItemStack stack, Player player) {
-        itemQueue.offer(new QueuedItem(stack, player));
     }
 
     @SubscribeEvent

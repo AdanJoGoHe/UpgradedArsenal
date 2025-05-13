@@ -18,9 +18,5 @@ public class CustomAttributeModifier extends AttributeModifier {
         }
         return super.getAmount();
     }
-
-    public double getRawAmount() {
-        return this.rawAmount;
-    }
 }
 
