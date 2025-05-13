@@ -5,17 +5,17 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:fire_resistance",
+      "attribute": "upgradedarsenal:fire_resistance",
       "value": 0.5,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:movement_speed",
+      "attribute": "upgradedarsenal:movement_speed",
       "value": 0.1,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:jump_height",
+      "attribute": "upgradedarsenal:jump_height",
       "value": 0.1,
       "operation": "multiply_total"
     }

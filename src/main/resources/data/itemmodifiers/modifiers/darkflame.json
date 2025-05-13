@@ -5,12 +5,12 @@
   "rarity": "legendary",
   "attributes": [
     {
-      "attribute": "itemmodifiers:fire_resistance",
+      "attribute": "upgradedarsenal:fire_resistance",
       "value": 0.75,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:respiration_efficiency",
+      "attribute": "upgradedarsenal:respiration_efficiency",
       "value": 0.5,
       "operation": "multiply_total"
     },

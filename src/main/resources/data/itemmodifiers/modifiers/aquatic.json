@@ -5,17 +5,17 @@
   "rarity": "uncommon",
   "attributes": [
     {
-      "attribute": "itemmodifiers:swim_speed",
+      "attribute": "upgradedarsenal:swim_speed",
       "value": 0.2,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:respiration_efficiency",
+      "attribute": "upgradedarsenal:respiration_efficiency",
       "value": 0.2,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:regeneration",
+      "attribute": "upgradedarsenal:regeneration",
       "value": 0.05,
       "operation": "multiply_total"
     }

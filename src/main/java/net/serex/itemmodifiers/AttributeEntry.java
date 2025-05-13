@@ -1,7 +1,7 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.Modifier;
 
 import java.util.function.Supplier;
 

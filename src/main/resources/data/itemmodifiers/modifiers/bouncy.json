@@ -5,7 +5,7 @@
   "rarity": "common",
   "attributes": [
     {
-      "attribute": "itemmodifiers:jump_height",
+      "attribute": "upgradedarsenal:jump_height",
       "value": 0.5,
       "operation": "multiply_total"
     }

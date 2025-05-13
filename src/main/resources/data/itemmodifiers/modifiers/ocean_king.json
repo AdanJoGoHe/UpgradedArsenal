@@ -5,17 +5,17 @@
   "rarity": "hero",
   "attributes": [
     {
-      "attribute": "itemmodifiers:swim_speed",
+      "attribute": "upgradedarsenal:swim_speed",
       "value": 0.75,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:respiration_efficiency",
+      "attribute": "upgradedarsenal:respiration_efficiency",
       "value": 1.0,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:xp_gain_bonus",
+      "attribute": "upgradedarsenal:xp_gain_bonus",
       "value": 1.0,
       "operation": "multiply_total"
     }

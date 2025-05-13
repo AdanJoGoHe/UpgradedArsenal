@@ -5,7 +5,7 @@
   "rarity": "legendary",
   "attributes": [
     {
-      "attribute": "itemmodifiers:regeneration",
+      "attribute": "upgradedarsenal:regeneration",
       "value": 0.5,
       "operation": "multiply_total"
     },

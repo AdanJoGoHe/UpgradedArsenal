@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.util;
+package net.serex.upgradedarsenal.util;
 
 
 import java.util.HashSet;
@@ -14,9 +14,9 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid="itemmodifiers")
+@Mod.EventBusSubscriber(modid="upgradedarsenal")
 public class PlayerPlacedBlocks extends SavedData {
-    private static final String DATA_NAME = "itemmodifiers_PlayerPlacedBlocks";
+    private static final String DATA_NAME = "upgradedarsenal_PlayerPlacedBlocks";
     private final Set<BlockPos> placedBlocks = new HashSet<>();
 
     public static PlayerPlacedBlocks get(ServerLevel level) {

@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +8,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class NetworkHandler {
 
-    public static final String MODID = "itemmodifiers";
+    public static final String MODID = "upgradedarsenal";
     private static final String PROTOCOL_VERSION = "1";
     // Crear el canal de red con un nombre único (modid:canal)
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(

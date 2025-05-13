@@ -5,12 +5,12 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:movement_speed",
+      "attribute": "upgradedarsenal:movement_speed",
       "value": 0.1,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:fall_damage_resistance",
+      "attribute": "upgradedarsenal:fall_damage_resistance",
       "value": 0.1,
       "operation": "multiply_total"
     }

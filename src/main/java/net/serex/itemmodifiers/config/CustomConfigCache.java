@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.config;
+package net.serex.upgradedarsenal.config;
 
 public class CustomConfigCache {
     public static int REROLL_XP_COST;

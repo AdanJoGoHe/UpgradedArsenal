@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.event;
+package net.serex.upgradedarsenal.event;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -12,13 +12,13 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import net.serex.itemmodifiers.ItemProcessingQueue;
-import net.serex.itemmodifiers.modifier.Modifier;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.ItemProcessingQueue;
+import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid="itemmodifiers")
+@Mod.EventBusSubscriber(modid="upgradedarsenal")
 public class ModifierEvents {
 
 
@@ -65,7 +65,7 @@ public class ModifierEvents {
 //            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 //            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 //                ModifierHandler.syncAllItems(player);
-//                player.sendSystemMessage(Component.literal("[ItemModifiers] Sincronización automática de modificadores"));
+//                player.sendSystemMessage(Component.literal("[upgradedarsenal] Sincronización automática de modificadores"));
 //            }
 //        }
 //    }

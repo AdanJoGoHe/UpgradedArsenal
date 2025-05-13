@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.config;
+package net.serex.upgradedarsenal.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

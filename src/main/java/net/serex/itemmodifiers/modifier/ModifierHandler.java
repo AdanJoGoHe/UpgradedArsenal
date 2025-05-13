@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.modifier;
+package net.serex.upgradedarsenal.modifier;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -23,17 +23,17 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.itemmodifiers.NetworkHandler;
-import net.serex.itemmodifiers.SyncModifierPacket;
-import net.serex.itemmodifiers.util.AttributeUtils;
+import net.serex.upgradedarsenal.NetworkHandler;
+import net.serex.upgradedarsenal.SyncModifierPacket;
+import net.serex.upgradedarsenal.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-@Mod.EventBusSubscriber(modid="itemmodifiers")
+@Mod.EventBusSubscriber(modid="upgradedarsenal")
 public class ModifierHandler {
     private static final Queue<QueuedItem> itemQueue = new ConcurrentLinkedQueue<QueuedItem>();
-    public static final String MODIFIER_TAG = "itemmodifiers:modifier";
-    public static final String PROCESSED_TAG = "itemmodifiers:processed";
+    public static final String MODIFIER_TAG = "upgradedarsenal:modifier";
+    public static final String PROCESSED_TAG = "upgradedarsenal:processed";
     private static final Map<UUID, Map<Attribute, AttributeModifier>> playerModifiers = new HashMap<UUID, Map<Attribute, AttributeModifier>>();
 
     public static void processNewItem(ItemStack stack, Player player, RandomSource random) {
@@ -104,7 +104,7 @@ public class ModifierHandler {
     public static void applyModifier(ItemStack stack, Modifier newModifier, @Nullable Player player) {
         if (canHaveModifiers(stack)) {
             CompoundTag tag = stack.getOrCreateTag();
-            tag.putString("itemmodifiers:modifier", newModifier.name.toString());
+            tag.putString("upgradedarsenal:modifier", newModifier.name.toString());
 
             Multimap<Attribute, AttributeModifier> existingModifiers = HashMultimap.create(stack.getAttributeModifiers(EquipmentSlot.MAINHAND));
             for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : newModifier.modifiers) {
@@ -145,7 +145,7 @@ public class ModifierHandler {
                     NetworkHandler.sendToPlayer(serverPlayer, new SyncModifierPacket(slot, newModifier.name.toString()));
                 }
             } else {
-                tag.putBoolean("itemmodifiers:needs_sync", true);
+                tag.putBoolean("upgradedarsenal:needs_sync", true);
             }
 
             markAsProcessed(stack);
@@ -180,7 +180,7 @@ public class ModifierHandler {
 
         String rawId = tag.getString(MODIFIER_TAG);
         if (rawId == null || rawId.isEmpty()) {
-            System.out.println("[ItemModifiers] Tag '" + MODIFIER_TAG + "' está presente pero vacío.");
+            System.out.println("[upgradedarsenal] Tag '" + MODIFIER_TAG + "' está presente pero vacío.");
             return null;
         }
 
@@ -188,13 +188,13 @@ public class ModifierHandler {
         try {
             id = AttributeUtils.createResourceLocation(rawId); // tu método existente
         } catch (Exception e) {
-            System.out.println("[ItemModifiers] Error creando ResourceLocation con '" + rawId + "': " + e.getMessage());
+            System.out.println("[upgradedarsenal] Error creando ResourceLocation con '" + rawId + "': " + e.getMessage());
             return null;
         }
 
         Modifier mod = Modifiers.getModifier(id);
         if (mod == null) {
-            System.out.println("[ItemModifiers] Modificador '" + id + "' no está registrado en este lado (¿cliente sin datapack?).");
+            System.out.println("[upgradedarsenal] Modificador '" + id + "' no está registrado en este lado (¿cliente sin datapack?).");
         }
 
         return mod;
@@ -281,24 +281,24 @@ public class ModifierHandler {
     public static void syncAllItems(ServerPlayer player) {
         for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
             ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.hasTag() && stack.getTag().contains("itemmodifiers:modifier")) {
-                String id = stack.getTag().getString("itemmodifiers:modifier");
+            if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
+                String id = stack.getTag().getString("upgradedarsenal:modifier");
                 NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
             }
         }
 
         // Offhand
         ItemStack offhand = player.getOffhandItem();
-        if (offhand.hasTag() && offhand.getTag().contains("itemmodifiers:modifier")) {
-            String id = offhand.getTag().getString("itemmodifiers:modifier");
+        if (offhand.hasTag() && offhand.getTag().contains("upgradedarsenal:modifier")) {
+            String id = offhand.getTag().getString("upgradedarsenal:modifier");
             NetworkHandler.sendToPlayer(player, new SyncModifierPacket(40, id)); // 40 = offhand
         }
 
         // Armadura
         for (int i = 0; i < player.getInventory().armor.size(); i++) {
             ItemStack armor = player.getInventory().armor.get(i);
-            if (armor.hasTag() && armor.getTag().contains("itemmodifiers:modifier")) {
-                String id = armor.getTag().getString("itemmodifiers:modifier");
+            if (armor.hasTag() && armor.getTag().contains("upgradedarsenal:modifier")) {
+                String id = armor.getTag().getString("upgradedarsenal:modifier");
                 int slot = 36 + i; // 36–39 = armor
                 NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
             }

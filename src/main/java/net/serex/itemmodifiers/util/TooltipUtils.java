@@ -1,12 +1,12 @@
-package net.serex.itemmodifiers.util;
+package net.serex.upgradedarsenal.util;
 
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.serex.itemmodifiers.attribute.ModAttributes;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.modifier.Modifier;
 
 /**
  * Utility class for tooltip-related operations.

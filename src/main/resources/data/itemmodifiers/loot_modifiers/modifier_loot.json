@@ -1,5 +1,5 @@
 {
-  "type": "itemmodifiers:modifier_loot",
+  "type": "upgradedarsenal:modifier_loot",
   "conditions": [
     {
       "condition": "forge:loot_table_id",

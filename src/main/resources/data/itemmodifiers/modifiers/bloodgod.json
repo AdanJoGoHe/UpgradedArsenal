@@ -5,12 +5,12 @@
   "rarity": "hero",
   "attributes": [
     {
-      "attribute": "itemmodifiers:lifesteal",
+      "attribute": "upgradedarsenal:lifesteal",
       "value": 0.5,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:regeneration",
+      "attribute": "upgradedarsenal:regeneration",
       "value": 1.5,
       "operation": "multiply_total"
     },

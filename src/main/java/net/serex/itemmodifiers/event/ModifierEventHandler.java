@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.event;
+package net.serex.upgradedarsenal.event;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -44,18 +44,18 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.itemmodifiers.SyncModifierPacket;
-import net.serex.itemmodifiers.attribute.ModAttributes;
-import net.serex.itemmodifiers.config.CustomConfig;
-import net.serex.itemmodifiers.modifier.Modifier;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
-import net.serex.itemmodifiers.util.PlayerPlacedBlocks;
+import net.serex.upgradedarsenal.SyncModifierPacket;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.config.CustomConfig;
+import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.util.PlayerPlacedBlocks;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Consolidated event handler for all item modifier related events.
  */
-@Mod.EventBusSubscriber(modid = "itemmodifiers")
+@Mod.EventBusSubscriber(modid = "upgradedarsenal")
 public class ModifierEventHandler {
 
     // Constants from RangedWeaponEventHandler
@@ -64,7 +64,7 @@ public class ModifierEventHandler {
     private static final int MAX_BOW_DRAW_TIME = 100;
 
     // Constants from GrindstoneHandler
-    private static final String REROLL_COUNT_TAG = "itemmodifiers:reroll_count";
+    private static final String REROLL_COUNT_TAG = "upgradedarsenal:reroll_count";
 
     // Set for allowed blocks
     private static Set<Block> allowedBlocks = new HashSet<>();
@@ -686,10 +686,10 @@ public class ModifierEventHandler {
 //    private static void syncPendingModifiers(ServerPlayer player) {
 //        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
 //            ItemStack stack = player.getInventory().getItem(slot);
-//            if (stack.hasTag() && stack.getTag().getBoolean("itemmodifiers:needs_sync")) {
-//                String id = stack.getTag().getString("itemmodifiers:modifier");
+//            if (stack.hasTag() && stack.getTag().getBoolean("upgradedarsenal:needs_sync")) {
+//                String id = stack.getTag().getString("upgradedarsenal:modifier");
 //                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
-//                stack.getTag().remove("itemmodifiers:needs_sync");
+//                stack.getTag().remove("upgradedarsenal:needs_sync");
 //            }
 //        }
 //    }

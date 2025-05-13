@@ -5,7 +5,7 @@
   "rarity": "epic",
   "attributes": [
     {
-      "attribute": "itemmodifiers:fire_resistance",
+      "attribute": "upgradedarsenal:fire_resistance",
       "value": 0.6,
       "operation": "multiply_total"
     },

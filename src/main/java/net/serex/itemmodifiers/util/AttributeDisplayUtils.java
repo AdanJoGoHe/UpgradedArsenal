@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.util;
+package net.serex.upgradedarsenal.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,8 +6,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.serex.itemmodifiers.attribute.ModAttributes;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.modifier.Modifier;
 
 /**
  * Utility class for attribute display-related operations.
@@ -22,11 +22,11 @@ public class AttributeDisplayUtils {
 
     static {
         // Initialize attribute translation keys
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MOVEMENT_SPEED.get(), "attribute.itemmodifiers.movement_speed_increase_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.itemmodifiers.mined_drop_double_chance_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MINING_SPEED.get(), "attribute.itemmodifiers.mining_speed_increase_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_DAMAGE, "attribute.itemmodifiers.attack_damage_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_SPEED, "attribute.itemmodifiers.attack_speed_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MOVEMENT_SPEED.get(), "attribute.upgradedarsenal.movement_speed_increase_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.upgradedarsenal.mined_drop_double_chance_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MINING_SPEED.get(), "attribute.upgradedarsenal.mining_speed_increase_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_DAMAGE, "attribute.upgradedarsenal.attack_damage_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_SPEED, "attribute.upgradedarsenal.attack_speed_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR, "attribute.name.generic.armor");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR_TOUGHNESS, "attribute.name.generic.armor_toughness");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.MAX_HEALTH, "attribute.name.generic.max_health");
@@ -38,10 +38,10 @@ public class AttributeDisplayUtils {
         RANGED_WEAPON_ATTRIBUTE_NAMES.put(ModAttributes.PROJECTILE_ACCURACY.get(), "Accuracy");
 
         // Initialize bow attribute translation keys
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DRAW_SPEED.get(), "attribute.itemmodifiers.draw_speed");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_VELOCITY.get(), "attribute.itemmodifiers.projectile_velocity");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_DAMAGE.get(), "attribute.itemmodifiers.projectile_damage");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_ACCURACY.get(), "attribute.itemmodifiers.projectile_accuracy");
+        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DRAW_SPEED.get(), "attribute.upgradedarsenal.draw_speed");
+        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_VELOCITY.get(), "attribute.upgradedarsenal.projectile_velocity");
+        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_DAMAGE.get(), "attribute.upgradedarsenal.projectile_damage");
+        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_ACCURACY.get(), "attribute.upgradedarsenal.projectile_accuracy");
     }
 
     /**

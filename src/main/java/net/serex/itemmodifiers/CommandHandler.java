@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;
@@ -14,16 +14,16 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.itemmodifiers.attribute.ModAttributes;
-import net.serex.itemmodifiers.config.CustomConfigCache;
-import net.serex.itemmodifiers.modifier.Modifier;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.config.CustomConfigCache;
+import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 import java.util.Objects;
 
-import static net.serex.itemmodifiers.modifier.ModifierHandler.syncAllItems;
+import static net.serex.upgradedarsenal.modifier.ModifierHandler.syncAllItems;
 
-@Mod.EventBusSubscriber(modid = "itemmodifiers", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = "upgradedarsenal", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommandHandler {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
@@ -34,12 +34,12 @@ public class CommandHandler {
 
     private static void configReload(RegisterCommandsEvent event) {
         event.getDispatcher().register(
-                Commands.literal("itemmodifiers")
+                Commands.literal("upgradedarsenal")
                         .then(Commands.literal("reloadconfig")
                                 .requires(source -> source.hasPermission(2))
                                 .executes(context -> {
                                     CustomConfigCache.reload();
-                                    context.getSource().sendSuccess(() -> Component.literal("ItemModifiers config reloaded."), true);
+                                    context.getSource().sendSuccess(() -> Component.literal("upgradedarsenal config reloaded."), true);
                                     return 1;
                                 })
                         )
@@ -47,12 +47,12 @@ public class CommandHandler {
     }
     private static void giveAttribute(RegisterCommandsEvent event) {
         event.getDispatcher().register(
-                Commands.literal("sync_itemmodifiers")
+                Commands.literal("sync_upgradedarsenal")
                         .requires(source -> source.hasPermission(2)) // nivel de OP
                         .executes(ctx -> {
                             ServerPlayer player = ctx.getSource().getPlayer();
                             syncAllItems(player);
-                            ctx.getSource().sendSuccess(() -> Component.literal("[ItemModifiers] Sincronización forzada."), false);
+                            ctx.getSource().sendSuccess(() -> Component.literal("[upgradedarsenal] Sincronización forzada."), false);
                             return 1;
                         })
         );

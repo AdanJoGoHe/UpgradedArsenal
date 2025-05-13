@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.client;
+package net.serex.upgradedarsenal.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -13,7 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = "itemmodifiers", value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = "upgradedarsenal", value = Dist.CLIENT)
 public class BowAnimationHandler {
 
     @SubscribeEvent

@@ -5,7 +5,7 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:projectile_accuracy",
+      "attribute": "upgradedarsenal:projectile_accuracy",
       "value": 0.2,
       "operation": "multiply_total"
     }

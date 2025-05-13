@@ -5,7 +5,7 @@
   "rarity": "common",
   "attributes": [
     {
-      "attribute": "itemmodifiers:mining_speed",
+      "attribute": "upgradedarsenal:mining_speed",
       "value": -0.1,
       "operation": "multiply_total"
     }

@@ -5,7 +5,7 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:double_drop_chance",
+      "attribute": "upgradedarsenal:double_drop_chance",
       "value": 0.1,
       "operation": "addition"
     }

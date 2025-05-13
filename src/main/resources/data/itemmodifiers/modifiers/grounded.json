@@ -10,12 +10,12 @@
       "operation": "addition"
     },
     {
-      "attribute": "itemmodifiers:durability_increase",
+      "attribute": "upgradedarsenal:durability_increase",
       "value": 0.15,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:movement_speed",
+      "attribute": "upgradedarsenal:movement_speed",
       "value": -0.05,
       "operation": "multiply_total"
     }

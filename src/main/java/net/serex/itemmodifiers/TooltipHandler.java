@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +18,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.serex.itemmodifiers.attribute.ModAttributes;
-import net.serex.itemmodifiers.modifier.Modifier;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
-import net.serex.itemmodifiers.util.AttributeDisplayUtils;
-import net.serex.itemmodifiers.util.AttributeUtils;
-import net.serex.itemmodifiers.util.ComponentUtils;
-import net.serex.itemmodifiers.util.TooltipUtils;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.util.AttributeDisplayUtils;
+import net.serex.upgradedarsenal.util.AttributeUtils;
+import net.serex.upgradedarsenal.util.ComponentUtils;
+import net.serex.upgradedarsenal.util.TooltipUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static net.serex.itemmodifiers.util.AttributeDisplayUtils.*;
+import static net.serex.upgradedarsenal.util.AttributeDisplayUtils.*;
 
 /**
  * Handles the display of tooltips for items with modifiers.
@@ -35,14 +35,14 @@ import static net.serex.itemmodifiers.util.AttributeDisplayUtils.*;
  * including attribute changes, rarity, and other modifier-specific details.
  * It handles different types of items (armor, weapons, bows) differently.
  */
-@Mod.EventBusSubscriber(modid="itemmodifiers", bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid="upgradedarsenal", bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler {
 
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         List<Component> tooltip = event.getToolTip();
-        if (stack.hasTag() && stack.getTag().contains("itemmodifiers:modifier")) {
+        if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
             Modifier modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 if (stack.getItem() instanceof BowItem) {

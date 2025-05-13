@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import java.util.List;
 

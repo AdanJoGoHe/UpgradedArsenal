@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.loot;
+package net.serex.upgradedarsenal.loot;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 public class ModifierLootModifier extends LootModifier {
     public static final Supplier<Codec<ModifierLootModifier>> CODEC = Suppliers.memoize(() ->

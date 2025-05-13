@@ -5,12 +5,12 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:swim_speed",
+      "attribute": "upgradedarsenal:swim_speed",
       "value": 0.4,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:respiration_efficiency",
+      "attribute": "upgradedarsenal:respiration_efficiency",
       "value": 0.3,
       "operation": "multiply_total"
     }

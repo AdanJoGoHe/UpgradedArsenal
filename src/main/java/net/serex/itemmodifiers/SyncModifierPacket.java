@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 
 import net.minecraft.client.Minecraft;
@@ -61,8 +61,8 @@ public class SyncModifierPacket {
         if (player == null) return;
         ItemStack stack = player.getInventory().getItem(slot);
         if (!stack.isEmpty()) {
-            // Escribir el NBT "itemmodifiers:modifier" en el ItemStack del cliente
-            stack.getOrCreateTag().putString("itemmodifiers:modifier", modifier);
+            // Escribir el NBT "upgradedarsenal:modifier" en el ItemStack del cliente
+            stack.getOrCreateTag().putString("upgradedarsenal:modifier", modifier);
             player.sendSystemMessage(Component.literal("[DEBUG] Sync → " + modifier + " en slot " + slot));
 
         }

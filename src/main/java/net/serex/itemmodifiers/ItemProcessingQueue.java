@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers;
+package net.serex.upgradedarsenal;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -7,9 +7,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.serex.itemmodifiers.modifier.ModifierHandler;
+import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
-@Mod.EventBusSubscriber(modid="itemmodifiers")
+@Mod.EventBusSubscriber(modid="upgradedarsenal")
 public class ItemProcessingQueue {
     private static final Queue<QueuedItem> itemQueue = new ConcurrentLinkedQueue<QueuedItem>();
 

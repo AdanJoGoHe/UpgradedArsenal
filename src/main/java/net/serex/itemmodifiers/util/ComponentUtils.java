@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.util;
+package net.serex.upgradedarsenal.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.Modifier;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**

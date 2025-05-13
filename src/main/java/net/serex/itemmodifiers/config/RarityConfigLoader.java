@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.config;
+package net.serex.upgradedarsenal.config;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.Modifier;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,7 +32,7 @@ public class RarityConfigLoader implements PreparableReloadListener {
         return CompletableFuture.supplyAsync(() -> {
             Map<String, RarityData> result = new HashMap<>();
             try {
-                ResourceLocation id = new ResourceLocation("itemmodifiers:rarity_config/rarities.json");
+                ResourceLocation id = new ResourceLocation("upgradedarsenal:rarity_config/rarities.json");
                 var optional = resourceManager.getResource(id);
                 if (optional.isPresent()) {
                     try (InputStream in = optional.get().open()) {

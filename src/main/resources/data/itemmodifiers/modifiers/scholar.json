@@ -5,7 +5,7 @@
   "rarity": "rare",
   "attributes": [
     {
-      "attribute": "itemmodifiers:xp_gain_bonus",
+      "attribute": "upgradedarsenal:xp_gain_bonus",
       "value": 0.15,
       "operation": "multiply_total"
     },

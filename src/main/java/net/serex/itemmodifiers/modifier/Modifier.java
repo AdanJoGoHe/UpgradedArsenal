@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.modifier;
+package net.serex.upgradedarsenal.modifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.itemmodifiers.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -41,7 +41,7 @@ public class Modifier {
     public Component getFormattedName(boolean bold) {
         Style baseStyle = Style.EMPTY.withColor(rarity.getColor());
         if (bold) baseStyle = baseStyle.withBold(true);
-        return Component.translatable("modifier.itemmodifiers." + name.getPath()).withStyle(baseStyle);
+        return Component.translatable("modifier.upgradedarsenal." + name.getPath()).withStyle(baseStyle);
     }
 
     public double getDurabilityIncrease() {

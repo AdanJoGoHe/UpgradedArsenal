@@ -5,12 +5,12 @@
   "rarity": "legendary",
   "attributes": [
     {
-      "attribute": "itemmodifiers:lifesteal",
+      "attribute": "upgradedarsenal:lifesteal",
       "value": 0.35,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:regeneration",
+      "attribute": "upgradedarsenal:regeneration",
       "value": 1.0,
       "operation": "multiply_total"
     }

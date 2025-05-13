@@ -5,7 +5,7 @@
   "rarity": "common",
   "attributes": [
     {
-      "attribute": "itemmodifiers:movement_speed",
+      "attribute": "upgradedarsenal:movement_speed",
       "value": 0.05,
       "operation": "multiply_total"
     }

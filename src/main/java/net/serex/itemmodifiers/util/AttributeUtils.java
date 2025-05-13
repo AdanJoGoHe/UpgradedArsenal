@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.util;
+package net.serex.upgradedarsenal.util;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
-import net.serex.itemmodifiers.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.Modifier;
 
 /**
  * Utility class for attribute-related operations.

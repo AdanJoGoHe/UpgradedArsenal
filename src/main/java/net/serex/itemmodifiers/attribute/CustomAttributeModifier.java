@@ -1,4 +1,4 @@
-package net.serex.itemmodifiers.attribute;
+package net.serex.upgradedarsenal.attribute;
 
 import java.util.UUID;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

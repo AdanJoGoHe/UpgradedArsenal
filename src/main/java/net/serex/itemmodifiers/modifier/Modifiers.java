@@ -1,12 +1,12 @@
-package net.serex.itemmodifiers.modifier;
+package net.serex.upgradedarsenal.modifier;
 
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.itemmodifiers.AttributeEntry;
-import net.serex.itemmodifiers.attribute.ModAttributes;
+import net.serex.upgradedarsenal.AttributeEntry;
+import net.serex.upgradedarsenal.attribute.ModAttributes;
 
 public class Modifiers {
     public static final Map<ResourceLocation, Modifier> MODIFIERS = new HashMap<>();
@@ -35,7 +35,7 @@ public class Modifiers {
     }
 
     private static Modifier create(String id, String name, Modifier.ModifierType type, Modifier.Rarity rarity, AttributeEntry... attributes) {
-        Modifier.ModifierBuilder builder = new Modifier.ModifierBuilder(new ResourceLocation("itemmodifiers", id), name, type)
+        Modifier.ModifierBuilder builder = new Modifier.ModifierBuilder(new ResourceLocation("upgradedarsenal", id), name, type)
                 .setRarity(rarity);
         for (AttributeEntry attr : attributes) {
             builder.addModifier(attr.attribute(), attr.modifier());

@@ -5,12 +5,12 @@
   "rarity": "uncommon",
   "attributes": [
     {
-      "attribute": "itemmodifiers:movement_speed",
+      "attribute": "upgradedarsenal:movement_speed",
       "value": 0.08,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:jump_height",
+      "attribute": "upgradedarsenal:jump_height",
       "value": 0.1,
       "operation": "multiply_total"
     },

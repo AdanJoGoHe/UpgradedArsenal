@@ -5,17 +5,17 @@
   "rarity": "mythic",
   "attributes": [
     {
-      "attribute": "itemmodifiers:xp_gain_bonus",
+      "attribute": "upgradedarsenal:xp_gain_bonus",
       "value": 0.2,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:regeneration",
+      "attribute": "upgradedarsenal:regeneration",
       "value": 0.15,
       "operation": "multiply_total"
     },
     {
-      "attribute": "itemmodifiers:jump_height",
+      "attribute": "upgradedarsenal:jump_height",
       "value": 0.15,
       "operation": "multiply_total"
     },
