@@ -44,7 +44,6 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.itemmodifiers.NetworkHandler;
 import net.serex.itemmodifiers.SyncModifierPacket;
 import net.serex.itemmodifiers.attribute.ModAttributes;
 import net.serex.itemmodifiers.config.CustomConfig;
@@ -665,33 +664,33 @@ public class ModifierEventHandler {
         return multiplier;
     }
 
-    private static final int SYNC_INTERVAL_TICKS = 20; // cada 20 ticks (1 segundo)
+    private static final int SYNC_INTERVAL_TICKS = 20;
     private static final Map<UUID, Integer> syncTimers = new HashMap<>();
 
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
-
-        ServerPlayer player = (ServerPlayer) event.player;
-        UUID uuid = player.getUUID();
-
-        int ticks = syncTimers.getOrDefault(uuid, 0) + 1;
-        if (ticks >= SYNC_INTERVAL_TICKS) {
-            syncTimers.put(uuid, 0); // reinicia el contador
-            syncPendingModifiers(player);
-        } else {
-            syncTimers.put(uuid, ticks);
-        }
-    }
-
-    private static void syncPendingModifiers(ServerPlayer player) {
-        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
-            ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.hasTag() && stack.getTag().getBoolean("itemmodifiers:needs_sync")) {
-                String id = stack.getTag().getString("itemmodifiers:modifier");
-                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
-                stack.getTag().remove("itemmodifiers:needs_sync");
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+//        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+//
+//        ServerPlayer player = (ServerPlayer) event.player;
+//        UUID uuid = player.getUUID();
+//
+//        int ticks = syncTimers.getOrDefault(uuid, 0) + 1;
+//        if (ticks >= SYNC_INTERVAL_TICKS) {
+//            syncTimers.put(uuid, 0); // reinicia el contador
+//            syncPendingModifiers(player);
+//        } else {
+//            syncTimers.put(uuid, ticks);
+//        }
+//    }
+//
+//    private static void syncPendingModifiers(ServerPlayer player) {
+//        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
+//            ItemStack stack = player.getInventory().getItem(slot);
+//            if (stack.hasTag() && stack.getTag().getBoolean("itemmodifiers:needs_sync")) {
+//                String id = stack.getTag().getString("itemmodifiers:modifier");
+//                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
+//                stack.getTag().remove("itemmodifiers:needs_sync");
+//            }
+//        }
+//    }
 }

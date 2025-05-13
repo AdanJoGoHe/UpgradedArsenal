@@ -53,22 +53,22 @@ public class ModifierEvents {
     private static int globalTickCounter = 0;
     private static final int SYNC_INTERVAL_TICKS = 20 * 60; // 1 minuto
 
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-
-        globalTickCounter++;
-        if (globalTickCounter >= SYNC_INTERVAL_TICKS) {
-            globalTickCounter = 0;
-
-            // Forzar sync a todos los jugadores
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                ModifierHandler.syncAllItems(player);
-                player.sendSystemMessage(Component.literal("[ItemModifiers] Sincronización automática de modificadores"));
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onServerTick(TickEvent.ServerTickEvent event) {
+//        if (event.phase != TickEvent.Phase.END) return;
+//
+//        globalTickCounter++;
+//        if (globalTickCounter >= SYNC_INTERVAL_TICKS) {
+//            globalTickCounter = 0;
+//
+//            // Forzar sync a todos los jugadores
+//            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+//            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+//                ModifierHandler.syncAllItems(player);
+//                player.sendSystemMessage(Component.literal("[ItemModifiers] Sincronización automática de modificadores"));
+//            }
+//        }
+//    }
 
 }
 

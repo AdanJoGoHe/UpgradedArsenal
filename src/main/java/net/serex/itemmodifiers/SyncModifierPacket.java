@@ -55,7 +55,7 @@ public class SyncModifierPacket {
     }
 
     // Aplicar el NBT del modificador al ItemStack del cliente en el slot dado
-    @OnlyIn(Dist.CLIENT)
+
     private static void applyModifierClient(int slot, String modifier) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
