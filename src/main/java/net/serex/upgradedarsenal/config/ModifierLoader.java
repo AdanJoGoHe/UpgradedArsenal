@@ -18,8 +18,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.*;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ModifierLoader {
