@@ -23,8 +23,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.upgradedarsenal.NetworkHandler;
-import net.serex.upgradedarsenal.SyncModifierPacket;
 import net.serex.upgradedarsenal.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -137,16 +135,6 @@ public class ModifierHandler {
             }
             attributesNBT.put("AttributeModifiers", listNBT);
             stack.getTag().put("AttributeModifiers", attributesNBT);
-
-            // 🔁 Sincronizar si hay un jugador, o marcar para sincronizar más adelante
-            if (player instanceof ServerPlayer serverPlayer) {
-                int slot = serverPlayer.getInventory().findSlotMatchingItem(stack);
-                if (slot != -1) {
-                    NetworkHandler.sendToPlayer(serverPlayer, new SyncModifierPacket(slot, newModifier.name.toString()));
-                }
-            } else {
-                tag.putBoolean("upgradedarsenal:needs_sync", true);
-            }
 
             markAsProcessed(stack);
         }
@@ -275,33 +263,6 @@ public class ModifierHandler {
         QueuedItem(ItemStack stack, Player player) {
             this.stack = stack;
             this.player = player;
-        }
-    }
-
-    public static void syncAllItems(ServerPlayer player) {
-        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
-            ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
-                String id = stack.getTag().getString("upgradedarsenal:modifier");
-                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
-            }
-        }
-
-        // Offhand
-        ItemStack offhand = player.getOffhandItem();
-        if (offhand.hasTag() && offhand.getTag().contains("upgradedarsenal:modifier")) {
-            String id = offhand.getTag().getString("upgradedarsenal:modifier");
-            NetworkHandler.sendToPlayer(player, new SyncModifierPacket(40, id)); // 40 = offhand
-        }
-
-        // Armadura
-        for (int i = 0; i < player.getInventory().armor.size(); i++) {
-            ItemStack armor = player.getInventory().armor.get(i);
-            if (armor.hasTag() && armor.getTag().contains("upgradedarsenal:modifier")) {
-                String id = armor.getTag().getString("upgradedarsenal:modifier");
-                int slot = 36 + i; // 36–39 = armor
-                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
-            }
         }
     }
 

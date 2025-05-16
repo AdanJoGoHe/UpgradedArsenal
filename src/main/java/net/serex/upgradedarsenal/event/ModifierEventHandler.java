@@ -661,34 +661,4 @@ public class ModifierEventHandler {
         }
         return multiplier;
     }
-
-    private static final int SYNC_INTERVAL_TICKS = 20;
-    private static final Map<UUID, Integer> syncTimers = new HashMap<>();
-
-//    @SubscribeEvent
-//    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-//        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
-//
-//        ServerPlayer player = (ServerPlayer) event.player;
-//        UUID uuid = player.getUUID();
-//
-//        int ticks = syncTimers.getOrDefault(uuid, 0) + 1;
-//        if (ticks >= SYNC_INTERVAL_TICKS) {
-//            syncTimers.put(uuid, 0); // reinicia el contador
-//            syncPendingModifiers(player);
-//        } else {
-//            syncTimers.put(uuid, ticks);
-//        }
-//    }
-//
-//    private static void syncPendingModifiers(ServerPlayer player) {
-//        for (int slot = 0; slot < player.getInventory().items.size(); slot++) {
-//            ItemStack stack = player.getInventory().getItem(slot);
-//            if (stack.hasTag() && stack.getTag().getBoolean("upgradedarsenal:needs_sync")) {
-//                String id = stack.getTag().getString("upgradedarsenal:modifier");
-//                NetworkHandler.sendToPlayer(player, new SyncModifierPacket(slot, id));
-//                stack.getTag().remove("upgradedarsenal:needs_sync");
-//            }
-//        }
-//    }
 }

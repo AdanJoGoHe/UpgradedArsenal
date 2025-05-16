@@ -30,7 +30,6 @@ public class Main {
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
-        NetworkHandler.register();
         modEventBus.addListener(this::setup);
         ModAttributes.ATTRIBUTES.register(modEventBus);
         this.registerCommonEventHandlers();
