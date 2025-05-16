@@ -1,22 +1,12 @@
 package net.serex.upgradedarsenal.event;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import net.serex.upgradedarsenal.ItemProcessingQueue;
-import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
-
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid="upgradedarsenal")
 public class ModifierEvents {

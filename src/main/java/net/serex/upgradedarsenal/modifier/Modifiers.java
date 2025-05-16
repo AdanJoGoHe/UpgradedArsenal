@@ -3,8 +3,6 @@ package net.serex.upgradedarsenal.modifier;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.serex.upgradedarsenal.AttributeEntry;
 import net.serex.upgradedarsenal.attribute.ModAttributes;
 
