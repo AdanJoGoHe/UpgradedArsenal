@@ -60,17 +60,18 @@ public class Main {
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        event.enqueueWork(Modifiers::init);
+        event.enqueueWork(() -> {
+            Modifiers.init();
+            ModifierLoader.loadAll();
+        });
         registerConfigSettings();
         CustomConfigCache.reload();
-
     }
 
     @Mod.EventBusSubscriber(modid = MODID)
     public static class ModEventHandler {
         @SubscribeEvent
         public static void onAddReloadListeners(AddReloadListenerEvent event) {
-            event.addListener(new ModifierLoader());
             event.addListener(new RarityConfigLoader());
         }
     }
