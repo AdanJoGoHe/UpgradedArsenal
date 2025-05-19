@@ -11,8 +11,6 @@
   "rarity.mythic": "Mythic",
 
   "_comment.general": "General Modifiers",
-  "modifier.upgradedarsenal.unchanged": "Unchanged",
-
   "_comment.weapon_modifiers": "Weapon Modifiers - Common",
   "modifier.upgradedarsenal.dull": "Dull",
   "modifier.upgradedarsenal.blunt": "Blunt",

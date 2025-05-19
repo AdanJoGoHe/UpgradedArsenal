@@ -18,7 +18,6 @@ import net.serex.upgradedarsenal.client.BowAnimationHandler;
 import net.serex.upgradedarsenal.config.CustomConfig;
 import net.serex.upgradedarsenal.config.CustomConfigCache;
 import net.serex.upgradedarsenal.config.ModifierLoader;
-import net.serex.upgradedarsenal.config.RarityConfigLoader;
 import net.serex.upgradedarsenal.event.*;
 import net.serex.upgradedarsenal.modifier.Modifiers;
 
@@ -67,11 +66,5 @@ public class Main {
         CustomConfigCache.reload();
     }
 
-    @Mod.EventBusSubscriber(modid = MODID)
-    public static class ModEventHandler {
-        @SubscribeEvent
-        public static void onAddReloadListeners(AddReloadListenerEvent event) {
-            event.addListener(new RarityConfigLoader());
-        }
-    }
+    // Removed RarityConfigLoader registration as it's now handled through the config system
 }

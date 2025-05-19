@@ -1,7 +1,9 @@
 package net.serex.upgradedarsenal.modifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
@@ -11,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.config.CustomConfigCache;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Modifier {
@@ -52,38 +55,50 @@ public class Modifier {
     }
 
     public static enum Rarity {
-        UNCHANGED(ChatFormatting.GRAY, 800),
-        COMMON(ChatFormatting.GRAY, 700),
-        UNCOMMON(ChatFormatting.GREEN, 400),
-        RARE(ChatFormatting.BLUE, 250),
-        EPIC(ChatFormatting.LIGHT_PURPLE, 150),
-        LEGENDARY(ChatFormatting.GOLD, 100),
-        MYTHIC(ChatFormatting.RED, 75),
-        HERO(ChatFormatting.DARK_RED, 50);
+        UNCHANGED,
+        COMMON,
+        UNCOMMON,
+        RARE,
+        EPIC,
+        LEGENDARY,
+        MYTHIC,
+        HERO;
 
+        // Default values used only if config fails to load
+        private static final Map<Rarity, ChatFormatting> DEFAULT_COLORS = Map.of(
+            UNCHANGED, ChatFormatting.GRAY,
+            COMMON, ChatFormatting.GRAY,
+            UNCOMMON, ChatFormatting.GREEN,
+            RARE, ChatFormatting.BLUE,
+            EPIC, ChatFormatting.LIGHT_PURPLE,
+            LEGENDARY, ChatFormatting.GOLD,
+            MYTHIC, ChatFormatting.RED,
+            HERO, ChatFormatting.DARK_RED
+        );
 
-        private ChatFormatting color;
-        private int weight;
-
-        private Rarity(ChatFormatting color, int weight) {
-            this.color = color;
-            this.weight = weight;
-        }
+        private static final Map<Rarity, Integer> DEFAULT_WEIGHTS = Map.of(
+                UNCHANGED, 67,
+                COMMON, 167,
+                UNCOMMON, 200,
+                RARE, 133,
+                EPIC, 100,
+                LEGENDARY, 67,
+                MYTHIC, 50,
+                HERO, 33
+        );
 
         public ChatFormatting getColor() {
-            return this.color;
+            if (net.serex.upgradedarsenal.config.CustomConfigCache.RARITY_CONFIG.containsKey(this)) {
+                return net.serex.upgradedarsenal.config.CustomConfigCache.RARITY_CONFIG.get(this).color;
+            }
+            return DEFAULT_COLORS.getOrDefault(this, ChatFormatting.GRAY);
         }
 
         public int getWeight() {
-            return this.weight;
-        }
-
-        public void setColor(ChatFormatting color) {
-            this.color = color;
-        }
-
-        public void setWeight(int weight) {
-            this.weight = weight;
+            if (net.serex.upgradedarsenal.config.CustomConfigCache.RARITY_CONFIG.containsKey(this)) {
+                return net.serex.upgradedarsenal.config.CustomConfigCache.RARITY_CONFIG.get(this).weight;
+            }
+            return DEFAULT_WEIGHTS.getOrDefault(this, 100);
         }
     }
 
