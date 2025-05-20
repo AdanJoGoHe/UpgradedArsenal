@@ -20,6 +20,7 @@ import net.serex.upgradedarsenal.config.CustomConfigCache;
 import net.serex.upgradedarsenal.config.ModifierLoader;
 import net.serex.upgradedarsenal.event.*;
 import net.serex.upgradedarsenal.modifier.Modifiers;
+import net.serex.upgradedarsenal.util.EventUtil;
 
 
 @Mod(value= Main.MODID)
@@ -39,7 +40,7 @@ public class Main {
     }
 
     private void registerConfigSettings() {
-         ModifierEventHandler.loadAllowedBlocks();
+         EventUtil.loadAllowedBlocks();
     }
 
     private void registerCommonEventHandlers() {
