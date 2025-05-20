@@ -49,7 +49,8 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(ModifierEvents.class);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.upgradedarsenal.modifier.ModifierHandler.class);
-        MinecraftForge.EVENT_BUS.register(net.serex.upgradedarsenal.event.ModifierEventHandler.class);
+        // ModifierEventHandler has been replaced with attribute-specific event handlers
+        // that are automatically registered via @Mod.EventBusSubscriber
         MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class);
     }
 
