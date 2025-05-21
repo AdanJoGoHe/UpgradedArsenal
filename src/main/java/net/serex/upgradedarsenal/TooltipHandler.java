@@ -44,74 +44,28 @@ public class TooltipHandler {
         if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
             Modifier modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
-                if (stack.getItem() instanceof BowItem) {
-                    updateItemTooltip(stack, tooltip, modifier, true);
-                } else if (!(stack.getItem() instanceof CrossbowItem)) {
-                    updateItemTooltip(stack, tooltip, modifier, false);
-                }
+                updateItemTooltip(stack, tooltip, modifier);
             }
         }
     }
 
-    /**
-     * Updates the tooltip for an item with modifier information
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param isBow Whether the item is a bow
-     */
-    private static void updateItemTooltip(ItemStack stack, List<Component> tooltip, Modifier modifier, boolean isBow) {
-        if (isBow) {
-            // Componer el nombre del modificador + nombre del ítem
-            MutableComponent itemName = Component.translatable(stack.getItem().getDescriptionId());
-            MutableComponent fullName = Component.literal(modifier.getFormattedName().getString() + " ")
-                    .append(itemName)
-                    .withStyle(style -> style.withColor(modifier.rarity.getColor()));
-            tooltip.set(0, fullName);
+    private static void updateItemTooltip(ItemStack stack, List<Component> tooltip, Modifier modifier) {
+        tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
+                .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
 
-            // Añadir la línea de rareza
-            tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
-                    .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
-
-            // Añadir atributos especiales de arcos
-            tooltip.add(2, Component.empty());
-            TooltipUtils.addBowAttributes(stack, tooltip, modifier, 3);
-            tooltip.add(Component.empty());
-
-            // Añadir el nombre del modificador en negrita
-            tooltip.add(modifier.getFormattedName()
-                    .copy()
-                    .withStyle(style -> style.withColor(modifier.rarity.getColor()).withBold(true)));
-
-            // Añadir las líneas descriptivas del modificador
-            for (Component line : ComponentUtils.getFormattedAttributeLines(modifier, true, AttributeDisplayUtils::getBowAttributeTranslationKey)) {
-                tooltip.add(line);
-            }
+        int whenIndex = findWhenIndex(tooltip);
+        if (stack.getItem() instanceof ArmorItem) {
+            updateArmorAttributes(stack, tooltip, modifier, whenIndex + 1);
+        } else if (stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem) {
+            updateRangedAttributes(stack, tooltip, modifier, whenIndex + 1);
         } else {
-            // Standard handling for other items
-            tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
-                    .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
-
-            int whenIndex = findWhenIndex(tooltip);
-            if (stack.getItem() instanceof ArmorItem) {
-                updateArmorAttributes(stack, tooltip, modifier, whenIndex + 1);
-            } else if (stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem) {
-                updateRangedAttributes(stack, tooltip, modifier, whenIndex + 1);
-            } else {
-                updateWeaponAttributes(stack, tooltip, modifier, whenIndex + 1);
-            }
-            int modifierIndex = findEndOfVanillaAttributes(tooltip, whenIndex + 1);
-            addModifierLines(stack, tooltip, modifier, modifierIndex);
+            updateWeaponAttributes(stack, tooltip, modifier, whenIndex + 1);
         }
+
+        int modifierIndex = findEndOfVanillaAttributes(tooltip, whenIndex + 1);
+        addModifierLines(tooltip, modifier, modifierIndex);
     }
 
-    /**
-     * Finds the index of the "When on" or "When in" line in the tooltip
-     *
-     * @param tooltip The tooltip to search
-     * @return The index of the line, or -1 if not found
-     */
     private static int findWhenIndex(List<Component> tooltip) {
         for (int i = 0; i < tooltip.size(); ++i) {
             String line = tooltip.get(i).getString();
@@ -121,71 +75,51 @@ public class TooltipHandler {
         return -1;
     }
 
-    /**
-     * Adds modifier information lines to the tooltip
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the modifier lines at
-     */
-    private static void addModifierLines(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Add a blank line
+    private static void addModifierLines(List<Component> tooltip, Modifier modifier, int insertIndex) {
         tooltip.add(insertIndex++, Component.empty());
+        tooltip.add(insertIndex++, formatModifierTitle(modifier));
+            tooltip.addAll(insertIndex++, getFormattedInfoLines(modifier));
 
-        // Add the modifier name
-        tooltip.add(insertIndex++, modifier.getFormattedName().copy()
-                .withStyle(modifier.rarity.getColor(), ChatFormatting.UNDERLINE));
-
-        // Add the modifier attribute lines
-        for (Component line : getFormattedInfoLines(modifier, false)) {
-            tooltip.add(insertIndex++, line);
-        }
     }
 
-    /**
-     * Creates formatted lines for displaying modifier attributes in tooltips
-     *
-     * @param modifier The modifier to get attribute lines for
-     * @param isBow Whether the item is a bow (affects formatting)
-     * @return A list of formatted component lines
-     */
-    private static List<Component> getFormattedInfoLines(Modifier modifier, boolean isBow) {
+    private static Component formatModifierTitle(Modifier modifier) {
+        return modifier.getFormattedName().copy()
+                .withStyle(modifier.rarity.getColor(), ChatFormatting.UNDERLINE);
+    }
+
+    private static List<Component> getFormattedInfoLines(Modifier modifier) {
         List<Component> lines = new ArrayList<>();
+
         for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
             Attribute attribute = entry.getKey().get();
             Modifier.AttributeModifierSupplier supplier = entry.getValue();
-            double amount = supplier.amount;
 
-            // Get the appropriate attribute key based on whether it's a bow or not
-            String attributeKey = isBow ?
-                getBowAttributeTranslationKey(attribute) :
-                getAttributeTranslationKey(attribute);
+            String attributeKey = getAttributeTranslationKey(attribute);
+            String formattedAmount = formatModifierAmount(supplier);
+            ChatFormatting color = getAmountColor(supplier.amount);
 
-            // Format the amount based on the operation
-            String formattedAmount;
-            if (isBow || supplier.operation == AttributeModifier.Operation.MULTIPLY_TOTAL) {
-                formattedAmount = String.format("%+d%%", (int)(amount * 100.0));
-            } else {
-                formattedAmount = String.format("%+.1f", amount);
-            }
-
-            // Create the component line
             MutableComponent line = Component.literal(formattedAmount + " ")
-                    .append(Component.translatable(attributeKey));
-            lines.add(line.withStyle(amount > 0.0 ? ChatFormatting.GREEN : ChatFormatting.RED));
+                    .append(Component.translatable(attributeKey))
+                    .withStyle(color);
+
+            lines.add(line);
         }
+
         return lines;
     }
 
-    /**
-     * Updates ranged weapon attributes in the tooltip
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
+    private static String formatModifierAmount(Modifier.AttributeModifierSupplier supplier) {
+        double amount = supplier.amount;
+        return supplier.operation == AttributeModifier.Operation.MULTIPLY_TOTAL
+                ? String.format("%+d%%", (int)(amount * 100.0))
+                : String.format("%+.1f", amount);
+    }
+
+    private static ChatFormatting getAmountColor(double amount) {
+        return amount > 0.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
+    }
+
+
     private static void updateRangedAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         // Remove existing attack damage and attack speed lines
         while (insertIndex < tooltip.size()) {
@@ -212,14 +146,6 @@ public class TooltipHandler {
         }
     }
 
-    /**
-     * Adds bow-specific attributes to the tooltip
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
     private static void addBowAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         // Define the attributes and their base values
         Attribute[] attributes = {
@@ -239,55 +165,22 @@ public class TooltipHandler {
         }
     }
 
-    /**
-     * Gets the translation key for a bow attribute
-     *
-     * @param attribute The attribute
-     * @return The translation key
-     */
     private static String getBowAttributeTranslationKey(Attribute attribute) {
         return BOW_ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
-    /**
-     * Formats an attribute value based on the operation
-     *
-     * @param value The attribute value
-     * @param operation The attribute modifier operation
-     * @return The formatted attribute value
-     */
     private static String formatAttributeValue(double value, AttributeModifier.Operation operation) {
         return AttributeUtils.formatAttributeValue(value, operation);
     }
 
-    /**
-     * Gets the display name for a ranged weapon attribute
-     *
-     * @param attribute The attribute
-     * @return The display name, or null if not a ranged weapon attribute
-     */
     public static String getAttributeNameForRangedWeapon(Attribute attribute) {
         return RANGED_WEAPON_ATTRIBUTE_NAMES.getOrDefault(attribute, null);
     }
 
-    /**
-     * Gets the translation key for an attribute
-     *
-     * @param attribute The attribute
-     * @return The translation key
-     */
     private static String getAttributeTranslationKey(Attribute attribute) {
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
-    /**
-     * Updates armor attributes in the tooltip
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
     private static void updateArmorAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         ArmorItem armorItem = (ArmorItem) stack.getItem();
 
@@ -303,14 +196,6 @@ public class TooltipHandler {
         }
     }
 
-    /**
-     * Updates weapon attributes in the tooltip
-     *
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
     private static void updateWeaponAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         // Define the attributes to update
         Attribute[] attributes = {Attributes.ATTACK_DAMAGE, Attributes.ATTACK_SPEED};
@@ -324,15 +209,6 @@ public class TooltipHandler {
         }
     }
 
-    /**
-     * Updates an attribute line in the tooltip with a new value
-     *
-     * @param tooltip The tooltip to update
-     * @param startIndex The index to start searching from
-     * @param attributeName The name of the attribute to update
-     * @param value The new value for the attribute
-     * @param format The format string for the value
-     */
     private static void updateAttributeLine(List<Component> tooltip, int startIndex, String attributeName, double value, String format) {
         for (int i = startIndex; i < tooltip.size(); ++i) {
             String line = tooltip.get(i).getString();
@@ -346,13 +222,6 @@ public class TooltipHandler {
         }
     }
 
-    /**
-     * Finds the end of vanilla attribute lines in the tooltip
-     *
-     * @param tooltip The tooltip to search
-     * @param startIndex The index to start searching from
-     * @return The index of the first non-attribute line
-     */
     private static int findEndOfVanillaAttributes(List<Component> tooltip, int startIndex) {
         for (int i = startIndex; i < tooltip.size(); ++i) {
             String line = tooltip.get(i).getString().toLowerCase();
@@ -363,26 +232,10 @@ public class TooltipHandler {
         return tooltip.size();
     }
 
-    /**
-     * Calculates the final value of an attribute after applying modifiers
-     *
-     * @param stack The item stack
-     * @param attribute The attribute to calculate
-     * @param baseValue The base value of the attribute
-     * @param modifier The modifier to apply
-     * @return The final value of the attribute
-     */
     private static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, Modifier modifier) {
         return AttributeUtils.calculateFinalAttributeValue(stack, attribute, baseValue, modifier);
     }
 
-    /**
-     * Gets the base value of an attribute for an item
-     *
-     * @param stack The item stack
-     * @param attribute The attribute to get the base value for
-     * @return The base value of the attribute
-     */
     private static double getBaseAttributeValue(ItemStack stack, Attribute attribute) {
         return AttributeUtils.getBaseAttributeValue(stack, attribute);
     }
