@@ -191,17 +191,8 @@ public class EventUtil {
         }
     }
 
-    public static void applyRespirationEfficiency(Player player) {
-        if (!player.isUnderWater()) return;
 
-        double efficiency = getAttributeValueFromAll(player, ModAttributes.RESPIRATION_EFFICIENCY.get());
-        if (efficiency > 1.0 && player.getAirSupply() < player.getMaxAirSupply()) {
-            int restored = (int)((efficiency - 1.0) * 2);
-            player.setAirSupply(Math.min(player.getAirSupply() + restored, player.getMaxAirSupply()));
-        }
-    }
-
-    public static void applyAttackDamageModifier(Player player, ItemStack stack, LivingHurtEvent event) {
+    public static void applyAttackDamageModifier(ItemStack stack, LivingHurtEvent event) {
         Modifier modifier = ModifierHandler.getModifier(stack);
         if (modifier == null) return;
 

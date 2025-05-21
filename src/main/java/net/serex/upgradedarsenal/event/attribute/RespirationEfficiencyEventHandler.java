@@ -20,7 +20,7 @@ public class RespirationEfficiencyEventHandler extends AttributeEventHandler {
     public Attribute getAttribute() {
         return ModAttributes.RESPIRATION_EFFICIENCY.get();
     }
-    
+
     /**
      * Event handler for player tick.
      * Applies respiration efficiency based on the RESPIRATION_EFFICIENCY attribute.
@@ -28,7 +28,12 @@ public class RespirationEfficiencyEventHandler extends AttributeEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
+        if (!player.isUnderWater()) return;
 
-        EventUtil.applyRespirationEfficiency(player);
+        double efficiency = EventUtil.getAttributeValueFromAll(player, ModAttributes.RESPIRATION_EFFICIENCY.get());
+        if (efficiency > 1.0 && player.getAirSupply() < player.getMaxAirSupply()) {
+            int restored = (int)((efficiency - 1.0) * 2);
+            player.setAirSupply(Math.min(player.getAirSupply() + restored, player.getMaxAirSupply()));
+        }
     }
 }
