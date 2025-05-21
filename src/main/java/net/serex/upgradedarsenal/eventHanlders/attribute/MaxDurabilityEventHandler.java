@@ -1,7 +1,6 @@
-package net.serex.upgradedarsenal.event.attribute;
+package net.serex.upgradedarsenal.eventHanlders.attribute;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

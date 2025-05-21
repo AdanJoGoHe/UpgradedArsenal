@@ -1,4 +1,4 @@
-package net.serex.upgradedarsenal.event;
+package net.serex.upgradedarsenal.eventHanlders;
 
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.level.Level;

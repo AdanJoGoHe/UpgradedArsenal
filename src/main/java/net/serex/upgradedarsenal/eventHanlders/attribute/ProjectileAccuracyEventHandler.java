@@ -1,15 +1,11 @@
-package net.serex.upgradedarsenal.event.attribute;
+package net.serex.upgradedarsenal.eventHanlders.attribute;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
 import net.serex.upgradedarsenal.attribute.ModAttributes;
-import net.serex.upgradedarsenal.modifier.ModifierHandler;
-import net.serex.upgradedarsenal.util.EventUtil;
 
 /**
  * Event handler for the PROJECTILE_ACCURACY attribute.

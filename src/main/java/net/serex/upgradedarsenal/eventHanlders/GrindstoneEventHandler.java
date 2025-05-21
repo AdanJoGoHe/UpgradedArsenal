@@ -1,4 +1,4 @@
-package net.serex.upgradedarsenal.event;
+package net.serex.upgradedarsenal.eventHanlders;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

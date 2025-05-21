@@ -1,4 +1,4 @@
-package net.serex.upgradedarsenal.event.attribute;
+package net.serex.upgradedarsenal.eventHanlders.attribute;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;

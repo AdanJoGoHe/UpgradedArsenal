@@ -1,9 +1,7 @@
-package net.serex.upgradedarsenal.event.attribute;
+package net.serex.upgradedarsenal.eventHanlders.attribute;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.common.Mod;
-import net.serex.upgradedarsenal.Main;
 
 /**
  * Base abstract class for all attribute-specific event handlers.

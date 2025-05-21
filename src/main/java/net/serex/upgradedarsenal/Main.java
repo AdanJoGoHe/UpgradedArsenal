@@ -1,12 +1,9 @@
 package net.serex.upgradedarsenal;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -14,11 +11,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.serex.upgradedarsenal.attribute.ModAttributes;
-import net.serex.upgradedarsenal.client.BowAnimationHandler;
 import net.serex.upgradedarsenal.config.CustomConfig;
 import net.serex.upgradedarsenal.config.CustomConfigCache;
 import net.serex.upgradedarsenal.config.ModifierLoader;
-import net.serex.upgradedarsenal.event.*;
+import net.serex.upgradedarsenal.eventHanlders.*;
 import net.serex.upgradedarsenal.modifier.Modifiers;
 import net.serex.upgradedarsenal.util.EventUtil;
 
@@ -52,11 +48,6 @@ public class Main {
         // ModifierEventHandler has been replaced with attribute-specific event handlers
         // that are automatically registered via @Mod.EventBusSubscriber
         MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class);
-    }
-
-    @OnlyIn(value=Dist.CLIENT)
-    private void registerClientEventHandlers() {
-        MinecraftForge.EVENT_BUS.register(new BowAnimationHandler());
     }
 
     private void setup(FMLCommonSetupEvent event) {
