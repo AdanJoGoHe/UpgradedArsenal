@@ -1,0 +1,38 @@
+{
+  "id": "critical_master",
+  "name": "critical master",
+  "type": "held",
+  "rarity": "legendary",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:critical_hit_chance",
+      "value": 0.3,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:critical_damage",
+      "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:lifesteal",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.3,
+      "operation": "multiply_total"
+    }
+  ]
+}

@@ -54,13 +54,7 @@ public class TooltipHandler {
                 .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
 
         int whenIndex = findWhenIndex(tooltip);
-        if (stack.getItem() instanceof ArmorItem) {
-            updateArmorAttributes(stack, tooltip, modifier, whenIndex + 1);
-        } else if (stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem) {
-            updateRangedAttributes(stack, tooltip, modifier, whenIndex + 1);
-        } else {
-            updateWeaponAttributes(stack, tooltip, modifier, whenIndex + 1);
-        }
+        updateItemAttributes(stack, tooltip, modifier, whenIndex + 1);
 
         int modifierIndex = findEndOfVanillaAttributes(tooltip, whenIndex + 1);
         addModifierLines(tooltip, modifier, modifierIndex);
@@ -120,55 +114,6 @@ public class TooltipHandler {
     }
 
 
-    private static void updateRangedAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Remove existing attack damage and attack speed lines
-        while (insertIndex < tooltip.size()) {
-            String line = tooltip.get(insertIndex).getString().toLowerCase();
-            if (!line.contains("attack damage") && !line.contains("attack speed")) break;
-            tooltip.remove(insertIndex);
-        }
-
-        // Add ranged weapon attribute lines
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-            Attribute attribute = entry.getKey().get();
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
-            double value = supplier.amount;
-            String attributeName = getAttributeNameForRangedWeapon(attribute);
-
-            // Skip attributes that aren't relevant for ranged weapons
-            if (attributeName == null) continue;
-
-            // Format and add the attribute line
-            String formattedValue = formatAttributeValue(value, supplier.operation);
-            MutableComponent line = Component.literal(formattedValue + " " + attributeName)
-                    .withStyle(value > 0.0 ? ChatFormatting.BLUE : ChatFormatting.RED);
-            tooltip.add(insertIndex++, line);
-        }
-    }
-
-    private static void addBowAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Define the attributes and their base values
-        Attribute[] attributes = {
-            ModAttributes.PROJECTILE_DAMAGE.get(),
-            ModAttributes.DRAW_SPEED.get(),
-            ModAttributes.PROJECTILE_VELOCITY.get(),
-            ModAttributes.PROJECTILE_ACCURACY.get()
-        };
-        String[] attributeNames = {"Damage", "Draw Speed", "Velocity", "Accuracy"};
-        double[] baseValues = {2.0, 1.0, 1.0, 1.0};
-
-        // Add each attribute to the tooltip
-        for (int i = 0; i < attributes.length; i++) {
-            double finalValue = calculateFinalAttributeValue(stack, attributes[i], baseValues[i], modifier);
-            tooltip.add(insertIndex++, Component.literal(String.format("+%.1f %s", finalValue, attributeNames[i]))
-                    .withStyle(ChatFormatting.BLUE));
-        }
-    }
-
-    private static String getBowAttributeTranslationKey(Attribute attribute) {
-        return BOW_ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
-    }
-
     private static String formatAttributeValue(double value, AttributeModifier.Operation operation) {
         return AttributeUtils.formatAttributeValue(value, operation);
     }
@@ -181,32 +126,98 @@ public class TooltipHandler {
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
-    private static void updateArmorAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        ArmorItem armorItem = (ArmorItem) stack.getItem();
+    private static void updateItemAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
+        // Process vanilla attributes first
+        processVanillaAttributes(stack, tooltip, modifier, insertIndex);
 
-        // Define the attributes to update
-        Attribute[] attributes = {Attributes.ARMOR, Attributes.ARMOR_TOUGHNESS};
-        String[] attributeNames = {"armor", "toughness"};
-        double[] baseValues = {armorItem.getDefense(), armorItem.getToughness()};
+        // Then add all additional attributes from the modifier
+        addModifierAttributes(stack, tooltip, modifier, insertIndex);
+    }
 
-        // Update each attribute
-        for (int i = 0; i < attributes.length; i++) {
-            double finalValue = calculateFinalAttributeValue(stack, attributes[i], baseValues[i], modifier);
-            updateAttributeLine(tooltip, insertIndex, attributeNames[i], finalValue, "%.1f");
+    private static void processVanillaAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
+        boolean isRangedWeapon = stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
+        boolean isArmor = stack.getItem() instanceof ArmorItem;
+
+        // For ranged weapons, remove attack damage and speed lines as they're not applicable
+        if (isRangedWeapon) {
+            int i = insertIndex;
+            while (i < tooltip.size()) {
+                String line = tooltip.get(i).getString().toLowerCase();
+                if (line.contains("attack damage") || line.contains("attack speed")) {
+                    tooltip.remove(i);
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        // Update armor attributes if present
+        if (isArmor) {
+            ArmorItem armorItem = (ArmorItem) stack.getItem();
+            updateAttributeLine(tooltip, insertIndex, "armor", 
+                calculateFinalAttributeValue(stack, Attributes.ARMOR, armorItem.getDefense(), modifier), "%.1f");
+            updateAttributeLine(tooltip, insertIndex, "toughness", 
+                calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, armorItem.getToughness(), modifier), "%.1f");
+        }
+
+        // Update weapon attributes if this is a melee weapon
+        if (!isRangedWeapon && !isArmor) {
+            updateAttributeLine(tooltip, insertIndex, "attack damage", 
+                calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, getBaseAttributeValue(stack, Attributes.ATTACK_DAMAGE), modifier), "%.1f");
+            updateAttributeLine(tooltip, insertIndex, "attack speed", 
+                calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, getBaseAttributeValue(stack, Attributes.ATTACK_SPEED), modifier), "%.1f");
         }
     }
 
-    private static void updateWeaponAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Define the attributes to update
-        Attribute[] attributes = {Attributes.ATTACK_DAMAGE, Attributes.ATTACK_SPEED};
-        String[] attributeNames = {"attack damage", "attack speed"};
+    private static void addModifierAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
+        // Find the end of vanilla attributes to insert additional modifier attributes
+        int modifierInsertIndex = findEndOfVanillaAttributes(tooltip, insertIndex);
+        boolean isRangedWeapon = stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
+        boolean isArmor = stack.getItem() instanceof ArmorItem;
 
-        // Update each attribute
-        for (int i = 0; i < attributes.length; i++) {
-            double baseValue = getBaseAttributeValue(stack, attributes[i]);
-            double finalValue = calculateFinalAttributeValue(stack, attributes[i], baseValue, modifier);
-            updateAttributeLine(tooltip, insertIndex, attributeNames[i], finalValue, "%.1f");
+        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+            Attribute attribute = entry.getKey().get();
+            Modifier.AttributeModifierSupplier supplier = entry.getValue();
+
+            // Skip attributes that are already handled by vanilla tooltip
+            if (isVanillaAttribute(attribute, isArmor, isRangedWeapon)) continue;
+
+            // Get the appropriate display name and format for this attribute
+            String displayName = null;
+            if (isRangedWeapon) {
+                displayName = getAttributeNameForRangedWeapon(attribute);
+            }
+
+            if (displayName != null) {
+                // Use ranged weapon specific formatting
+                String formattedValue = formatAttributeValue(supplier.amount, supplier.operation);
+                MutableComponent line = Component.literal(formattedValue + " " + displayName)
+                        .withStyle(supplier.amount > 0.0 ? ChatFormatting.BLUE : ChatFormatting.RED);
+                tooltip.add(modifierInsertIndex++, line);
+            } else {
+                // Use standard formatting for all other attributes
+                String attributeKey = getAttributeTranslationKey(attribute);
+                String formattedAmount = formatModifierAmount(supplier);
+                ChatFormatting color = getAmountColor(supplier.amount);
+
+                MutableComponent line = Component.literal(formattedAmount + " ")
+                        .append(Component.translatable(attributeKey))
+                        .withStyle(color);
+
+                tooltip.add(modifierInsertIndex++, line);
+            }
         }
+    }
+
+    private static boolean isVanillaAttribute(Attribute attribute, boolean isArmor, boolean isRangedWeapon) {
+        // Check if this is a vanilla attribute that's already handled by the tooltip
+        if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && isArmor) {
+            return true;
+        }
+        if ((attribute == Attributes.ATTACK_DAMAGE || attribute == Attributes.ATTACK_SPEED) && !isRangedWeapon && !isArmor) {
+            return true;
+        }
+        return false;
     }
 
     private static void updateAttributeLine(List<Component> tooltip, int startIndex, String attributeName, double value, String format) {

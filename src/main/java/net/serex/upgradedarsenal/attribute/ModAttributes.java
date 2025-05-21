@@ -25,7 +25,9 @@ public class ModAttributes {
     public static final RegistryObject<Attribute> RESPIRATION_EFFICIENCY = ATTRIBUTES.register("respiration_efficiency", () -> new RangedAttribute("attribute.upgradedarsenal.respiration_efficiency", 1.0, 0.1, 10.0).setSyncable(true));
     public static final RegistryObject<Attribute> REGENERATION = ATTRIBUTES.register("regeneration", () -> new RangedAttribute("attribute.upgradedarsenal.regeneration", 0.0, 0.0, 10.0).setSyncable(true));
 
-
+    // New attributes
+    public static final RegistryObject<Attribute> CRITICAL_CHANCE = ATTRIBUTES.register("critical_hit_chance", () -> new RangedAttribute("attribute.upgradedarsenal.critical_hit_chance", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> CRITICAL_DAMAGE = ATTRIBUTES.register("critical_damage", () -> new RangedAttribute("attribute.upgradedarsenal.critical_damage", 0.0, 0.0, 5.0).setSyncable(true));
+    public static final RegistryObject<Attribute> LIFESTEAL = ATTRIBUTES.register("lifesteal", () -> new RangedAttribute("attribute.upgradedarsenal.lifesteal", 0.0, 0.0, 1.0).setSyncable(true));
 
 }
-

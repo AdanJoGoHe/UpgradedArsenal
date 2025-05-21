@@ -312,4 +312,40 @@ public class EventUtil {
     public static Set<Block> getAllowedBlocks() {
         return allowedBlocks;
     }
+
+    /**
+     * Applies lifesteal healing to a player based on damage dealt.
+     * 
+     * @param player The player to heal
+     * @param damageDealt The amount of damage dealt
+     */
+    public static void handleLifesteal(Player player, float damageDealt) {
+        double lifestealAmount = getAttributeValueFromAll(player, ModAttributes.LIFESTEAL.get());
+        if (lifestealAmount > 0 && player.getHealth() < player.getMaxHealth()) {
+            float healAmount = damageDealt * (float)lifestealAmount;
+            player.heal(healAmount);
+        }
+    }
+
+    /**
+     * Calculates if a critical hit occurs based on player's critical hit chance.
+     * 
+     * @param player The player attacking
+     * @return true if a critical hit occurs, false otherwise
+     */
+    public static boolean rollForCriticalHit(Player player) {
+        double critChance = getAttributeValueFromAll(player, ModAttributes.CRITICAL_CHANCE.get());
+        return critChance > 0 && player.getRandom().nextDouble() < critChance;
+    }
+
+    /**
+     * Calculates the damage multiplier for a critical hit.
+     * 
+     * @param player The player attacking
+     * @return The damage multiplier (1.0 + critical damage bonus)
+     */
+    public static float getCriticalDamageMultiplier(Player player) {
+        double critDamage = getAttributeValueFromAll(player, ModAttributes.CRITICAL_DAMAGE.get());
+        return 1.0f + (float)critDamage;
+    }
 }

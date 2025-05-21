@@ -6,18 +6,33 @@
   "attributes": [
     {
       "attribute": "upgradedarsenal:lifesteal",
-      "value": 0.5,
+      "value": 0.75,
       "operation": "multiply_total"
     },
     {
       "attribute": "upgradedarsenal:regeneration",
-      "value": 1.5,
+      "value": 2.0,
       "operation": "multiply_total"
     },
     {
       "attribute": "minecraft:generic.max_health",
-      "value": 6.0,
+      "value": 10.0,
       "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.5,
+      "operation": "multiply_total"
     }
   ]
 }

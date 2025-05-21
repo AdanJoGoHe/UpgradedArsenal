@@ -6,17 +6,37 @@
   "attributes": [
     {
       "attribute": "upgradedarsenal:swim_speed",
-      "value": 0.75,
+      "value": 1.0,
       "operation": "multiply_total"
     },
     {
       "attribute": "upgradedarsenal:respiration_efficiency",
-      "value": 1.0,
+      "value": 1.5,
       "operation": "multiply_total"
     },
     {
       "attribute": "upgradedarsenal:xp_gain_bonus",
+      "value": 1.5,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 8.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:regeneration",
       "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.5,
       "operation": "multiply_total"
     }
   ]
