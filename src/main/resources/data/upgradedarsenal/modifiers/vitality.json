@@ -1,0 +1,23 @@
+{
+  "id": "vitality",
+  "name": "vitality",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 4.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:regeneration",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

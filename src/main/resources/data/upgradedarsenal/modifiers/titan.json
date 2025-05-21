@@ -1,0 +1,33 @@
+{
+  "id": "titan",
+  "name": "titan",
+  "type": "equipped",
+  "rarity": "mythic",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 8.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.25,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "value": 0.25,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": -0.15,
+      "operation": "multiply_total"
+    }
+  ]
+}

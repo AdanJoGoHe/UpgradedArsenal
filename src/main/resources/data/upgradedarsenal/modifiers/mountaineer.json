@@ -1,0 +1,23 @@
+{
+  "id": "mountaineer",
+  "name": "mountaineer",
+  "type": "equipped",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:jump_height",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "value": 0.1,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": 0.03,
+      "operation": "multiply_total"
+    }
+  ]
+}

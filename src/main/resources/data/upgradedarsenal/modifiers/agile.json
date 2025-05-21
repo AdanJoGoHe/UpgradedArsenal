@@ -1,17 +1,17 @@
 {
-  "id": "scholar",
-  "name": "scholar",
+  "id": "agile",
+  "name": "agile",
   "type": "equipped",
   "rarity": "uncommon",
   "attributes": [
     {
-      "attribute": "upgradedarsenal:xp_gain_bonus",
-      "value": 0.3,
+      "attribute": "minecraft:generic.movement_speed",
+      "value": 0.08,
       "operation": "multiply_total"
     },
     {
-      "attribute": "upgradedarsenal:durability_increase",
-      "value": 0.2,
+      "attribute": "upgradedarsenal:jump_height",
+      "value": 0.15,
       "operation": "multiply_total"
     },
     {

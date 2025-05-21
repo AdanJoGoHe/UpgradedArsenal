@@ -1,0 +1,23 @@
+{
+  "id": "heavyweight",
+  "name": "heavyweight",
+  "type": "equipped",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "value": 0.2,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.1,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

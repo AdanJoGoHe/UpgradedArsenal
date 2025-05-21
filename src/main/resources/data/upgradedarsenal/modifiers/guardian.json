@@ -1,0 +1,28 @@
+{
+  "id": "guardian",
+  "name": "guardian",
+  "type": "equipped",
+  "rarity": "legendary",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "value": 0.15,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": -0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}

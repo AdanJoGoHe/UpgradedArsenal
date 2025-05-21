@@ -1,0 +1,23 @@
+{
+  "id": "endurance",
+  "name": "endurance",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.35,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:regeneration",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 2.0,
+      "operation": "addition"
+    }
+  ]
+}

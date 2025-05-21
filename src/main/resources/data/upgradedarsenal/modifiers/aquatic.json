@@ -2,21 +2,21 @@
   "id": "aquatic",
   "name": "aquatic",
   "type": "equipped",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "attributes": [
     {
       "attribute": "upgradedarsenal:swim_speed",
-      "value": 0.2,
+      "value": 0.5,
       "operation": "multiply_total"
     },
     {
       "attribute": "upgradedarsenal:respiration_efficiency",
-      "value": 0.2,
+      "value": 0.75,
       "operation": "multiply_total"
     },
     {
-      "attribute": "upgradedarsenal:regeneration",
-      "value": 0.05,
+      "attribute": "minecraft:generic.movement_speed",
+      "value": -0.02,
       "operation": "multiply_total"
     }
   ]

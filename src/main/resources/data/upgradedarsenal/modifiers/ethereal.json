@@ -1,0 +1,28 @@
+{
+  "id": "ethereal",
+  "name": "ethereal",
+  "type": "equipped",
+  "rarity": "mythic",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:jump_height",
+      "value": 0.3,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.max_health",
+      "value": 2.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

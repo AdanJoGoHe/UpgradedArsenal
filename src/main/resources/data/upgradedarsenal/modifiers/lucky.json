@@ -1,0 +1,23 @@
+{
+  "id": "lucky",
+  "name": "lucky",
+  "type": "held",
+  "rarity": "uncommon",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.luck",
+      "value": 1.5,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:xp_gain_bonus",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": -0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}
