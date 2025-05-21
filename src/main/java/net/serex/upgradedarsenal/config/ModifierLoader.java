@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class ModifierLoader {
     private static final Gson GSON = new Gson();
-    private static final String MODIFIERS_PATH = "data/itemmodifiers/modifiers/";
+    private static final String MODIFIERS_PATH = "data/upgradedarsenal/modifiers/";
 
     public static void loadAll() {
         System.out.println("[ModifierLoader] Loading embedded modifiers...");

@@ -29,9 +29,6 @@ public class Main {
         modEventBus.addListener(this::setup);
         ModAttributes.ATTRIBUTES.register(modEventBus);
         this.registerCommonEventHandlers();
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            this.registerClientEventHandlers();
-        }
         ModRegistry.init(modEventBus);
     }
 
@@ -41,12 +38,9 @@ public class Main {
 
     private void registerCommonEventHandlers() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CustomConfig.SPEC);
-
         MinecraftForge.EVENT_BUS.register(ModifierEvents.class);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.upgradedarsenal.modifier.ModifierHandler.class);
-        // ModifierEventHandler has been replaced with attribute-specific event handlers
-        // that are automatically registered via @Mod.EventBusSubscriber
         MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class);
     }
 
@@ -58,6 +52,4 @@ public class Main {
         registerConfigSettings();
         CustomConfigCache.reload();
     }
-
-    // Removed RarityConfigLoader registration as it's now handled through the config system
 }
