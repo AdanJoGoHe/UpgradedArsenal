@@ -33,10 +33,10 @@ public class CustomConfig {
     public static final ForgeConfigSpec.IntValue HERO_WEIGHT;
 
     static {
-        BUILDER.push("Duplication Settings");
+        BUILDER.push("Duplication/Smelting Settings");
 
         ALLOWED_DUPLICATION_BLOCKS = BUILDER
-                .comment("List of blocks allowed to be duplicated when modifiers are active.")
+                .comment("List of blocks allowed to be duplicated and/or smelted when modifiers are active.")
                 .defineListAllowEmpty(
                         "allowedDuplicationBlocks",
                         List.of(
@@ -51,8 +51,10 @@ public class CustomConfig {
                                 "minecraft:acacia_log",
                                 "minecraft:dark_oak_log",
                                 "minecraft:coal_ore",
+                                "minecraft:copper_ore",
                                 "minecraft:deepslate_coal_ore",
                                 "minecraft:iron_ore",
+                                "minecraft:gold_ore",
                                 "minecraft:deepslate_iron_ore",
                                 "minecraft:diamond_ore",
                                 "minecraft:deepslate_diamond_ore",
@@ -61,7 +63,8 @@ public class CustomConfig {
                                 "minecraft:blue_ice",
                                 "minecraft:cobblestone",
                                 "minecraft:deepslate",
-                                "minecraft:stone_bricks"
+                                "minecraft:stone_bricks",
+                                "minecraft:sand"
                         ),
                         obj -> obj instanceof String
                 );

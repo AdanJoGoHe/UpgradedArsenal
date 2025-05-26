@@ -30,4 +30,8 @@ public class ModAttributes {
     public static final RegistryObject<Attribute> CRITICAL_DAMAGE = ATTRIBUTES.register("critical_damage", () -> new RangedAttribute("attribute.upgradedarsenal.critical_damage", 0.0, 0.0, 5.0).setSyncable(true));
     public static final RegistryObject<Attribute> LIFESTEAL = ATTRIBUTES.register("lifesteal", () -> new RangedAttribute("attribute.upgradedarsenal.lifesteal", 0.0, 0.0, 1.0).setSyncable(true));
 
+    // Tool-related attributes
+    public static final RegistryObject<Attribute> MELTING_TOUCH = ATTRIBUTES.register("melting_touch", () -> new RangedAttribute("attribute.upgradedarsenal.melting_touch", 0.0, 0.0, 1.0).setSyncable(true));
+    public static final RegistryObject<Attribute> VEIN_MINER = ATTRIBUTES.register("vein_miner", () -> new RangedAttribute("attribute.upgradedarsenal.vein_miner", 0.0, 0.0, 1.0).setSyncable(true));
+
 }

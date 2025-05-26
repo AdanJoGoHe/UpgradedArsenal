@@ -58,7 +58,9 @@ public class Modifiers {
                 RANGED_POOL.add(modifier);
             } else if (modifier.hasAttribute(
                     ModAttributes.MINING_SPEED.get(),
-                    ModAttributes.DOUBLE_DROP_CHANCE.get())
+                    ModAttributes.DOUBLE_DROP_CHANCE.get(),
+                    ModAttributes.MELTING_TOUCH.get(),
+                    ModAttributes.VEIN_MINER.get())
             ) {
                 TOOL_POOL.add(modifier);
             } else {

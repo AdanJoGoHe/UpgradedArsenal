@@ -25,6 +25,8 @@ public class AttributeDisplayUtils {
         ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MOVEMENT_SPEED.get(), "attribute.upgradedarsenal.movement_speed_increase_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.upgradedarsenal.mined_drop_double_chance_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MINING_SPEED.get(), "attribute.upgradedarsenal.mining_speed_increase_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MELTING_TOUCH.get(), "attribute.upgradedarsenal.melting_touch_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.VEIN_MINER.get(), "attribute.upgradedarsenal.vein_miner_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_DAMAGE, "attribute.upgradedarsenal.attack_damage_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_SPEED, "attribute.upgradedarsenal.attack_speed_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR, "attribute.name.generic.armor");

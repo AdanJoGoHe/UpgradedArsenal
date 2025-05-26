@@ -1,0 +1,18 @@
+{
+  "id": "battle_tool",
+  "name": "battle_tool",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:mining_speed",
+      "value": 0.05,
+      "operation": "multiply_total"
+    }
+  ]
+}

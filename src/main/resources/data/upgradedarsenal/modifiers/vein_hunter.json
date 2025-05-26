@@ -1,0 +1,18 @@
+{
+  "id": "vein_hunter",
+  "name": "vein_hunter",
+  "type": "held",
+  "rarity": "epic",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:vein_miner",
+      "value": 1.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:mining_speed",
+      "value": -0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

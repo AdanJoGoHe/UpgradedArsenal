@@ -1,0 +1,18 @@
+{
+  "id": "melting_master",
+  "name": "melting_master",
+  "type": "held",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:melting_touch",
+      "value": 1.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:mining_speed",
+      "value": 0.1,
+      "operation": "multiply_total"
+    }
+  ]
+}

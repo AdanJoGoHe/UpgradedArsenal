@@ -145,6 +145,8 @@
   "attribute.upgradedarsenal.movement_speed_increase_percent": "Movement Speed",
   "attribute.upgradedarsenal.fall_damage_resistance": "Fall Damage Resistance",
   "attribute.upgradedarsenal.step_height": "Step Height",
+  "attribute.upgradedarsenal.melting_touch_percent": "Melting Touch",
+  "attribute.upgradedarsenal.vein_miner_percent": "Vein Miner",
 
   "_comment.projectile_attributes": "Projectile Attributes",
   "attribute.upgradedarsenal.projectile_velocity": "Velocity",
@@ -236,6 +238,10 @@
   "modifier.upgradedarsenal.ocean_king": "Ocean King",
   "modifier.upgradedarsenal.phoenix_blessing": "Phoenix Blessing",
   "modifier.upgradedarsenal.lifebloom": "Lifebloom",
-  "modifier.upgradedarsenal.scholar": "Scholar"
+  "modifier.upgradedarsenal.scholar": "Scholar",
+  "modifier.upgradedarsenal.melting_master": "Melting Master",
+  "modifier.upgradedarsenal.vein_hunter": "Vein Hunter",
+  "modifier.upgradedarsenal.wisdom_tool": "Wisdom",
+  "modifier.upgradedarsenal.battle_tool": "Battle Ready"
 
 }

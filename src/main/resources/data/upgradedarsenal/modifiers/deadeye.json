@@ -1,0 +1,43 @@
+{
+  "id": "deadeye",
+  "name": "deadeye",
+  "type": "held",
+  "rarity": "mythic",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:projectile_accuracy",
+      "value": 0.4,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:projectile_velocity",
+      "value": 0.3,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:projectile_damage",
+      "value": 0.3,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:critical_hit_chance",
+      "value": 0.25,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:critical_damage",
+      "value": 1.0,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:draw_speed",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.25,
+      "operation": "multiply_total"
+    }
+  ]
+}

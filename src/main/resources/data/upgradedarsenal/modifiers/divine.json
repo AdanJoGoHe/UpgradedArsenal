@@ -2,7 +2,7 @@
   "id": "divine",
   "name": "divine",
   "type": "held",
-  "rarity": "mythic",
+  "rarity": "hero",
   "attributes": [
     {
       "attribute": "minecraft:generic.attack_damage",

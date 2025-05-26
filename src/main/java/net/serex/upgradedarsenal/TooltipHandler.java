@@ -56,8 +56,10 @@ public class TooltipHandler {
         int whenIndex = findWhenIndex(tooltip);
         updateItemAttributes(stack, tooltip, modifier, whenIndex + 1);
 
+        // Add just the modifier title, not the attributes (which are already added by updateItemAttributes)
         int modifierIndex = findEndOfVanillaAttributes(tooltip, whenIndex + 1);
-        addModifierLines(tooltip, modifier, modifierIndex);
+        tooltip.add(modifierIndex++, Component.empty());
+        tooltip.add(modifierIndex, formatModifierTitle(modifier));
     }
 
     private static int findWhenIndex(List<Component> tooltip) {
@@ -151,21 +153,53 @@ public class TooltipHandler {
             }
         }
 
-        // Update armor attributes if present
+        // Process armor attributes
         if (isArmor) {
             ArmorItem armorItem = (ArmorItem) stack.getItem();
-            updateAttributeLine(tooltip, insertIndex, "armor", 
+            processAttributeLine(tooltip, insertIndex, "armor", 
                 calculateFinalAttributeValue(stack, Attributes.ARMOR, armorItem.getDefense(), modifier), "%.1f");
-            updateAttributeLine(tooltip, insertIndex, "toughness", 
+            processAttributeLine(tooltip, insertIndex, "toughness", 
                 calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, armorItem.getToughness(), modifier), "%.1f");
+        } else {
+            // For non-armor items, check if the modifier adds armor attributes
+            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+                Attribute attribute = entry.getKey().get();
+                if (attribute == Attributes.ARMOR) {
+                    double value = calculateFinalAttributeValue(stack, Attributes.ARMOR, 0.0, modifier);
+                    if (value > 0) {
+                        addAttributeLine(tooltip, insertIndex, "armor", value, "%.1f");
+                    }
+                } else if (attribute == Attributes.ARMOR_TOUGHNESS) {
+                    double value = calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, 0.0, modifier);
+                    if (value > 0) {
+                        addAttributeLine(tooltip, insertIndex, "toughness", value, "%.1f");
+                    }
+                }
+            }
         }
 
-        // Update weapon attributes if this is a melee weapon
+        // Process weapon attributes
         if (!isRangedWeapon && !isArmor) {
-            updateAttributeLine(tooltip, insertIndex, "attack damage", 
+            processAttributeLine(tooltip, insertIndex, "attack damage", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, getBaseAttributeValue(stack, Attributes.ATTACK_DAMAGE), modifier), "%.1f");
-            updateAttributeLine(tooltip, insertIndex, "attack speed", 
+            processAttributeLine(tooltip, insertIndex, "attack speed", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, getBaseAttributeValue(stack, Attributes.ATTACK_SPEED), modifier), "%.1f");
+        } else if (!isRangedWeapon) {
+            // For non-weapon items (except ranged weapons), check if the modifier adds weapon attributes
+            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+                Attribute attribute = entry.getKey().get();
+                if (attribute == Attributes.ATTACK_DAMAGE) {
+                    double value = calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, 0.0, modifier);
+                    if (value > 0) {
+                        addAttributeLine(tooltip, insertIndex, "attack damage", value, "%.1f");
+                    }
+                } else if (attribute == Attributes.ATTACK_SPEED) {
+                    double value = calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, 0.0, modifier);
+                    if (value > 0) {
+                        addAttributeLine(tooltip, insertIndex, "attack speed", value, "%.1f");
+                    }
+                }
+            }
         }
     }
 
@@ -179,8 +213,30 @@ public class TooltipHandler {
             Attribute attribute = entry.getKey().get();
             Modifier.AttributeModifierSupplier supplier = entry.getValue();
 
-            // Skip attributes that are already handled by vanilla tooltip
-            if (isVanillaAttribute(attribute, isArmor, isRangedWeapon)) continue;
+            // Check if this is a vanilla attribute
+            boolean isVanilla = isVanillaAttribute(attribute, isArmor, isRangedWeapon);
+
+            // For vanilla attributes, check if they're already in the tooltip
+            boolean attributeLineExists = false;
+            if (isVanilla) {
+                String attributeName = "";
+                if (attribute == Attributes.ARMOR) attributeName = "armor";
+                else if (attribute == Attributes.ARMOR_TOUGHNESS) attributeName = "toughness";
+                else if (attribute == Attributes.ATTACK_DAMAGE) attributeName = "attack damage";
+                else if (attribute == Attributes.ATTACK_SPEED) attributeName = "attack speed";
+
+                // Check if the attribute line exists in the tooltip
+                for (int i = insertIndex; i < tooltip.size(); ++i) {
+                    String line = tooltip.get(i).getString().toLowerCase();
+                    if (line.contains(attributeName)) {
+                        attributeLineExists = true;
+                        break;
+                    }
+                }
+            }
+
+            // Skip vanilla attributes that are already in the tooltip
+            if (isVanilla && attributeLineExists) continue;
 
             // Get the appropriate display name and format for this attribute
             String displayName = null;
@@ -220,6 +276,27 @@ public class TooltipHandler {
         return false;
     }
 
+    private static void processAttributeLine(List<Component> tooltip, int startIndex, String attributeName, double value, String format) {
+        // First try to update an existing line
+        boolean lineUpdated = false;
+        for (int i = startIndex; i < tooltip.size(); ++i) {
+            String line = tooltip.get(i).getString();
+            if (!line.toLowerCase().contains(attributeName)) continue;
+
+            // Replace the numeric value in the line
+            String newLine = line.replaceFirst("\\d+(\\.\\d+)?", String.format(format, value));
+            MutableComponent newComponent = Component.literal(newLine).withStyle(tooltip.get(i).getStyle());
+            tooltip.set(i, newComponent);
+            lineUpdated = true;
+            break;
+        }
+
+        // If no line was updated, add a new line
+        if (!lineUpdated) {
+            addAttributeLine(tooltip, startIndex, attributeName, value, format);
+        }
+    }
+
     private static void updateAttributeLine(List<Component> tooltip, int startIndex, String attributeName, double value, String format) {
         for (int i = startIndex; i < tooltip.size(); ++i) {
             String line = tooltip.get(i).getString();
@@ -231,6 +308,20 @@ public class TooltipHandler {
             tooltip.set(i, newComponent);
             break;
         }
+    }
+
+    private static void addAttributeLine(List<Component> tooltip, int insertIndex, String attributeName, double value, String format) {
+        // Find the end of vanilla attributes to insert the new line
+        int endIndex = findEndOfVanillaAttributes(tooltip, insertIndex);
+
+        // Create a new line with the attribute
+        String formattedValue = String.format(format, value);
+        String displayName = attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+        MutableComponent line = Component.literal(formattedValue + " " + displayName)
+                .withStyle(ChatFormatting.BLUE);
+
+        // Add the line at the end of vanilla attributes
+        tooltip.add(endIndex, line);
     }
 
     private static int findEndOfVanillaAttributes(List<Component> tooltip, int startIndex) {

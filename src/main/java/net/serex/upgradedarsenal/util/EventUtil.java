@@ -175,6 +175,14 @@ public class EventUtil {
         return getAttributeValue(modifier, ModAttributes.DOUBLE_DROP_CHANCE.get());
     }
 
+    public static double getMeltingTouchChance(Modifier modifier) {
+        return getAttributeValue(modifier, ModAttributes.MELTING_TOUCH.get());
+    }
+
+    public static double getVeinMinerChance(Modifier modifier) {
+        return getAttributeValue(modifier, ModAttributes.VEIN_MINER.get());
+    }
+
     public static double getAttributeValue(Modifier modifier, Attribute attribute) {
         for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
             if (entry.getKey().get().equals(attribute)) {

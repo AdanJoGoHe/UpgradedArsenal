@@ -1,0 +1,28 @@
+{
+  "id": "frost_walker",
+  "name": "frost_walker",
+  "type": "equipped",
+  "rarity": "rare",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor",
+      "value": 0.1,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:fire_resistance",
+      "value": 0.2,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "value": 0.15,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:fall_damage_resistance",
+      "value": 0.2,
+      "operation": "multiply_total"
+    }
+  ]
+}

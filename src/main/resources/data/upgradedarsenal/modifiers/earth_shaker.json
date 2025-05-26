@@ -1,0 +1,33 @@
+{
+  "id": "earth_shaker",
+  "name": "earth_shaker",
+  "type": "held",
+  "rarity": "legendary",
+  "attributes": [
+    {
+      "attribute": "upgradedarsenal:vein_miner",
+      "value": 1.0,
+      "operation": "addition"
+    },
+    {
+      "attribute": "upgradedarsenal:mining_speed",
+      "value": 0.3,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:double_drop_chance",
+      "value": 0.25,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "upgradedarsenal:durability_increase",
+      "value": 0.4,
+      "operation": "multiply_total"
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "value": 0.15,
+      "operation": "multiply_total"
+    }
+  ]
+}
