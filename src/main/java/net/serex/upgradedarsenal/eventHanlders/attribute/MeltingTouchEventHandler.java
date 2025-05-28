@@ -16,8 +16,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.ArsenalAttributes;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.EventUtil;
 import net.serex.upgradedarsenal.util.PlayerPlacedBlocks;
@@ -56,7 +56,7 @@ public class MeltingTouchEventHandler extends AttributeEventHandler {
         if (tracker.isPlayerPlaced(event.getPos())) return;
 
         ItemStack heldItem = player.getMainHandItem();
-        Modifier modifier = ModifierHandler.getModifier(heldItem);
+        ModifierRegistry modifier = ModifierHandler.getModifier(heldItem);
         if (modifier == null) return;
 
         double meltingTouchChance = EventUtil.getMeltingTouchChance(modifier);

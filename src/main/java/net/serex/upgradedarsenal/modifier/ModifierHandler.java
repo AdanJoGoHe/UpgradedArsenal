@@ -11,7 +11,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -38,7 +37,7 @@ public class ModifierHandler {
         if (canHaveModifiers(stack)) {
             ModifierPool pool = getAppropriatePool(stack);
             pool.add(Modifiers.UNCHANGED);
-            Modifier selectedModifier = pool.roll(random.fork());
+            ModifierRegistry selectedModifier = pool.roll(random.fork());
             pool.remove(Modifiers.UNCHANGED);
             if (selectedModifier != null) {
                 applyModifier(stack, selectedModifier, player);
@@ -68,9 +67,9 @@ public class ModifierHandler {
     }
 
     private static void removeModifiers(Player player, ItemStack stack, EquipmentSlot slot) {
-        Modifier modifier = getModifier(stack);
+        ModifierRegistry modifier = getModifier(stack);
         if (modifier != null) {
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
                 AttributeInstance attributeInstance = player.getAttribute(attribute);
                 if (attributeInstance != null) {
@@ -82,11 +81,11 @@ public class ModifierHandler {
     }
 
     private static void applyModifiers(Player player, ItemStack stack, EquipmentSlot slot) {
-        Modifier modifier = getModifier(stack);
+        ModifierRegistry modifier = getModifier(stack);
         if (modifier != null) {
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
-                Modifier.AttributeModifierSupplier supplier = entry.getValue();
+                ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
                 AttributeInstance attributeInstance = player.getAttribute(attribute);
                 if (attributeInstance != null) {
                     UUID modifierUUID = getModifierUUID(attribute, slot);
@@ -98,15 +97,15 @@ public class ModifierHandler {
         }
     }
 
-    public static void applyModifier(ItemStack stack, Modifier newModifier, @Nullable Player player) {
+    public static void applyModifier(ItemStack stack, ModifierRegistry newModifier, @Nullable Player player) {
         if (canHaveModifiers(stack)) {
             CompoundTag tag = stack.getOrCreateTag();
             tag.putString("upgradedarsenal:modifier", newModifier.name.toString());
 
             Multimap<Attribute, AttributeModifier> existingModifiers = HashMultimap.create(stack.getAttributeModifiers(EquipmentSlot.MAINHAND));
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : newModifier.modifiers) {
+            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : newModifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
-                Modifier.AttributeModifierSupplier supplier = entry.getValue();
+                ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
                 UUID modifierUUID = UUID.randomUUID();
                 String modifierName = "Custom_" + attribute.getDescriptionId() + "_modifier";
                 AttributeModifier newModifierInstance = new AttributeModifier(modifierUUID, modifierName, supplier.amount, supplier.operation);
@@ -140,7 +139,7 @@ public class ModifierHandler {
     }
 
     public static void updateItemNameAndColor(ItemStack stack) {
-        Modifier modifier = getModifier(stack);
+        ModifierRegistry modifier = getModifier(stack);
         if (modifier != null) {
             String itemName = stack.getItem().getDescriptionId();
             String modifierName = modifier.getFormattedName().getString();
@@ -159,7 +158,7 @@ public class ModifierHandler {
         return UUID.nameUUIDFromBytes((attribute.getDescriptionId() + slot.getName()).getBytes());
     }
 
-    public static Modifier getModifier(ItemStack stack) {
+    public static ModifierRegistry getModifier(ItemStack stack) {
         if (stack == null || !stack.hasTag()) return null;
 
         CompoundTag tag = stack.getTag();
@@ -179,7 +178,7 @@ public class ModifierHandler {
             return null;
         }
 
-        Modifier mod = Modifiers.getModifier(id);
+        ModifierRegistry mod = Modifiers.getModifier(id);
         if (mod == null) {
             System.out.println("[upgradedarsenal] Modificador '" + id + "' no está registrado en este lado (¿cliente sin datapack?).");
         }
@@ -205,22 +204,22 @@ public class ModifierHandler {
     public static void processChestLoot(ItemStack stack, RandomSource random, ResourceLocation lootTableId) {
         if (canHaveModifiers(stack) && !hasBeenProcessed(stack)) {
             float rarityChance = random.nextFloat();
-            Modifier modifier = rarityChance < 0.4f ? rollModifierWithMinRarity(stack, random, Modifier.Rarity.UNCOMMON)
-                    : rarityChance < 0.7f ? rollModifierWithMinRarity(stack, random, Modifier.Rarity.RARE)
-                    : rarityChance < 0.9f ? rollModifierWithMinRarity(stack, random, Modifier.Rarity.EPIC)
-                    : rollModifierWithMinRarity(stack, random, Modifier.Rarity.LEGENDARY);
+            ModifierRegistry modifier = rarityChance < 0.4f ? rollModifierWithMinRarity(stack, random, ModifierRegistry.Rarity.UNCOMMON)
+                    : rarityChance < 0.7f ? rollModifierWithMinRarity(stack, random, ModifierRegistry.Rarity.RARE)
+                    : rarityChance < 0.9f ? rollModifierWithMinRarity(stack, random, ModifierRegistry.Rarity.EPIC)
+                    : rollModifierWithMinRarity(stack, random, ModifierRegistry.Rarity.LEGENDARY);
             applyModifier(stack, modifier != null ? modifier : Modifiers.UNCHANGED, null);
             markAsProcessed(stack);
         }
     }
 
-    private static Modifier rollModifierWithMinRarity(ItemStack stack, RandomSource random, Modifier.Rarity minRarity) {
+    private static ModifierRegistry rollModifierWithMinRarity(ItemStack stack, RandomSource random, ModifierRegistry.Rarity minRarity) {
         ModifierPool originalPool = getAppropriatePool(stack);
-        if (minRarity.ordinal() <= Modifier.Rarity.COMMON.ordinal()) {
+        if (minRarity.ordinal() <= ModifierRegistry.Rarity.COMMON.ordinal()) {
             return originalPool.roll(random);
         }
         ModifierPool filteredPool = new ModifierPool();
-        for (Modifier mod : originalPool.getModifiers()) {
+        for (ModifierRegistry mod : originalPool.getModifiers()) {
             if (mod.rarity.ordinal() >= minRarity.ordinal()) {
                 filteredPool.add(mod);
             }

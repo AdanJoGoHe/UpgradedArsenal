@@ -8,11 +8,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.serex.upgradedarsenal.Main;
 import net.serex.upgradedarsenal.ModifierJson;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.Modifiers;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -67,18 +66,18 @@ public class ModifierLoader {
         try {
             ModifierJson json = GSON.fromJson(jsonObject, ModifierJson.class);
 
-            Modifier.ModifierBuilder builder = new Modifier.ModifierBuilder(
+            ModifierRegistry.ModifierBuilder builder = new ModifierRegistry.ModifierBuilder(
                     new ResourceLocation(Main.MODID, json.id),
                     json.name,
-                    Modifier.ModifierType.valueOf(json.type.toUpperCase())
-            ).setRarity(Modifier.Rarity.valueOf(json.rarity.toUpperCase()));
+                    ModifierRegistry.ModifierType.valueOf(json.type.toUpperCase())
+            ).setRarity(ModifierRegistry.Rarity.valueOf(json.rarity.toUpperCase()));
 
             for (ModifierJson.AttributeJson attr : json.attributes) {
                 ResourceLocation attrId = new ResourceLocation(attr.attribute);
                 Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(attrId);
                 if (attribute != null) {
                     AttributeModifier.Operation op = AttributeModifier.Operation.valueOf(attr.operation.toUpperCase());
-                    builder.addModifier(() -> attribute, new Modifier.AttributeModifierSupplier(attr.value, op));
+                    builder.addModifier(() -> attribute, new ModifierRegistry.AttributeModifierSupplier(attr.value, op));
                 }
             }
 

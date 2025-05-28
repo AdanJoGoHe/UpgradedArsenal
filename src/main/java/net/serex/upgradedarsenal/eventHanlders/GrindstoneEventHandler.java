@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
 import net.serex.upgradedarsenal.config.CustomConfig;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.EventUtil;
 
@@ -49,9 +49,9 @@ public class GrindstoneEventHandler {
             }
 
             if (player.experienceLevel >= xpCost || player.isCreative()) {
-                Modifier oldModifier = ModifierHandler.getModifier(heldItem);
+                ModifierRegistry oldModifier = ModifierHandler.getModifier(heldItem);
                 ModifierHandler.processNewItem(heldItem, player, player.getRandom());
-                Modifier newModifier = ModifierHandler.getModifier(heldItem);
+                ModifierRegistry newModifier = ModifierHandler.getModifier(heldItem);
 
                 if (!player.isCreative()) {
                     player.giveExperienceLevels(-xpCost);

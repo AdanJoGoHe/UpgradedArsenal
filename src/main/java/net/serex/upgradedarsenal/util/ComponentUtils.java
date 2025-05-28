@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -27,14 +27,14 @@ public class ComponentUtils {
      * @return A list of formatted component lines
      */
     public static List<Component> getFormattedAttributeLines(
-            Modifier modifier, 
+            ModifierRegistry modifier,
             boolean isBow, 
             java.util.function.Function<Attribute, String> attributeKeyFunction) {
         
         List<Component> lines = new ArrayList<>();
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             Attribute attribute = entry.getKey().get();
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
+            ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
             double amount = supplier.amount;
 
             // Get the appropriate attribute key
@@ -62,7 +62,7 @@ public class ComponentUtils {
      * @param rarity The rarity to create a component for
      * @return A formatted component for the rarity
      */
-    public static Component createRarityComponent(Modifier.Rarity rarity) {
+    public static Component createRarityComponent(ModifierRegistry.Rarity rarity) {
         return Component.translatable("rarity." + rarity.name().toLowerCase())
                 .withStyle(style -> style.withColor(rarity.getColor()).withItalic(false));
     }

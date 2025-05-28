@@ -8,8 +8,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.ArsenalAttributes;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 /**
@@ -31,7 +31,7 @@ public class DurabilityIncreaseEventHandler extends AttributeEventHandler {
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         ItemStack stack = event.getEntity().getMainHandItem();
-        Modifier modifier = ModifierHandler.getModifier(stack);
+        ModifierRegistry modifier = ModifierHandler.getModifier(stack);
         if (modifier != null) {
             double durabilityIncrease = modifier.getDurabilityIncrease();
             if (durabilityIncrease > 1.0) {
@@ -49,7 +49,7 @@ public class DurabilityIncreaseEventHandler extends AttributeEventHandler {
     public static void onLivingHurtDurability(LivingHurtEvent event) {
         if (event.getEntity() instanceof Player player) {
             for (ItemStack armorPiece : player.getArmorSlots()) {
-                Modifier modifier = ModifierHandler.getModifier(armorPiece);
+                ModifierRegistry modifier = ModifierHandler.getModifier(armorPiece);
                 if (modifier == null) continue;
                 double durabilityIncrease = modifier.getDurabilityIncrease();
                 if (durabilityIncrease > 1.0) {
@@ -67,7 +67,7 @@ public class DurabilityIncreaseEventHandler extends AttributeEventHandler {
     @SubscribeEvent
     public static void onPlayerDestroyItem(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
-        Modifier modifier = ModifierHandler.getModifier(result);
+        ModifierRegistry modifier = ModifierHandler.getModifier(result);
         if (modifier != null) {
             double durabilityIncrease = modifier.getDurabilityIncrease();
             if (durabilityIncrease > 1.0) {

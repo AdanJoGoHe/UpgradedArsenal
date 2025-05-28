@@ -6,7 +6,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
+import net.serex.upgradedarsenal.ArsenalAttributes;
 import net.serex.upgradedarsenal.util.EventUtil;
 
 /**

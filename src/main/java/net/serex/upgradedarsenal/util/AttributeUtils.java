@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 
 
 public class AttributeUtils {
@@ -37,11 +37,11 @@ public class AttributeUtils {
         return 0.0;
     }
 
-    public static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, Modifier modifier) {
+    public static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, ModifierRegistry modifier) {
         double finalValue = baseValue;
-        for (Pair<java.util.function.Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<java.util.function.Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             if (entry.getKey().get() != attribute) continue;
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
+            ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
             switch (supplier.operation) {
                 case ADDITION -> finalValue += supplier.amount;
                 case MULTIPLY_BASE -> finalValue += baseValue * supplier.amount;

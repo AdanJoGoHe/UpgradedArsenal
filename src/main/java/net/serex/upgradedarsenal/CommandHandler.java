@@ -6,13 +6,12 @@ import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.config.CustomConfigCache;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.modifier.Modifiers;
 
@@ -58,7 +57,7 @@ public class CommandHandler {
                                                 modifierId = ResourceLocation.parse("upgradedarsenal:" + modifierId.getPath());
                                             }
 
-                                            Modifier modifier = Modifiers.getModifier(modifierId);
+                                            ModifierRegistry modifier = Modifiers.getModifier(modifierId);
 
                                             if (modifier == null) {
                                                 context.getSource().sendFailure(Component.literal("Modifier not found: " + modifierId));
@@ -96,7 +95,7 @@ public class CommandHandler {
                                     ServerPlayer player = context.getSource().getPlayerOrException();
 
                                     // Get all modifiers
-                                    Map<ResourceLocation, Modifier> modifiers = Modifiers.MODIFIERS;
+                                    Map<ResourceLocation, ModifierRegistry> modifiers = Modifiers.MODIFIERS;
 
                                     if (modifiers.isEmpty()) {
                                         context.getSource().sendFailure(Component.literal("No modifiers found"));
@@ -107,10 +106,10 @@ public class CommandHandler {
                                     List<Component> messages = new ArrayList<>();
                                     messages.add(Component.literal("Available Modifiers:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
-                                    for (Modifier.Rarity rarity : Modifier.Rarity.values()) {
-                                        List<Modifier> rarityModifiers = new ArrayList<>();
+                                    for (ModifierRegistry.Rarity rarity : ModifierRegistry.Rarity.values()) {
+                                        List<ModifierRegistry> rarityModifiers = new ArrayList<>();
 
-                                        for (Modifier modifier : modifiers.values()) {
+                                        for (ModifierRegistry modifier : modifiers.values()) {
                                             if (modifier.rarity == rarity && !modifier.name.getPath().equals("unchanged")) {
                                                 rarityModifiers.add(modifier);
                                             }
@@ -120,7 +119,7 @@ public class CommandHandler {
                                             messages.add(Component.literal(""));
                                             messages.add(Component.literal(rarity.name() + ":").withStyle(rarity.getColor(), ChatFormatting.BOLD));
 
-                                            for (Modifier modifier : rarityModifiers) {
+                                            for (ModifierRegistry modifier : rarityModifiers) {
                                                 String commandSuggestion = "/upgradedarsenal applymodifier " + modifier.name.getPath();
                                                 Component modifierName = Component.literal("  • " + modifier.name.getPath())
                                                         .withStyle(style -> style

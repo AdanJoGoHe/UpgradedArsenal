@@ -10,8 +10,8 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.ArsenalAttributes;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 /**
@@ -36,7 +36,7 @@ public class FallDamageResistanceEventHandler extends AttributeEventHandler {
         if (!(entity instanceof Player player)) return;
 
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-        Modifier modifier = ModifierHandler.getModifier(boots);
+        ModifierRegistry modifier = ModifierHandler.getModifier(boots);
         if (modifier == null) return;
 
         AttributeInstance fallRes = player.getAttribute(ArsenalAttributes.FALL_DAMAGE_RESISTANCE.get());

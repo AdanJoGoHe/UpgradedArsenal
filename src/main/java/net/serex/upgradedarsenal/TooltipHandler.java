@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,14 +36,14 @@ public class TooltipHandler {
         ItemStack stack = event.getItemStack();
         List<Component> tooltip = event.getToolTip();
         if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 updateItemTooltip(stack, tooltip, modifier);
             }
         }
     }
 
-    private static void updateItemTooltip(ItemStack stack, List<Component> tooltip, Modifier modifier) {
+    private static void updateItemTooltip(ItemStack stack, List<Component> tooltip, ModifierRegistry modifier) {
         tooltip.add(1, Component.translatable("rarity." + modifier.rarity.name().toLowerCase())
                 .withStyle(style -> style.withColor(modifier.rarity.getColor()).withItalic(false)));
 
@@ -65,24 +65,24 @@ public class TooltipHandler {
         return -1;
     }
 
-    private static void addModifierLines(List<Component> tooltip, Modifier modifier, int insertIndex) {
+    private static void addModifierLines(List<Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         tooltip.add(insertIndex++, Component.empty());
         tooltip.add(insertIndex++, formatModifierTitle(modifier));
             tooltip.addAll(insertIndex++, getFormattedInfoLines(modifier));
 
     }
 
-    private static Component formatModifierTitle(Modifier modifier) {
+    private static Component formatModifierTitle(ModifierRegistry modifier) {
         return modifier.getFormattedName().copy()
                 .withStyle(modifier.rarity.getColor(), ChatFormatting.UNDERLINE);
     }
 
-    private static List<Component> getFormattedInfoLines(Modifier modifier) {
+    private static List<Component> getFormattedInfoLines(ModifierRegistry modifier) {
         List<Component> lines = new ArrayList<>();
 
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             Attribute attribute = entry.getKey().get();
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
+            ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
 
             String attributeKey = getAttributeTranslationKey(attribute);
             String formattedAmount = formatModifierAmount(supplier);
@@ -98,7 +98,7 @@ public class TooltipHandler {
         return lines;
     }
 
-    private static String formatModifierAmount(Modifier.AttributeModifierSupplier supplier) {
+    private static String formatModifierAmount(ModifierRegistry.AttributeModifierSupplier supplier) {
         double amount = supplier.amount;
         return supplier.operation == AttributeModifier.Operation.MULTIPLY_TOTAL
                 ? String.format("%+d%%", (int)(amount * 100.0))
@@ -113,7 +113,7 @@ public class TooltipHandler {
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
-    private static void updateItemAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
+    private static void updateItemAttributes(ItemStack stack, List<Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         // Process vanilla attributes first
         processVanillaAttributes(stack, tooltip, modifier, insertIndex);
 
@@ -121,7 +121,7 @@ public class TooltipHandler {
         addModifierAttributes(stack, tooltip, modifier, insertIndex);
     }
 
-    private static void processVanillaAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
+    private static void processVanillaAttributes(ItemStack stack, List<Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         boolean isArmor = stack.getItem() instanceof ArmorItem;
 
         // Process armor attributes
@@ -133,7 +133,7 @@ public class TooltipHandler {
                 calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, armorItem.getToughness(), modifier), "%.1f");
         } else {
             // For non-armor items, check if the modifier adds armor attributes
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
                 if (attribute == Attributes.ARMOR) {
                     double value = calculateFinalAttributeValue(stack, Attributes.ARMOR, 0.0, modifier);
@@ -149,15 +149,13 @@ public class TooltipHandler {
             }
         }
 
-        // Process weapon attributes
         if (!isArmor) {
             processAttributeLine(tooltip, insertIndex, "attack damage", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, getBaseAttributeValue(stack, Attributes.ATTACK_DAMAGE), modifier), "%.1f");
             processAttributeLine(tooltip, insertIndex, "attack speed", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, getBaseAttributeValue(stack, Attributes.ATTACK_SPEED), modifier), "%.1f");
         } else {
-            // For armor items, check if the modifier adds weapon attributes
-            for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
                 if (attribute == Attributes.ATTACK_DAMAGE) {
                     double value = calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, 0.0, modifier);
@@ -174,16 +172,14 @@ public class TooltipHandler {
         }
     }
 
-    private static void addModifierAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Find the end of vanilla attributes to insert additional modifier attributes
+    private static void addModifierAttributes(ItemStack stack, List<Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         int modifierInsertIndex = findEndOfVanillaAttributes(tooltip, insertIndex);
         boolean isArmor = stack.getItem() instanceof ArmorItem;
 
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             Attribute attribute = entry.getKey().get();
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
+            ModifierRegistry.AttributeModifierSupplier supplier = entry.getValue();
 
-            // Check if this is a vanilla attribute
             boolean isVanilla = isVanillaAttribute(attribute, isArmor);
 
             // For vanilla attributes, check if they're already in the tooltip
@@ -290,7 +286,7 @@ public class TooltipHandler {
         return tooltip.size();
     }
 
-    private static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, Modifier modifier) {
+    private static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, ModifierRegistry modifier) {
         return AttributeUtils.calculateFinalAttributeValue(stack, attribute, baseValue, modifier);
     }
 

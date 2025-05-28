@@ -4,22 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.serex.upgradedarsenal.AttributeEntry;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
+import net.serex.upgradedarsenal.ArsenalAttributes;
 
 public class Modifiers {
-    public static final Map<ResourceLocation, Modifier> MODIFIERS = new HashMap<>();
+    public static final Map<ResourceLocation, ModifierRegistry> MODIFIERS = new HashMap<>();
     public static final ModifierPool WEAPON_POOL = new ModifierPool();
     public static final ModifierPool TOOL_POOL = new ModifierPool();
     public static final ModifierPool ARMOR_POOL = new ModifierPool();
 
-    // Public access to modifiers
-    public static Modifier UNCHANGED;
+    public static ModifierRegistry UNCHANGED;
 
     static {
-        Modifier.ModifierType held = Modifier.ModifierType.HELD;
-
-        // Unchanged Modifier
-        UNCHANGED = create("unchanged", "unchanged", held, Modifier.Rarity.UNCHANGED);
+        ModifierRegistry.ModifierType held = ModifierRegistry.ModifierType.HELD;
+        UNCHANGED = create("unchanged", "unchanged", held, ModifierRegistry.Rarity.UNCHANGED);
     }
 
 
@@ -30,8 +27,8 @@ public class Modifiers {
         MODIFIERS.clear();
     }
 
-    private static Modifier create(String id, String name, Modifier.ModifierType type, Modifier.Rarity rarity, AttributeEntry... attributes) {
-        Modifier.ModifierBuilder builder = new Modifier.ModifierBuilder(new ResourceLocation("upgradedarsenal", id), name, type)
+    private static ModifierRegistry create(String id, String name, ModifierRegistry.ModifierType type, ModifierRegistry.Rarity rarity, AttributeEntry... attributes) {
+        ModifierRegistry.ModifierBuilder builder = new ModifierRegistry.ModifierBuilder(new ResourceLocation("upgradedarsenal", id), name, type)
                 .setRarity(rarity);
         for (AttributeEntry attr : attributes) {
             builder.addModifier(attr.attribute(), attr.modifier());
@@ -39,14 +36,14 @@ public class Modifiers {
         return register(builder.build());
     }
 
-    public static Modifier register(Modifier modifier) {
+    public static ModifierRegistry register(ModifierRegistry modifier) {
         MODIFIERS.put(modifier.name, modifier);
         classify(modifier);
         return modifier;
     }
 
-    private static void classify(Modifier modifier) {
-        if (modifier.type == Modifier.ModifierType.HELD) {
+    private static void classify(ModifierRegistry modifier) {
+        if (modifier.type == ModifierRegistry.ModifierType.HELD) {
             if (modifier.hasAttribute(
                     ArsenalAttributes.MINING_SPEED.get(),
                     ArsenalAttributes.DOUBLE_DROP_CHANCE.get(),
@@ -57,16 +54,16 @@ public class Modifiers {
             } else {
                 WEAPON_POOL.add(modifier);
             }
-        } else if (modifier.type == Modifier.ModifierType.EQUIPPED) {
+        } else if (modifier.type == ModifierRegistry.ModifierType.EQUIPPED) {
             ARMOR_POOL.add(modifier);
         }
     }
 
-    public static Modifier getModifier(ResourceLocation name) {
+    public static ModifierRegistry getModifier(ResourceLocation name) {
         return MODIFIERS.get(name);
     }
 
     public static void init() {
-        UNCHANGED = create("unchanged", "unchanged", Modifier.ModifierType.HELD, Modifier.Rarity.UNCHANGED);
+        UNCHANGED = create("unchanged", "unchanged", ModifierRegistry.ModifierType.HELD, ModifierRegistry.Rarity.UNCHANGED);
     }
 }

@@ -6,8 +6,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.ArsenalAttributes;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 
 /**
  * Utility class for attribute display-related operations.
@@ -50,7 +50,7 @@ public class AttributeDisplayUtils {
      * @param modifier The modifier to apply
      * @param insertIndex The index to insert the attributes at
      */
-    public static void updateArmorAttributes(ItemStack stack, java.util.List<net.minecraft.network.chat.Component> tooltip, Modifier modifier, int insertIndex) {
+    public static void updateArmorAttributes(ItemStack stack, java.util.List<net.minecraft.network.chat.Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         ArmorItem armorItem = (ArmorItem) stack.getItem();
 
         // Define the attributes to update
@@ -73,7 +73,7 @@ public class AttributeDisplayUtils {
      * @param modifier The modifier to apply
      * @param insertIndex The index to insert the attributes at
      */
-    public static void updateWeaponAttributes(ItemStack stack, java.util.List<net.minecraft.network.chat.Component> tooltip, Modifier modifier, int insertIndex) {
+    public static void updateWeaponAttributes(ItemStack stack, java.util.List<net.minecraft.network.chat.Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         // Define the attributes to update
         Attribute[] attributes = {Attributes.ATTACK_DAMAGE, Attributes.ATTACK_SPEED};
         String[] attributeNames = {"attack damage", "attack speed"};

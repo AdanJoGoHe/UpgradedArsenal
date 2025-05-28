@@ -18,9 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
+import net.serex.upgradedarsenal.ArsenalAttributes;
 import net.serex.upgradedarsenal.config.CustomConfig;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -79,13 +79,13 @@ public class EventUtil {
         double total = 0.0;
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack stack = player.getItemInHand(hand);
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 total += getAttributeValue(modifier, attribute);
             }
         }
         for (ItemStack stack : player.getArmorSlots()) {
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 total += getAttributeValue(modifier, attribute);
             }
@@ -115,7 +115,7 @@ public class EventUtil {
         double maxValue = 0.0;
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack stack = player.getItemInHand(hand);
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 double value = getAttributeValue(modifier, attribute);
                 if (value > maxValue) {
@@ -124,7 +124,7 @@ public class EventUtil {
             }
         }
         for (ItemStack stack : player.getArmorSlots()) {
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 double value = getAttributeValue(modifier, attribute);
                 if (value > maxValue) {
@@ -135,7 +135,7 @@ public class EventUtil {
         return maxValue;
     }
 
-    public static double getSpeedIncrease(Modifier modifier) {
+    public static double getSpeedIncrease(ModifierRegistry modifier) {
         return getAttributeValue(modifier, ArsenalAttributes.MOVEMENT_SPEED.get());
     }
 
@@ -148,7 +148,7 @@ public class EventUtil {
         }
     }
 
-    public static double getDurabilityIncrease(Modifier modifier) {
+    public static double getDurabilityIncrease(ModifierRegistry modifier) {
         return getAttributeValue(modifier, ArsenalAttributes.MAX_DURABILITY.get());
     }
 
@@ -156,13 +156,13 @@ public class EventUtil {
         double total = 0.0;
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack stack = player.getItemInHand(hand);
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 total += getSpeedIncrease(modifier);
             }
         }
         for (ItemStack stack : player.getArmorSlots()) {
-            Modifier modifier = ModifierHandler.getModifier(stack);
+            ModifierRegistry modifier = ModifierHandler.getModifier(stack);
             if (modifier != null) {
                 total += getSpeedIncrease(modifier);
             }
@@ -170,20 +170,20 @@ public class EventUtil {
         return total;
     }
 
-    public static double getMinedDropDoubleChance(Modifier modifier) {
+    public static double getMinedDropDoubleChance(ModifierRegistry modifier) {
         return getAttributeValue(modifier, ArsenalAttributes.DOUBLE_DROP_CHANCE.get());
     }
 
-    public static double getMeltingTouchChance(Modifier modifier) {
+    public static double getMeltingTouchChance(ModifierRegistry modifier) {
         return getAttributeValue(modifier, ArsenalAttributes.MELTING_TOUCH.get());
     }
 
-    public static double getVeinMinerChance(Modifier modifier) {
+    public static double getVeinMinerChance(ModifierRegistry modifier) {
         return getAttributeValue(modifier, ArsenalAttributes.VEIN_MINER.get());
     }
 
-    public static double getAttributeValue(Modifier modifier, Attribute attribute) {
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+    public static double getAttributeValue(ModifierRegistry modifier, Attribute attribute) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             if (entry.getKey().get().equals(attribute)) {
                 return entry.getValue().amount;
             }
@@ -200,10 +200,10 @@ public class EventUtil {
 
 
     public static void applyAttackDamageModifier(ItemStack stack, LivingHurtEvent event) {
-        Modifier modifier = ModifierHandler.getModifier(stack);
+        ModifierRegistry modifier = ModifierHandler.getModifier(stack);
         if (modifier == null) return;
 
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             if (entry.getKey().get() == Attributes.ATTACK_DAMAGE) {
                 double modifierAmount = entry.getValue().amount;
                 float adjustedDamage = event.getAmount() * (1.0f + (float) modifierAmount);
@@ -227,14 +227,14 @@ public class EventUtil {
         double total = 0.0;
         // Main hand and offhand
         for (InteractionHand hand : InteractionHand.values()) {
-            Modifier modifier = ModifierHandler.getModifier(player.getItemInHand(hand));
+            ModifierRegistry modifier = ModifierHandler.getModifier(player.getItemInHand(hand));
             if (modifier != null) {
                 total += getAttributeValue(modifier, attribute);
             }
         }
         // Armor
         for (ItemStack item : player.getArmorSlots()) {
-            Modifier modifier = ModifierHandler.getModifier(item);
+            ModifierRegistry modifier = ModifierHandler.getModifier(item);
             if (modifier != null) {
                 total += getAttributeValue(modifier, attribute);
             }
@@ -264,11 +264,11 @@ public class EventUtil {
         tag.putInt(REROLL_COUNT_TAG, count);
     }
 
-    public static double calculateMiningSpeedMultiplier(Modifier modifier) {
+    public static double calculateMiningSpeedMultiplier(ModifierRegistry modifier) {
         double multiplier = 1.0;
-        for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
+        for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
             if (((Supplier)entry.getKey()).get() != ArsenalAttributes.MINING_SPEED.get()) continue;
-            Modifier.AttributeModifierSupplier modifierSupplier = (Modifier.AttributeModifierSupplier)entry.getValue();
+            ModifierRegistry.AttributeModifierSupplier modifierSupplier = (ModifierRegistry.AttributeModifierSupplier)entry.getValue();
             if (modifierSupplier.operation == AttributeModifier.Operation.MULTIPLY_TOTAL) {
                 multiplier *= 1.0 + modifierSupplier.amount;
                 continue;

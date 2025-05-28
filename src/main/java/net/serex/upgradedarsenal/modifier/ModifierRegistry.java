@@ -11,10 +11,10 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
+import net.serex.upgradedarsenal.ArsenalAttributes;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class Modifier {
+public class ModifierRegistry {
     public final ResourceLocation name;
     public final String debugName;
     public final String displayName;
@@ -23,7 +23,7 @@ public class Modifier {
     public final List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers;
     public final Rarity rarity;
 
-    private Modifier(ResourceLocation name, String debugName, String displayName ,  int weight, ModifierType type, List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers, Rarity rarity) {
+    private ModifierRegistry(ResourceLocation name, String debugName, String displayName , int weight, ModifierType type, List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers, Rarity rarity) {
         this.name = name;
         this.displayName = debugName;
         this.debugName = debugName;
@@ -126,7 +126,7 @@ public class Modifier {
             this.type = type;
         }
 
-        public ModifierBuilder(Modifier existing) {
+        public ModifierBuilder(ModifierRegistry existing) {
             this(existing.name, existing.debugName, existing.type);
             this.displayName = existing.displayName;
             this.weight = existing.weight;
@@ -154,9 +154,9 @@ public class Modifier {
             return this;
         }
 
-        public Modifier build() {
+        public ModifierRegistry build() {
             int actualWeight = this.weight > 0 ? this.weight : this.rarity.getWeight();
-            return new Modifier(this.name, this.debugName, this.displayName,  actualWeight, this.type, this.modifiers, this.rarity);
+            return new ModifierRegistry(this.name, this.debugName, this.displayName,  actualWeight, this.type, this.modifiers, this.rarity);
         }
 
     }

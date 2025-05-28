@@ -6,10 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
 public class ModifierPool {
-    private final List<Modifier> modifiers = new ArrayList<Modifier>();
+    private final List<ModifierRegistry> modifiers = new ArrayList<ModifierRegistry>();
     private int totalWeight = 0;
 
-    public void add(Modifier modifier) {
+    public void add(ModifierRegistry modifier) {
         this.modifiers.add(modifier);
         this.totalWeight += modifier.weight;
     }
@@ -18,24 +18,24 @@ public class ModifierPool {
         modifiers.clear();
     }
 
-    public void remove(Modifier modifier) {
+    public void remove(ModifierRegistry modifier) {
         if (this.modifiers.remove(modifier)) {
             this.totalWeight -= modifier.weight;
         }
     }
 
-    public List<Modifier> getModifiers() {
-        return new ArrayList<Modifier>(this.modifiers);
+    public List<ModifierRegistry> getModifiers() {
+        return new ArrayList<ModifierRegistry>(this.modifiers);
     }
 
-    public Modifier roll(RandomSource random) {
+    public ModifierRegistry roll(RandomSource random) {
         if (totalWeight <= 0 || modifiers.isEmpty()) {
             System.err.println("[ModifierPool] Pool vacío o sin peso válido. Devolviendo 'unchanged'.");
             return Modifiers.getModifier(new ResourceLocation("upgradedarsenal", "unchanged"));
         }
 
         int roll = random.nextInt(totalWeight);
-        for (Modifier modifier : modifiers) {
+        for (ModifierRegistry modifier : modifiers) {
             roll -= modifier.weight;
             if (roll < 0) return modifier;
         }

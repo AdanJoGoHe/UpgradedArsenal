@@ -6,8 +6,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
+import net.serex.upgradedarsenal.ArsenalAttributes;
+import net.serex.upgradedarsenal.modifier.ModifierRegistry;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
 /**
@@ -29,7 +29,7 @@ public class MaxDurabilityEventHandler extends AttributeEventHandler {
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
-        Modifier modifier = ModifierHandler.getModifier(result);
+        ModifierRegistry modifier = ModifierHandler.getModifier(result);
         if (modifier != null) {
             // Apply max durability attribute if present
             double maxDurabilityMultiplier = getMaxDurabilityMultiplier(modifier);
@@ -46,7 +46,7 @@ public class MaxDurabilityEventHandler extends AttributeEventHandler {
      * @param modifier The modifier to check
      * @return The max durability multiplier, or 1.0 if not present
      */
-    private static double getMaxDurabilityMultiplier(Modifier modifier) {
+    private static double getMaxDurabilityMultiplier(ModifierRegistry modifier) {
         // This would typically access the MAX_DURABILITY attribute from the modifier
         // For now, we'll return a default value
         return 1.0;
