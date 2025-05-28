@@ -1,7 +1,6 @@
 package net.serex.upgradedarsenal.modifier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +11,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
-import net.serex.upgradedarsenal.config.CustomConfigCache;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Modifier {
@@ -46,7 +44,7 @@ public class Modifier {
     }
 
     public double getDurabilityIncrease() {
-        return this.modifiers.stream().filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.DURABILITY_INCREASE.get()).mapToDouble(pair -> ((AttributeModifierSupplier)pair.getValue()).amount).sum();
+        return this.modifiers.stream().filter(pair -> ((Supplier)pair.getKey()).get() == ArsenalAttributes.DURABILITY_INCREASE.get()).mapToDouble(pair -> ((AttributeModifierSupplier)pair.getValue()).amount).sum();
     }
 
     public static enum ModifierType {

@@ -11,7 +11,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.EventUtil;
@@ -26,7 +26,7 @@ public class DoubleDropChanceEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.DOUBLE_DROP_CHANCE.get();
+        return ArsenalAttributes.DOUBLE_DROP_CHANCE.get();
     }
     
     /**

@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
@@ -21,7 +21,7 @@ public class DurabilityIncreaseEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.DURABILITY_INCREASE.get();
+        return ArsenalAttributes.DURABILITY_INCREASE.get();
     }
     
     /**

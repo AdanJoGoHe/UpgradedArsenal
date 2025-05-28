@@ -4,14 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.serex.upgradedarsenal.AttributeEntry;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 
 public class Modifiers {
     public static final Map<ResourceLocation, Modifier> MODIFIERS = new HashMap<>();
     public static final ModifierPool WEAPON_POOL = new ModifierPool();
     public static final ModifierPool TOOL_POOL = new ModifierPool();
     public static final ModifierPool ARMOR_POOL = new ModifierPool();
-    public static final ModifierPool RANGED_POOL = new ModifierPool();
 
     // Public access to modifiers
     public static Modifier UNCHANGED;
@@ -28,7 +27,6 @@ public class Modifiers {
         WEAPON_POOL.clear();
         TOOL_POOL.clear();
         ARMOR_POOL.clear();
-        RANGED_POOL.clear();
         MODIFIERS.clear();
     }
 
@@ -50,17 +48,10 @@ public class Modifiers {
     private static void classify(Modifier modifier) {
         if (modifier.type == Modifier.ModifierType.HELD) {
             if (modifier.hasAttribute(
-                    ModAttributes.DRAW_SPEED.get(),
-                    ModAttributes.PROJECTILE_VELOCITY.get(),
-                    ModAttributes.PROJECTILE_DAMAGE.get(),
-                    ModAttributes.PROJECTILE_ACCURACY.get())
-            ) {
-                RANGED_POOL.add(modifier);
-            } else if (modifier.hasAttribute(
-                    ModAttributes.MINING_SPEED.get(),
-                    ModAttributes.DOUBLE_DROP_CHANCE.get(),
-                    ModAttributes.MELTING_TOUCH.get(),
-                    ModAttributes.VEIN_MINER.get())
+                    ArsenalAttributes.MINING_SPEED.get(),
+                    ArsenalAttributes.DOUBLE_DROP_CHANCE.get(),
+                    ArsenalAttributes.MELTING_TOUCH.get(),
+                    ArsenalAttributes.VEIN_MINER.get())
             ) {
                 TOOL_POOL.add(modifier);
             } else {

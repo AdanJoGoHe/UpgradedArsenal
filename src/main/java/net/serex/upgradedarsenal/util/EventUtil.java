@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -19,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.config.CustomConfig;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
@@ -137,7 +136,7 @@ public class EventUtil {
     }
 
     public static double getSpeedIncrease(Modifier modifier) {
-        return getAttributeValue(modifier, ModAttributes.MOVEMENT_SPEED.get());
+        return getAttributeValue(modifier, ArsenalAttributes.MOVEMENT_SPEED.get());
     }
 
     public static void loadAllowedBlocks() {
@@ -150,7 +149,7 @@ public class EventUtil {
     }
 
     public static double getDurabilityIncrease(Modifier modifier) {
-        return getAttributeValue(modifier, ModAttributes.MAX_DURABILITY.get());
+        return getAttributeValue(modifier, ArsenalAttributes.MAX_DURABILITY.get());
     }
 
     public static double getSpeedIncrease(Player player) {
@@ -172,15 +171,15 @@ public class EventUtil {
     }
 
     public static double getMinedDropDoubleChance(Modifier modifier) {
-        return getAttributeValue(modifier, ModAttributes.DOUBLE_DROP_CHANCE.get());
+        return getAttributeValue(modifier, ArsenalAttributes.DOUBLE_DROP_CHANCE.get());
     }
 
     public static double getMeltingTouchChance(Modifier modifier) {
-        return getAttributeValue(modifier, ModAttributes.MELTING_TOUCH.get());
+        return getAttributeValue(modifier, ArsenalAttributes.MELTING_TOUCH.get());
     }
 
     public static double getVeinMinerChance(Modifier modifier) {
-        return getAttributeValue(modifier, ModAttributes.VEIN_MINER.get());
+        return getAttributeValue(modifier, ArsenalAttributes.VEIN_MINER.get());
     }
 
     public static double getAttributeValue(Modifier modifier, Attribute attribute) {
@@ -193,7 +192,7 @@ public class EventUtil {
     }
 
     public static void handleRegeneration(Player player) {
-        double regenAmount = getAttributeValueFromAll(player, ModAttributes.REGENERATION.get());
+        double regenAmount = getAttributeValueFromAll(player, ArsenalAttributes.REGENERATION.get());
         if (regenAmount > 0.0 && player.getHealth() < player.getMaxHealth()) {
             player.heal((float) regenAmount);
         }
@@ -217,7 +216,7 @@ public class EventUtil {
     public static void applyFireResistanceModifier(Player player, LivingHurtEvent event) {
         if (!event.getSource().is(net.minecraft.tags.DamageTypeTags.IS_FIRE)) return;
 
-        double resistance = getAttributeValueFromAll(player, ModAttributes.FIRE_RESISTANCE.get());
+        double resistance = getAttributeValueFromAll(player, ArsenalAttributes.FIRE_RESISTANCE.get());
         if (resistance > 0) {
             float reduced = event.getAmount() * (1.0f - (float) resistance);
             event.setAmount(reduced);
@@ -241,39 +240,6 @@ public class EventUtil {
             }
         }
         return total;
-    }
-
-    public static void resetBowState(ItemStack bow) {
-        CompoundTag tag = bow.getOrCreateTag();
-        tag.putFloat("DrawProgress", 0.0f);
-        tag.putFloat("ElapsedTimeF", 0.0f);
-        tag.putBoolean("IsDrawing", false);
-    }
-
-    public static float getDrawSpeedMultiplier(Modifier modifier) {
-        if (modifier == null) {
-            return 0.0f;
-        }
-        return (float)modifier.modifiers.stream()
-            .filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.DRAW_SPEED.get())
-            .mapToDouble(pair -> ((Modifier.AttributeModifierSupplier)pair.getValue()).amount)
-            .findFirst()
-            .orElse(0.0);
-    }
-
-    public static int calculateModifiedDrawTime(float drawSpeedMultiplier) {
-        int modifiedDrawTime = drawSpeedMultiplier >= 0.0f ? 
-            Math.round(DEFAULT_BOW_DRAW_TIME / (1.0f + drawSpeedMultiplier)) : 
-            Math.round(DEFAULT_BOW_DRAW_TIME * (1.0f - drawSpeedMultiplier));
-        return Math.max(MIN_BOW_DRAW_TIME, Math.min(modifiedDrawTime, MAX_BOW_DRAW_TIME));
-    }
-
-    public static float getVelocityMultiplier(Modifier modifier) {
-        return (float)modifier.modifiers.stream()
-            .filter(pair -> ((Supplier)pair.getKey()).get() == ModAttributes.PROJECTILE_VELOCITY.get())
-            .mapToDouble(pair -> 1.0 + ((Modifier.AttributeModifierSupplier)pair.getValue()).amount)
-            .findFirst()
-            .orElse(1.0);
     }
 
     public static void processChestItems(ChestMenu chestMenu, Level level) {
@@ -301,7 +267,7 @@ public class EventUtil {
     public static double calculateMiningSpeedMultiplier(Modifier modifier) {
         double multiplier = 1.0;
         for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-            if (((Supplier)entry.getKey()).get() != ModAttributes.MINING_SPEED.get()) continue;
+            if (((Supplier)entry.getKey()).get() != ArsenalAttributes.MINING_SPEED.get()) continue;
             Modifier.AttributeModifierSupplier modifierSupplier = (Modifier.AttributeModifierSupplier)entry.getValue();
             if (modifierSupplier.operation == AttributeModifier.Operation.MULTIPLY_TOTAL) {
                 multiplier *= 1.0 + modifierSupplier.amount;
@@ -328,7 +294,7 @@ public class EventUtil {
      * @param damageDealt The amount of damage dealt
      */
     public static void handleLifesteal(Player player, float damageDealt) {
-        double lifestealAmount = getAttributeValueFromAll(player, ModAttributes.LIFESTEAL.get());
+        double lifestealAmount = getAttributeValueFromAll(player, ArsenalAttributes.LIFESTEAL.get());
         if (lifestealAmount > 0 && player.getHealth() < player.getMaxHealth()) {
             float healAmount = damageDealt * (float)lifestealAmount;
             player.heal(healAmount);
@@ -342,7 +308,7 @@ public class EventUtil {
      * @return true if a critical hit occurs, false otherwise
      */
     public static boolean rollForCriticalHit(Player player) {
-        double critChance = getAttributeValueFromAll(player, ModAttributes.CRITICAL_CHANCE.get());
+        double critChance = getAttributeValueFromAll(player, ArsenalAttributes.CRITICAL_CHANCE.get());
         return critChance > 0 && player.getRandom().nextDouble() < critChance;
     }
 
@@ -353,7 +319,7 @@ public class EventUtil {
      * @return The damage multiplier (1.0 + critical damage bonus)
      */
     public static float getCriticalDamageMultiplier(Player player) {
-        double critDamage = getAttributeValueFromAll(player, ModAttributes.CRITICAL_DAMAGE.get());
+        double critDamage = getAttributeValueFromAll(player, ArsenalAttributes.CRITICAL_DAMAGE.get());
         return 1.0f + (float)critDamage;
     }
 }

@@ -10,7 +10,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 
@@ -23,7 +23,7 @@ public class FallDamageResistanceEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.FALL_DAMAGE_RESISTANCE.get();
+        return ArsenalAttributes.FALL_DAMAGE_RESISTANCE.get();
     }
     
     /**
@@ -39,7 +39,7 @@ public class FallDamageResistanceEventHandler extends AttributeEventHandler {
         Modifier modifier = ModifierHandler.getModifier(boots);
         if (modifier == null) return;
 
-        AttributeInstance fallRes = player.getAttribute(ModAttributes.FALL_DAMAGE_RESISTANCE.get());
+        AttributeInstance fallRes = player.getAttribute(ArsenalAttributes.FALL_DAMAGE_RESISTANCE.get());
         if (fallRes != null) {
             double value = fallRes.getValue();
             event.setDistance((float) (event.getDistance() * (1.0 - value)));

@@ -2,10 +2,6 @@ package net.serex.upgradedarsenal.util;
 
 import java.util.List;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.ItemStack;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
-import net.serex.upgradedarsenal.modifier.Modifier;
 
 /**
  * Utility class for tooltip-related operations.
@@ -44,32 +40,5 @@ public class TooltipUtils {
             return i;
         }
         return tooltip.size();
-    }
-
-    /**
-     * Adds bow-specific attributes to the tooltip
-     * 
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
-    public static void addBowAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        // Define the attributes and their base values
-        Attribute[] attributes = {
-            ModAttributes.PROJECTILE_DAMAGE.get(),
-            ModAttributes.DRAW_SPEED.get(),
-            ModAttributes.PROJECTILE_VELOCITY.get(),
-            ModAttributes.PROJECTILE_ACCURACY.get()
-        };
-        String[] attributeNames = {"Damage", "Draw Speed", "Velocity", "Accuracy"};
-        double[] baseValues = {2.0, 1.0, 1.0, 1.0};
-
-        // Add each attribute to the tooltip
-        for (int i = 0; i < attributes.length; i++) {
-            double finalValue = AttributeUtils.calculateFinalAttributeValue(stack, attributes[i], baseValues[i], modifier);
-            tooltip.add(insertIndex++, Component.literal(String.format("+%.1f %s", finalValue, attributeNames[i]))
-                    .withStyle(net.minecraft.ChatFormatting.BLUE));
-        }
     }
 }

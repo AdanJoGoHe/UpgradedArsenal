@@ -13,7 +13,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.EventUtil;
@@ -36,7 +36,7 @@ public class VeinMinerEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.VEIN_MINER.get();
+        return ArsenalAttributes.VEIN_MINER.get();
     }
     
     /**

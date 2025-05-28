@@ -16,13 +16,12 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.EventUtil;
 import net.serex.upgradedarsenal.util.PlayerPlacedBlocks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +34,7 @@ public class MeltingTouchEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.MELTING_TOUCH.get();
+        return ArsenalAttributes.MELTING_TOUCH.get();
     }
 
     /**
@@ -51,8 +50,6 @@ public class MeltingTouchEventHandler extends AttributeEventHandler {
         LevelAccessor level = event.getLevel();
         if (!(level instanceof ServerLevel serverLevel)) return;
 
-        // Asumiendo que EventUtil.loadAllowedBlocks() se llama en otro lugar (ej. al iniciar el juego)
-        // EventUtil.loadAllowedBlocks(); // Usualmente no se carga en cada evento
         if (!EventUtil.getAllowedBlocks().contains(state.getBlock())) return;
 
         PlayerPlacedBlocks tracker = PlayerPlacedBlocks.get(serverLevel);
@@ -65,26 +62,17 @@ public class MeltingTouchEventHandler extends AttributeEventHandler {
         double meltingTouchChance = EventUtil.getMeltingTouchChance(modifier);
         if (meltingTouchChance <= 0 || serverLevel.getRandom().nextDouble() >= meltingTouchChance) return;
 
-        // Cancela el evento original para prevenir los drops normales
         event.setCanceled(true);
 
-        // Obtiene los drops del bloque
         List<ItemStack> originalDrops = Block.getDrops(state, serverLevel, event.getPos(), null, player, heldItem);
         if (originalDrops.isEmpty()) {
-            // Si no hay drops, simplemente removemos el bloque
             serverLevel.removeBlock(event.getPos(), false);
             return;
         }
 
-        // Procesa cada drop
         for (ItemStack drop : originalDrops) {
             if (drop.isEmpty()) continue;
-
-            // Usamos un SimpleContainer para buscar la receta, ya que SingleItemContainer
-            // podría no estar disponible directamente o tener otro nombre/paquete según la versión de MC/Forge.
-            // También puedes crear tu propia implementación de Container que envuelva un solo ItemStack.
-            Container container = new SimpleContainer(drop.copy()); // Es importante copiar el stack para no modificar el original
-            // durante la búsqueda de receta si la receta lo consume.
+            Container container = new SimpleContainer(drop.copy());
 
             Optional<SmeltingRecipe> recipeOptional = serverLevel.getRecipeManager()
                     .getRecipeFor(RecipeType.SMELTING, container, serverLevel);
@@ -95,30 +83,18 @@ public class MeltingTouchEventHandler extends AttributeEventHandler {
 
                 if (!recipeOutput.isEmpty()) {
                     ItemStack smeltedItemResult = recipeOutput.copy();
-                    // La cantidad final es la cantidad del drop original multiplicada por la cantidad que produce la receta.
-                    // Para la mayoría de las recetas de fundición, recipeOutput.getCount() será 1.
-                    // Esto maneja correctamente Fortuna (que afecta drop.getCount())
                     smeltedItemResult.setCount(drop.getCount() * recipeOutput.getCount());
                     Block.popResource(serverLevel, event.getPos(), smeltedItemResult);
                 } else {
-                    // Si la receta resulta en un item vacío (poco común para fundición), dropea el original
                     Block.popResource(serverLevel, event.getPos(), drop.copy());
                 }
             } else {
-                // Si no hay receta de fundición, dropea el ítem original
                 Block.popResource(serverLevel, event.getPos(), drop.copy());
             }
         }
-
-        // Rompe el bloque sin dropear ítems (ya los manejamos nosotros)
         serverLevel.removeBlock(event.getPos(), false);
     }
 
-    // The onHarvestDrops method has been removed as we now handle everything in onBlockBreak
-
-    /**
-     * Simple container implementation for recipe matching
-     */
     private static class SingleItemContainer implements net.minecraft.world.Container {
         private final ItemStack stack;
 

@@ -6,7 +6,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.util.EventUtil;
 
 /**
@@ -18,7 +18,7 @@ public class RespirationEfficiencyEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.RESPIRATION_EFFICIENCY.get();
+        return ArsenalAttributes.RESPIRATION_EFFICIENCY.get();
     }
 
     /**
@@ -30,7 +30,7 @@ public class RespirationEfficiencyEventHandler extends AttributeEventHandler {
         if (!(event.getEntity() instanceof Player player)) return;
         if (!player.isUnderWater()) return;
 
-        double efficiency = EventUtil.getAttributeValueFromAll(player, ModAttributes.RESPIRATION_EFFICIENCY.get());
+        double efficiency = EventUtil.getAttributeValueFromAll(player, ArsenalAttributes.RESPIRATION_EFFICIENCY.get());
         if (efficiency > 1.0 && player.getAirSupply() < player.getMaxAirSupply()) {
             int restored = (int)((efficiency - 1.0) * 2);
             player.setAirSupply(Math.min(player.getAirSupply() + restored, player.getMaxAirSupply()));

@@ -6,7 +6,7 @@ import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.util.EventUtil;
 
 /**
@@ -18,7 +18,7 @@ public class XpGainBonusEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.XP_GAIN_BONUS.get();
+        return ArsenalAttributes.XP_GAIN_BONUS.get();
     }
     
     /**
@@ -28,7 +28,7 @@ public class XpGainBonusEventHandler extends AttributeEventHandler {
     @SubscribeEvent
     public static void onXpGain(PlayerXpEvent.XpChange event) {
         Player player = event.getEntity();
-        double bonus = EventUtil.getAttributeValueFromAll(player, ModAttributes.XP_GAIN_BONUS.get());
+        double bonus = EventUtil.getAttributeValueFromAll(player, ArsenalAttributes.XP_GAIN_BONUS.get());
         if (bonus > 0) {
             int extra = (int)(event.getAmount() * bonus);
             event.setAmount(event.getAmount() + extra);

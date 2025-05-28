@@ -11,19 +11,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 import net.serex.upgradedarsenal.modifier.ModifierHandler;
-import net.serex.upgradedarsenal.util.AttributeDisplayUtils;
 import net.serex.upgradedarsenal.util.AttributeUtils;
-import net.serex.upgradedarsenal.util.ComponentUtils;
-import net.serex.upgradedarsenal.util.TooltipUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import static net.serex.upgradedarsenal.util.AttributeDisplayUtils.*;
@@ -32,7 +26,7 @@ import static net.serex.upgradedarsenal.util.AttributeDisplayUtils.*;
  * Handles the display of tooltips for items with modifiers.
  * This class is responsible for updating item tooltips to show modifier information,
  * including attribute changes, rarity, and other modifier-specific details.
- * It handles different types of items (armor, weapons, bows) differently.
+ * It handles different types of items (armor, weapons) differently.
  */
 @Mod.EventBusSubscriber(modid="upgradedarsenal", bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler {
@@ -115,15 +109,6 @@ public class TooltipHandler {
         return amount > 0.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
     }
 
-
-    private static String formatAttributeValue(double value, AttributeModifier.Operation operation) {
-        return AttributeUtils.formatAttributeValue(value, operation);
-    }
-
-    public static String getAttributeNameForRangedWeapon(Attribute attribute) {
-        return RANGED_WEAPON_ATTRIBUTE_NAMES.getOrDefault(attribute, null);
-    }
-
     private static String getAttributeTranslationKey(Attribute attribute) {
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
@@ -137,21 +122,7 @@ public class TooltipHandler {
     }
 
     private static void processVanillaAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
-        boolean isRangedWeapon = stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
         boolean isArmor = stack.getItem() instanceof ArmorItem;
-
-        // For ranged weapons, remove attack damage and speed lines as they're not applicable
-        if (isRangedWeapon) {
-            int i = insertIndex;
-            while (i < tooltip.size()) {
-                String line = tooltip.get(i).getString().toLowerCase();
-                if (line.contains("attack damage") || line.contains("attack speed")) {
-                    tooltip.remove(i);
-                } else {
-                    i++;
-                }
-            }
-        }
 
         // Process armor attributes
         if (isArmor) {
@@ -179,13 +150,13 @@ public class TooltipHandler {
         }
 
         // Process weapon attributes
-        if (!isRangedWeapon && !isArmor) {
+        if (!isArmor) {
             processAttributeLine(tooltip, insertIndex, "attack damage", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, getBaseAttributeValue(stack, Attributes.ATTACK_DAMAGE), modifier), "%.1f");
             processAttributeLine(tooltip, insertIndex, "attack speed", 
                 calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, getBaseAttributeValue(stack, Attributes.ATTACK_SPEED), modifier), "%.1f");
-        } else if (!isRangedWeapon) {
-            // For non-weapon items (except ranged weapons), check if the modifier adds weapon attributes
+        } else {
+            // For armor items, check if the modifier adds weapon attributes
             for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
                 Attribute attribute = entry.getKey().get();
                 if (attribute == Attributes.ATTACK_DAMAGE) {
@@ -206,7 +177,6 @@ public class TooltipHandler {
     private static void addModifierAttributes(ItemStack stack, List<Component> tooltip, Modifier modifier, int insertIndex) {
         // Find the end of vanilla attributes to insert additional modifier attributes
         int modifierInsertIndex = findEndOfVanillaAttributes(tooltip, insertIndex);
-        boolean isRangedWeapon = stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem;
         boolean isArmor = stack.getItem() instanceof ArmorItem;
 
         for (Pair<Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
@@ -214,7 +184,7 @@ public class TooltipHandler {
             Modifier.AttributeModifierSupplier supplier = entry.getValue();
 
             // Check if this is a vanilla attribute
-            boolean isVanilla = isVanillaAttribute(attribute, isArmor, isRangedWeapon);
+            boolean isVanilla = isVanillaAttribute(attribute, isArmor);
 
             // For vanilla attributes, check if they're already in the tooltip
             boolean attributeLineExists = false;
@@ -238,39 +208,25 @@ public class TooltipHandler {
             // Skip vanilla attributes that are already in the tooltip
             if (isVanilla && attributeLineExists) continue;
 
-            // Get the appropriate display name and format for this attribute
-            String displayName = null;
-            if (isRangedWeapon) {
-                displayName = getAttributeNameForRangedWeapon(attribute);
-            }
+            // Use standard formatting for all attributes
+            String attributeKey = getAttributeTranslationKey(attribute);
+            String formattedAmount = formatModifierAmount(supplier);
+            ChatFormatting color = getAmountColor(supplier.amount);
 
-            if (displayName != null) {
-                // Use ranged weapon specific formatting
-                String formattedValue = formatAttributeValue(supplier.amount, supplier.operation);
-                MutableComponent line = Component.literal(formattedValue + " " + displayName)
-                        .withStyle(supplier.amount > 0.0 ? ChatFormatting.BLUE : ChatFormatting.RED);
-                tooltip.add(modifierInsertIndex++, line);
-            } else {
-                // Use standard formatting for all other attributes
-                String attributeKey = getAttributeTranslationKey(attribute);
-                String formattedAmount = formatModifierAmount(supplier);
-                ChatFormatting color = getAmountColor(supplier.amount);
+            MutableComponent line = Component.literal(formattedAmount + " ")
+                    .append(Component.translatable(attributeKey))
+                    .withStyle(color);
 
-                MutableComponent line = Component.literal(formattedAmount + " ")
-                        .append(Component.translatable(attributeKey))
-                        .withStyle(color);
-
-                tooltip.add(modifierInsertIndex++, line);
-            }
+            tooltip.add(modifierInsertIndex++, line);
         }
     }
 
-    private static boolean isVanillaAttribute(Attribute attribute, boolean isArmor, boolean isRangedWeapon) {
+    private static boolean isVanillaAttribute(Attribute attribute, boolean isArmor) {
         // Check if this is a vanilla attribute that's already handled by the tooltip
         if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && isArmor) {
             return true;
         }
-        if ((attribute == Attributes.ATTACK_DAMAGE || attribute == Attributes.ATTACK_SPEED) && !isRangedWeapon && !isArmor) {
+        if ((attribute == Attributes.ATTACK_DAMAGE || attribute == Attributes.ATTACK_SPEED) && !isArmor) {
             return true;
         }
         return false;

@@ -53,8 +53,7 @@ public class ModifierHandler {
                         stack.getItem() instanceof AxeItem ||
                         stack.getItem() instanceof PickaxeItem ||
                         stack.getItem() instanceof ShovelItem ||
-                        stack.getItem() instanceof ArmorItem ||
-                        stack.getItem() instanceof BowItem);
+                        stack.getItem() instanceof ArmorItem);
     }
 
     public static void handleEquipmentChange(Player player, EquipmentSlot slot, ItemStack oldItem, ItemStack newItem) {
@@ -232,7 +231,6 @@ public class ModifierHandler {
     private static ModifierPool getAppropriatePool(ItemStack stack) {
         Item item = stack.getItem();
         if (item instanceof ArmorItem) return Modifiers.ARMOR_POOL;
-        if (item instanceof BowItem || item instanceof CrossbowItem) return Modifiers.RANGED_POOL;
         if (item instanceof PickaxeItem || item instanceof ShovelItem || (item instanceof AxeItem && !(item instanceof SwordItem))) {
             return Modifiers.TOOL_POOL;
         }

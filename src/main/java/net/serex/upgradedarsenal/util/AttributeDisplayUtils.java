@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.modifier.Modifier;
 
 /**
@@ -17,33 +17,19 @@ import net.serex.upgradedarsenal.modifier.Modifier;
 public class AttributeDisplayUtils {
     // Maps for attribute lookups
     public static final Map<Attribute, String> ATTRIBUTE_TRANSLATION_KEYS = new HashMap<>();
-    public static final Map<Attribute, String> RANGED_WEAPON_ATTRIBUTE_NAMES = new HashMap<>();
-    public static final Map<Attribute, String> BOW_ATTRIBUTE_TRANSLATION_KEYS = new HashMap<>();
 
     static {
         // Initialize attribute translation keys
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MOVEMENT_SPEED.get(), "attribute.upgradedarsenal.movement_speed_increase_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.upgradedarsenal.mined_drop_double_chance_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MINING_SPEED.get(), "attribute.upgradedarsenal.mining_speed_increase_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.MELTING_TOUCH.get(), "attribute.upgradedarsenal.melting_touch_percent");
-        ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.VEIN_MINER.get(), "attribute.upgradedarsenal.vein_miner_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MOVEMENT_SPEED.get(), "attribute.upgradedarsenal.movement_speed_increase_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.upgradedarsenal.mined_drop_double_chance_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MINING_SPEED.get(), "attribute.upgradedarsenal.mining_speed_increase_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MELTING_TOUCH.get(), "attribute.upgradedarsenal.melting_touch_percent");
+        ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.VEIN_MINER.get(), "attribute.upgradedarsenal.vein_miner_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_DAMAGE, "attribute.upgradedarsenal.attack_damage_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_SPEED, "attribute.upgradedarsenal.attack_speed_percent");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR, "attribute.name.generic.armor");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR_TOUGHNESS, "attribute.name.generic.armor_toughness");
         ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.MAX_HEALTH, "attribute.name.generic.max_health");
-
-        // Initialize ranged weapon attribute names
-        RANGED_WEAPON_ATTRIBUTE_NAMES.put(ModAttributes.DRAW_SPEED.get(), "Draw Speed");
-        RANGED_WEAPON_ATTRIBUTE_NAMES.put(ModAttributes.PROJECTILE_VELOCITY.get(), "Arrow Velocity");
-        RANGED_WEAPON_ATTRIBUTE_NAMES.put(ModAttributes.PROJECTILE_DAMAGE.get(), "Arrow Damage");
-        RANGED_WEAPON_ATTRIBUTE_NAMES.put(ModAttributes.PROJECTILE_ACCURACY.get(), "Accuracy");
-
-        // Initialize bow attribute translation keys
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.DRAW_SPEED.get(), "attribute.upgradedarsenal.draw_speed");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_VELOCITY.get(), "attribute.upgradedarsenal.projectile_velocity");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_DAMAGE.get(), "attribute.upgradedarsenal.projectile_damage");
-        BOW_ATTRIBUTE_TRANSLATION_KEYS.put(ModAttributes.PROJECTILE_ACCURACY.get(), "attribute.upgradedarsenal.projectile_accuracy");
     }
 
     /**
@@ -54,26 +40,6 @@ public class AttributeDisplayUtils {
      */
     public static String getAttributeTranslationKey(Attribute attribute) {
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
-    }
-
-    /**
-     * Gets the display name for a ranged weapon attribute
-     * 
-     * @param attribute The attribute
-     * @return The display name, or null if not a ranged weapon attribute
-     */
-    public static String getAttributeNameForRangedWeapon(Attribute attribute) {
-        return RANGED_WEAPON_ATTRIBUTE_NAMES.getOrDefault(attribute, null);
-    }
-
-    /**
-     * Gets the translation key for a bow attribute
-     * 
-     * @param attribute The attribute
-     * @return The translation key
-     */
-    public static String getBowAttributeTranslationKey(Attribute attribute) {
-        return BOW_ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
     /**
@@ -117,40 +83,6 @@ public class AttributeDisplayUtils {
             double baseValue = AttributeUtils.getBaseAttributeValue(stack, attributes[i]);
             double finalValue = AttributeUtils.calculateFinalAttributeValue(stack, attributes[i], baseValue, modifier);
             ComponentUtils.updateAttributeLine(tooltip, insertIndex, attributeNames[i], finalValue, "%.1f");
-        }
-    }
-
-    /**
-     * Updates ranged weapon attributes in the tooltip
-     * 
-     * @param stack The item stack
-     * @param tooltip The tooltip to update
-     * @param modifier The modifier to apply
-     * @param insertIndex The index to insert the attributes at
-     */
-    public static void updateRangedAttributes(ItemStack stack, java.util.List<net.minecraft.network.chat.Component> tooltip, Modifier modifier, int insertIndex) {
-        // Remove existing attack damage and attack speed lines
-        while (insertIndex < tooltip.size()) {
-            String line = tooltip.get(insertIndex).getString().toLowerCase();
-            if (!line.contains("attack damage") && !line.contains("attack speed")) break;
-            tooltip.remove(insertIndex);
-        }
-
-        // Add ranged weapon attribute lines
-        for (org.apache.commons.lang3.tuple.Pair<java.util.function.Supplier<Attribute>, Modifier.AttributeModifierSupplier> entry : modifier.modifiers) {
-            Attribute attribute = entry.getKey().get();
-            Modifier.AttributeModifierSupplier supplier = entry.getValue();
-            double value = supplier.amount;
-            String attributeName = getAttributeNameForRangedWeapon(attribute);
-
-            // Skip attributes that aren't relevant for ranged weapons
-            if (attributeName == null) continue;
-
-            // Format and add the attribute line
-            String formattedValue = AttributeUtils.formatAttributeValue(value, supplier.operation);
-            net.minecraft.network.chat.MutableComponent line = net.minecraft.network.chat.Component.literal(formattedValue + " " + attributeName)
-                    .withStyle(value > 0.0 ? net.minecraft.ChatFormatting.BLUE : net.minecraft.ChatFormatting.RED);
-            tooltip.add(insertIndex++, line);
         }
     }
 }

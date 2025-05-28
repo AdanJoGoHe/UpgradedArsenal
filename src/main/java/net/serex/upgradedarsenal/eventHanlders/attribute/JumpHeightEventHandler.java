@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.serex.upgradedarsenal.Main;
-import net.serex.upgradedarsenal.attribute.ModAttributes;
+import net.serex.upgradedarsenal.attribute.ArsenalAttributes;
 import net.serex.upgradedarsenal.util.EventUtil;
 
 /**
@@ -20,35 +20,30 @@ public class JumpHeightEventHandler extends AttributeEventHandler {
 
     @Override
     public Attribute getAttribute() {
-        return ModAttributes.JUMP_HEIGHT.get();
+        return ArsenalAttributes.JUMP_HEIGHT.get();
     }
 
-    /**
-     * Event handler for entity jumping.
-     * Increases jump height based on the JUMP_HEIGHT attribute.
-     */
     @SubscribeEvent
     public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
-        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+        double jumpHeightBonus = EventUtil.getAttributeValueFromAll(player, ArsenalAttributes.JUMP_HEIGHT.get());
+        final double EPSILON = 0.0001;
+        if (Math.abs(jumpHeightBonus) > EPSILON) {
+            Vec3 currentMotion = player.getDeltaMovement();
+            double additionalUpwardVelocity = 0.1 * jumpHeightBonus;
 
-        double jumpBoost = EventUtil.getAttributeValueFromAll(player, ModAttributes.JUMP_HEIGHT.get());
-        if (jumpBoost > 1.0) {
-            Vec3 motion = player.getDeltaMovement();
-            player.setDeltaMovement(motion.x, motion.y + (0.1 * (jumpBoost - 1.0)), motion.z);
+            player.setDeltaMovement(currentMotion.x, currentMotion.y + additionalUpwardVelocity, currentMotion.z);
         }
     }
 
-    /**
-     * Reduces fall damage based on jump height attribute.
-     * Players with higher jump height are better at landing.
-     */
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        double jumpBoost = EventUtil.getAttributeValueFromAll(player, ModAttributes.JUMP_HEIGHT.get());
+        double jumpBoost = EventUtil.getAttributeValueFromAll(player, ArsenalAttributes.JUMP_HEIGHT.get());
         if (jumpBoost > 1.0) {
-            // Reduce fall damage based on jump height attribute
             float damageReduction = (float)(jumpBoost - 1.0) * 0.5f;
             event.setDistance(Math.max(0, event.getDistance() - damageReduction));
         }
