@@ -1,7 +1,9 @@
 package net.serex.upgradedarsenal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import net.minecraft.ChatFormatting;
@@ -20,8 +22,6 @@ import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static net.serex.upgradedarsenal.util.AttributeDisplayUtils.*;
-
 /**
  * Handles the display of tooltips for items with modifiers.
  * This class is responsible for updating item tooltips to show modifier information,
@@ -30,9 +30,44 @@ import static net.serex.upgradedarsenal.util.AttributeDisplayUtils.*;
  */
 @Mod.EventBusSubscriber(modid="upgradedarsenal", bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler {
+    // Maps for attribute lookups
+    public static final Map<Attribute, String> ATTRIBUTE_TRANSLATION_KEYS = new HashMap<>();
+
+    // Flag to track if the map has been initialized
+    private static boolean attributeKeysInitialized = false;
+
+    /**
+     * Initialize the attribute translation keys map.
+     * This method should be called after the attributes are registered.
+     */
+    private static void initAttributeTranslationKeys() {
+        if (attributeKeysInitialized) return;
+
+        try {
+            // Initialize attribute translation keys
+            ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MOVEMENT_SPEED.get(), "attribute.upgradedarsenal.movement_speed_increase_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.DOUBLE_DROP_CHANCE.get(), "attribute.upgradedarsenal.mined_drop_double_chance_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MINING_SPEED.get(), "attribute.upgradedarsenal.mining_speed_increase_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.MELTING_TOUCH.get(), "attribute.upgradedarsenal.melting_touch_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(ArsenalAttributes.VEIN_MINER.get(), "attribute.upgradedarsenal.vein_miner_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_DAMAGE, "attribute.upgradedarsenal.attack_damage_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ATTACK_SPEED, "attribute.upgradedarsenal.attack_speed_percent");
+            ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR, "attribute.name.generic.armor");
+            ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.ARMOR_TOUGHNESS, "attribute.name.generic.armor_toughness");
+            ATTRIBUTE_TRANSLATION_KEYS.put(Attributes.MAX_HEALTH, "attribute.name.generic.max_health");
+
+            attributeKeysInitialized = true;
+        } catch (Exception e) {
+            // If we get an exception (like NullPointerException), we'll try again later
+            attributeKeysInitialized = false;
+        }
+    }
 
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
+        // Initialize attribute translation keys if not already done
+        initAttributeTranslationKeys();
+
         ItemStack stack = event.getItemStack();
         List<Component> tooltip = event.getToolTip();
         if (stack.hasTag() && stack.getTag().contains("upgradedarsenal:modifier")) {
@@ -110,6 +145,7 @@ public class TooltipHandler {
     }
 
     private static String getAttributeTranslationKey(Attribute attribute) {
+        initAttributeTranslationKeys();
         return ATTRIBUTE_TRANSLATION_KEYS.getOrDefault(attribute, attribute.getDescriptionId());
     }
 
