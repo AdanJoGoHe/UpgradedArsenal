@@ -37,7 +37,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(ModifierEvents.class);
         MinecraftForge.EVENT_BUS.register(TooltipHandler.class);
         MinecraftForge.EVENT_BUS.register(net.serex.upgradedarsenal.modifier.ModifierHandler.class);
-        MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class); // Considerar si esto debe ser una instancia de manejador
+        MinecraftForge.EVENT_BUS.register(ServerStartingEvent.class);
     }
 
     private void registerModConfiguration() {

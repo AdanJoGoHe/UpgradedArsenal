@@ -148,10 +148,6 @@ public class EventUtil {
         }
     }
 
-    public static double getDurabilityIncrease(ModifierRegistry modifier) {
-        return getAttributeValue(modifier, ArsenalAttributes.MAX_DURABILITY.get());
-    }
-
     public static double getSpeedIncrease(Player player) {
         double total = 0.0;
         for (InteractionHand hand : InteractionHand.values()) {

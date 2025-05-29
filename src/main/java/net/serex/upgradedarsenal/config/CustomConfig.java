@@ -1,11 +1,10 @@
 package net.serex.upgradedarsenal.config;
 
-import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.ForgeConfigSpec;
-
+import net.minecraftforge.fml.common.Mod;
 import java.util.List;
-import java.util.Map;
 
+@Mod.EventBusSubscriber(modid="upgradedarsenal", bus=Mod.EventBusSubscriber.Bus.MOD)
 public class CustomConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;

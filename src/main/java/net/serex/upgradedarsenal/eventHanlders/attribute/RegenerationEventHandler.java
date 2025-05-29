@@ -20,11 +20,7 @@ public class RegenerationEventHandler extends AttributeEventHandler {
     public Attribute getAttribute() {
         return ArsenalAttributes.REGENERATION.get();
     }
-    
-    /**
-     * Event handler for player tick.
-     * Applies health regeneration based on the REGENERATION attribute.
-     */
+
     @SubscribeEvent
     public static void onPlayerTickRegen(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END || event.player.isCreative()) return;

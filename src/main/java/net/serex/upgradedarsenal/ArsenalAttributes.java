@@ -26,7 +26,6 @@ public class ArsenalAttributes {
     public static final RegistryObject<Attribute> FIRE_RESISTANCE = register("fire_resistance", 0.0, 0.0, 1.0);
     public static final RegistryObject<Attribute> JUMP_HEIGHT = register("jump_height", 1.0, 0.0, 5.0);
     public static final RegistryObject<Attribute> LIFESTEAL = register("lifesteal", 0.0, 0.0, 1.0);
-    public static final RegistryObject<Attribute> MAX_DURABILITY = register("max_durability", 1.0, 0.0, 1024.0);
     public static final RegistryObject<Attribute> MELTING_TOUCH = register("melting_touch", 0.0, 0.0, 1.0);
     public static final RegistryObject<Attribute> MINING_SPEED = register("mining_speed", 1.0, 0.0, 1024.0);
     public static final RegistryObject<Attribute> MOVEMENT_SPEED = register("movement_speed", 1.0, 0.0, 5.0);
