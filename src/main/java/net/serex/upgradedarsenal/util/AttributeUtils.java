@@ -1,5 +1,6 @@
 package net.serex.upgradedarsenal.util;
 
+import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -14,28 +15,46 @@ public class AttributeUtils {
 
 
     public static double getBaseAttributeValue(ItemStack stack, Attribute attribute) {
-        if (attribute == Attributes.ATTACK_DAMAGE && stack.getItem() instanceof TieredItem item) {
-            float base = item.getTier().getAttackDamageBonus();
+        Item item = stack.getItem();
+
+        // Armaduras vanilla
+        if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && item instanceof ArmorItem armorItem) {
+            return attribute == Attributes.ARMOR ? armorItem.getDefense() : armorItem.getToughness();
+        }
+
+        // Armas vanilla de TieredItem (swords, axes, etc)
+        if (attribute == Attributes.ATTACK_DAMAGE && item instanceof TieredItem tiered) {
+            float base = tiered.getTier().getAttackDamageBonus();
             if (item instanceof SwordItem) return base + 4.0f;
             if (item instanceof AxeItem) return base + 7.0f;
             if (item instanceof PickaxeItem) return base + 2.0f;
             if (item instanceof ShovelItem) return base + 2.5f;
-            return base + 1.0f;
+            return base + 1.0f; // por si hay un item custom de TieredItem
         }
-        if (attribute == Attributes.ATTACK_SPEED) {
-            double baseSpeed = 4.0;
-            for (AttributeModifier mod : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attribute)) {
-                if (mod.getOperation() == AttributeModifier.Operation.ADDITION) {
-                    baseSpeed += mod.getAmount();
-                }
+
+        // Usar default attribute modifiers del item para cubrir TODO lo demás
+        Multimap<Attribute, AttributeModifier> defaultMods = item.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND);
+        for (AttributeModifier mod : defaultMods.get(attribute)) {
+            if (mod.getOperation() == AttributeModifier.Operation.ADDITION) {
+                return mod.getAmount();
             }
-            return baseSpeed;
         }
-        if ((attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS) && stack.getItem() instanceof ArmorItem armorItem) {
-            return attribute == Attributes.ARMOR ? armorItem.getDefense() : armorItem.getToughness();
+
+        // Si no, revisar los modifiers del stack por si acaso
+        for (AttributeModifier mod : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attribute)) {
+            if (mod.getOperation() == AttributeModifier.Operation.ADDITION) {
+                return mod.getAmount();
+            }
         }
+
+        // Ataque velocidad fallback: 4.0 como vanilla
+        if (attribute == Attributes.ATTACK_SPEED) {
+            return 4.0;
+        }
+
         return 0.0;
     }
+
 
     public static double calculateFinalAttributeValue(ItemStack stack, Attribute attribute, double baseValue, ModifierRegistry modifier) {
         double finalValue = baseValue;

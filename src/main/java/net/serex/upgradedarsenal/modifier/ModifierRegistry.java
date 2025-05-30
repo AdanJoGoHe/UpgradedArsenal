@@ -25,7 +25,7 @@ public class ModifierRegistry {
 
     private ModifierRegistry(ResourceLocation name, String debugName, String displayName , int weight, ModifierType type, List<Pair<Supplier<Attribute>, AttributeModifierSupplier>> modifiers, Rarity rarity) {
         this.name = name;
-        this.displayName = debugName;
+        this.displayName = displayName;
         this.debugName = debugName;
         this.weight = weight;
         this.type = type;
@@ -79,10 +79,10 @@ public class ModifierRegistry {
                 COMMON, 167,
                 UNCOMMON, 200,
                 RARE, 133,
-                EPIC, 100,
+                EPIC, 108,
                 LEGENDARY, 67,
                 MYTHIC, 50,
-                HERO, 33
+                HERO, 25
         );
 
         public ChatFormatting getColor() {

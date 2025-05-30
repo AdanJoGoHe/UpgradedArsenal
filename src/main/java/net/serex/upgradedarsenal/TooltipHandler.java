@@ -22,12 +22,6 @@ import net.serex.upgradedarsenal.modifier.ModifierHandler;
 import net.serex.upgradedarsenal.util.AttributeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-/**
- * Handles the display of tooltips for items with modifiers.
- * This class is responsible for updating item tooltips to show modifier information,
- * including attribute changes, rarity, and other modifier-specific details.
- * It handles different types of items (armor, weapons) differently.
- */
 @Mod.EventBusSubscriber(modid="upgradedarsenal", bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler {
     // Maps for attribute lookups
@@ -157,53 +151,32 @@ public class TooltipHandler {
         addModifierAttributes(stack, tooltip, modifier, insertIndex);
     }
 
+    private static final Map<Attribute, String> VANILLA_ATTRIBUTES = Map.of(
+            Attributes.ARMOR, "armor",
+            Attributes.ARMOR_TOUGHNESS, "toughness",
+            Attributes.ATTACK_DAMAGE, "attack damage",
+            Attributes.ATTACK_SPEED, "attack speed"
+    );
+
     private static void processVanillaAttributes(ItemStack stack, List<Component> tooltip, ModifierRegistry modifier, int insertIndex) {
         boolean isArmor = stack.getItem() instanceof ArmorItem;
 
-        // Process armor attributes
-        if (isArmor) {
-            ArmorItem armorItem = (ArmorItem) stack.getItem();
-            processAttributeLine(tooltip, insertIndex, "armor", 
-                calculateFinalAttributeValue(stack, Attributes.ARMOR, armorItem.getDefense(), modifier), "%.1f");
-            processAttributeLine(tooltip, insertIndex, "toughness", 
-                calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, armorItem.getToughness(), modifier), "%.1f");
-        } else {
-            // For non-armor items, check if the modifier adds armor attributes
-            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
-                Attribute attribute = entry.getKey().get();
-                if (attribute == Attributes.ARMOR) {
-                    double value = calculateFinalAttributeValue(stack, Attributes.ARMOR, 0.0, modifier);
-                    if (value > 0) {
-                        addAttributeLine(tooltip, insertIndex, "armor", value, "%.1f");
-                    }
-                } else if (attribute == Attributes.ARMOR_TOUGHNESS) {
-                    double value = calculateFinalAttributeValue(stack, Attributes.ARMOR_TOUGHNESS, 0.0, modifier);
-                    if (value > 0) {
-                        addAttributeLine(tooltip, insertIndex, "toughness", value, "%.1f");
-                    }
-                }
-            }
-        }
+        for (Map.Entry<Attribute, String> entry : VANILLA_ATTRIBUTES.entrySet()) {
+            Attribute attribute = entry.getKey();
+            String displayName = entry.getValue();
 
-        if (!isArmor) {
-            processAttributeLine(tooltip, insertIndex, "attack damage", 
-                calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, getBaseAttributeValue(stack, Attributes.ATTACK_DAMAGE), modifier), "%.1f");
-            processAttributeLine(tooltip, insertIndex, "attack speed", 
-                calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, getBaseAttributeValue(stack, Attributes.ATTACK_SPEED), modifier), "%.1f");
-        } else {
-            for (Pair<Supplier<Attribute>, ModifierRegistry.AttributeModifierSupplier> entry : modifier.modifiers) {
-                Attribute attribute = entry.getKey().get();
-                if (attribute == Attributes.ATTACK_DAMAGE) {
-                    double value = calculateFinalAttributeValue(stack, Attributes.ATTACK_DAMAGE, 0.0, modifier);
-                    if (value > 0) {
-                        addAttributeLine(tooltip, insertIndex, "attack damage", value, "%.1f");
-                    }
-                } else if (attribute == Attributes.ATTACK_SPEED) {
-                    double value = calculateFinalAttributeValue(stack, Attributes.ATTACK_SPEED, 0.0, modifier);
-                    if (value > 0) {
-                        addAttributeLine(tooltip, insertIndex, "attack speed", value, "%.1f");
-                    }
-                }
+            // Lógica vanilla: solo mostrar atributos relevantes para el tipo de ítem
+            if ((isArmor && (attribute == Attributes.ATTACK_DAMAGE || attribute == Attributes.ATTACK_SPEED)) ||
+                    (!isArmor && (attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS))) {
+                continue;
+            }
+
+            double base = getBaseAttributeValue(stack, attribute);
+            double value = calculateFinalAttributeValue(stack, attribute, base, modifier);
+
+            // Mostrar cualquier valor distinto de cero
+            if (Math.abs(value) > 0.00001) {
+                processAttributeLine(tooltip, insertIndex, displayName, value, "%.1f");
             }
         }
     }
